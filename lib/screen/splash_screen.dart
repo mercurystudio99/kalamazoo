@@ -32,33 +32,21 @@ class _SplashScreenState extends State<SplashScreen> {
         children: <Widget>[
           Container(
             decoration: const BoxDecoration(color: Colors.deepPurple),
+            child: Image.asset('assets/group.png'),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                flex: 4,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const <Widget>[
-                    FlutterLogo(
-                      size: 100.0,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10.0),
-                    ),
-                    Text(
-                      Util.splashCaption,
-                      style: TextStyle(
-                          color: Colors.white70,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24.0),
-                    )
-                  ],
-                ),
+          Container(
+            padding: const EdgeInsets.only(bottom: 50),
+            child: const Align(
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                Util.splashCaption,
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0),
               ),
-            ],
-          )
+            ),
+          ),
         ],
       ),
     );
