@@ -15,7 +15,10 @@ class Util {
   static const String loginQuestion = "Don't Have An Account yet?";
   // Register Screen
   static const String registerTitle = "Register";
+  static const String registerCaption = "Register an account";
+  static const String registerQuestion = "Already have an account?";
   // Button Text
   static const String buttonGetStarted = "Get Started";
   static const String buttonLogin = "Login";
+  static const String buttonSignup = "Create Account";
 }
