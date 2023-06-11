@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/util.dart';
 
 class StartScreen extends StatefulWidget {
@@ -48,31 +49,29 @@ class _StartScreenState extends State<StartScreen> {
             style: TextStyle(color: Colors.black12, fontSize: 12.0),
           ),
           const SizedBox(height: 50),
-          ButtonTheme(
-              minWidth: 200.0,
-              height: 100.0,
+          SizedBox(
+              height: 50, //height of button
+              width: MediaQuery.of(context).size.width, //width of button
               child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                      (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.pressed)) {
-                      return Theme.of(context)
-                          .colorScheme
-                          .primary
-                          .withOpacity(0.5);
-                    }
-                    return null; // Use the component's default.
-                  }),
-                  foregroundColor: MaterialStateProperty.resolveWith<Color?>(
-                      (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.disabled))
-                      return Colors.blue;
-                    return null; // Defer to the widget's default.
-                  }),
+                style: ElevatedButton.styleFrom(
+                    elevation: 3, //elevation of button
+                    shape: RoundedRectangleBorder(
+                        //to set border radius to button
+                        borderRadius: BorderRadius.circular(10)),
+                    padding:
+                        const EdgeInsets.all(5) //content padding inside button
+                    ),
+                onPressed: () {
+                  NavigationRouter.switchToLogin(context);
+                },
+                child: const Text(
+                  Util.buttonGetStarted,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.0),
                 ),
-                onPressed: () {},
-                child: const Text(Util.buttonGetStarted),
-              ))
+              )),
         ],
       ),
     );
