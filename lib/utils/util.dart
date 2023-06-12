@@ -2,6 +2,9 @@ class Util {
   static const double mainPadding = 32.0;
   static const double titleSize = 20.0;
   static const double descriptionSize = 12.0;
+  // Common Text
+  static const String seeAll = "See All";
+  static const String categories = "Categories";
   // Splash Screen
   static const String splashCaption = "Welcome to Local Restaurant >>>";
   static const String startTitle = "Local Restaurant";
@@ -27,6 +30,9 @@ class Util {
       "Don't Worry! It happens. Please enter the \nemail address associated with your account.";
   // Reset Pass Screen
   static const String resetPassTitle = "Reset \nPassword";
+  // Home Screen
+  static const String homeTopBrands = "Top Brands Near You";
+  static const String homeBestOffers = "Best offers for you";
   // Button Text
   static const String buttonGetStarted = "Get Started";
   static const String buttonLogin = "Login";

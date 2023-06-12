@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:kalamazoo/utils/util.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -35,44 +36,65 @@ class _HomeScreenState extends State<HomeScreen> {
         Container(
           padding: const EdgeInsets.only(top: 10.0),
           child: Column(children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: _handleMenuButtonPressed,
-                  icon: ValueListenableBuilder<AdvancedDrawerValue>(
-                    valueListenable: _advancedDrawerController,
-                    builder: (_, value, __) {
-                      return AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 250),
-                        child: Icon(
-                          value.visible ? Icons.clear : Icons.menu,
-                          key: ValueKey<bool>(value.visible),
-                        ),
-                      );
-                    },
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Util.mainPadding),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: _handleMenuButtonPressed,
+                    icon: ValueListenableBuilder<AdvancedDrawerValue>(
+                      valueListenable: _advancedDrawerController,
+                      builder: (_, value, __) {
+                        return AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 250),
+                          child: Icon(
+                            value.visible ? Icons.clear : Icons.menu,
+                            key: ValueKey<bool>(value.visible),
+                          ),
+                        );
+                      },
+                    ),
                   ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Text('Location'),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            Icons.location_on,
+                            color: Colors.red,
+                          ),
+                          Text('Kalamazoo, Michigon'),
+                        ],
+                      )
+                    ],
+                  ),
+                  const badges.Badge(
+                    badgeContent: Text('1'),
+                    child: Icon(Icons.notifications_outlined),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Util.mainPadding, vertical: 10.0),
+              child: TextFormField(
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Search Restaurant or Food...',
+                  prefixIconConstraints: BoxConstraints(
+                    minWidth: 50,
+                    minHeight: 2,
+                  ),
+                  prefixIcon: Icon(Icons.search_outlined, size: 24),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Text('Location'),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(
-                          Icons.location_on,
-                          color: Colors.red,
-                        ),
-                        Text('Kalamazoo, Michigon'),
-                      ],
-                    )
-                  ],
-                ),
-                const Icon(Icons.notifications_outlined),
-              ],
-            )
+              ),
+            ),
           ]),
         ),
       ]),
@@ -177,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 ListTile(
                   onTap: () {},
-                  leading: const Icon(Icons.account_box_outlined),
+                  leading: const Icon(Icons.wallet_giftcard),
                   title: const Text('Offer & Promos'),
                 ),
                 const SizedBox(
