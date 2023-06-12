@@ -15,20 +15,6 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Icon(
-      Icons.call,
-      size: 150,
-    ),
-    Icon(
-      Icons.camera,
-      size: 150,
-    ),
-    Icon(
-      Icons.chat,
-      size: 150,
-    ),
-  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -44,6 +30,62 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> widgetOptions = <Widget>[
+      Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
+        Container(
+          padding: const EdgeInsets.only(top: 10.0),
+          child: Column(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: _handleMenuButtonPressed,
+                  icon: ValueListenableBuilder<AdvancedDrawerValue>(
+                    valueListenable: _advancedDrawerController,
+                    builder: (_, value, __) {
+                      return AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 250),
+                        child: Icon(
+                          value.visible ? Icons.clear : Icons.menu,
+                          key: ValueKey<bool>(value.visible),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const Text('Location'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(
+                          Icons.location_on,
+                          color: Colors.red,
+                        ),
+                        Text('Kalamazoo, Michigon'),
+                      ],
+                    )
+                  ],
+                ),
+                const Icon(Icons.notifications_outlined),
+              ],
+            )
+          ]),
+        ),
+      ]),
+      const Icon(
+        Icons.camera,
+        size: 150,
+      ),
+      const Icon(
+        Icons.chat,
+        size: 150,
+      ),
+    ];
+
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -190,26 +232,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Advanced Drawer Example'),
-          leading: IconButton(
-            onPressed: _handleMenuButtonPressed,
-            icon: ValueListenableBuilder<AdvancedDrawerValue>(
-              valueListenable: _advancedDrawerController,
-              builder: (_, value, __) {
-                return AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 250),
-                  child: Icon(
-                    value.visible ? Icons.clear : Icons.menu,
-                    key: ValueKey<bool>(value.visible),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-        body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
+        body: Container(
+          child: widgetOptions.elementAt(_selectedIndex),
         ),
         bottomNavigationBar: BottomNavigationBar(
           backgroundColor: Colors.blueAccent,
