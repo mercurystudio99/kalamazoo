@@ -153,6 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     const SnackBar(
                                         content: Text('Processing Data')),
                                   );
+                                  NavigationRouter.switchToHome(context);
                                 }
                               },
                               child: const Text(
