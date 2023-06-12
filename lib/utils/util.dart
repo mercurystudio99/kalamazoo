@@ -17,8 +17,20 @@ class Util {
   static const String registerTitle = "Register";
   static const String registerCaption = "Register an account";
   static const String registerQuestion = "Already have an account?";
+  // OTP Screen
+  static const String otpTitle = "OTP";
+  static const String otpCaption =
+      "An 4 digit code has been sent to \nExample@gmail.com";
+  // Retrieve Pass Screen
+  static const String retrievePassTitle = "Retrieve \nPassword";
+  static const String retrievePassCaption =
+      "Don't Worry! It happens. Please enter the \nemail address associated with your account.";
+  // Reset Pass Screen
+  static const String resetPassTitle = "Reset \nPassword";
   // Button Text
   static const String buttonGetStarted = "Get Started";
   static const String buttonLogin = "Login";
   static const String buttonSignup = "Create Account";
+  static const String buttonSubmit = "Submit";
+  static const String buttonOTP = "Get OTP";
 }

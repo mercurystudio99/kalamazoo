@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:kalamazoo/screen/home_screen.dart';
 import 'package:kalamazoo/screen/start_screen.dart';
 import 'package:kalamazoo/screen/login_screen.dart';
+import 'package:kalamazoo/screen/otp_screen.dart';
+import 'package:kalamazoo/screen/resetpass_screen.dart';
+import 'package:kalamazoo/screen/retrievepass_screen.dart';
 import 'package:kalamazoo/screen/registration_screen.dart';
 import 'package:kalamazoo/screen/splash_screen.dart';
 
 var routes = <String, WidgetBuilder>{
+  "/OTPScreen": (BuildContext context) => const OTPScreen(),
+  "/ResetPassScreen": (BuildContext context) => const ResetPassScreen(),
+  "/RetrievePassScreen": (BuildContext context) => const RetrievePassScreen(),
   "/RegistrationScreen": (BuildContext context) => const RegistrationScreen(),
   "/LoginScreen": (BuildContext context) => const LoginScreen(),
   "/HomeScreen": (BuildContext context) => const HomeScreen(),

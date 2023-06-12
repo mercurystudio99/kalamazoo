@@ -113,13 +113,18 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
-                        children: const [
-                          SizedBox(width: 10),
-                          Text(
-                            Util.loginForgotPassword,
-                            style: TextStyle(
-                                color: Colors.black45,
-                                fontSize: Util.descriptionSize),
+                        children: [
+                          const SizedBox(width: 10),
+                          GestureDetector(
+                            onTap: () {
+                              NavigationRouter.switchToRetrievePass(context);
+                            },
+                            child: const Text(
+                              Util.loginForgotPassword,
+                              style: TextStyle(
+                                  color: Colors.black45,
+                                  fontSize: Util.descriptionSize),
+                            ),
                           ),
                         ],
                       ),
