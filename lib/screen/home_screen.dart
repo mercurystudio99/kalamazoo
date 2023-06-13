@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/util.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -31,6 +32,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<String> countries = [
+      "Tea",
+      "Samosa",
+      "Sandwich",
+      "Dosa",
+      "Dessert",
+      "Dessert"
+    ];
+
     final List<Widget> widgetOptions = <Widget>[
       Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
         Container(
@@ -95,6 +105,29 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Util.mainPadding),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(Util.categories),
+                    GestureDetector(
+                      onTap: () {},
+                      child: const Text(
+                        Util.seeAll,
+                      ),
+                    ),
+                  ]),
+            ),
+            SizedBox(
+                height: 100,
+                child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: countries.map((country) {
+                        return box(country, Colors.deepOrangeAccent);
+                      }).toList(),
+                    ))),
           ]),
         ),
       ]),
@@ -127,11 +160,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       controller: _advancedDrawerController,
-      animationCurve: Curves.easeInOut,
-      animationDuration: const Duration(milliseconds: 300),
-      animateChildDecoration: true,
-      rtlOpening: false,
-      // openScale: 1.0,
+      disabledGestures: true,
+      openRatio: 0.75,
+      openScale: 0.85,
       childDecoration: const BoxDecoration(
         // NOTICE: Uncomment if you want to add shadow behind the page.
         // Keep in mind that it may cause animation jerks.
@@ -222,7 +253,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   trailing: const Icon(Icons.arrow_forward_ios),
                 ),
                 ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    NavigationRouter.switchToNotification(context);
+                  },
                   leading: const Icon(Icons.notifications_outlined),
                   title: const Text('Notification'),
                   trailing: const Icon(Icons.arrow_forward_ios),
@@ -287,5 +320,18 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  Widget box(String title, Color backgroundcolor) {
+    return Container(
+        margin: const EdgeInsets.all(10),
+        width: 80,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: backgroundcolor,
+        ),
+        alignment: Alignment.center,
+        child: Text(title,
+            style: const TextStyle(color: Colors.white, fontSize: 20)));
   }
 }

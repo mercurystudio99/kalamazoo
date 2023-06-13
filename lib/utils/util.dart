@@ -3,6 +3,7 @@ class Util {
   static const double titleSize = 20.0;
   static const double descriptionSize = 12.0;
   // Common Text
+  static const String notification = "Notification";
   static const String seeAll = "See All";
   static const String categories = "Categories";
   // Splash Screen
