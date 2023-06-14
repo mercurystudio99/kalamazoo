@@ -141,9 +141,189 @@ class _HomeScreenState extends State<HomeScreen> {
         Icons.camera,
         size: 150,
       ),
-      const Icon(
-        Icons.chat,
-        size: 150,
+      Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          Image.asset('assets/group.png'),
+          Container(
+            padding: const EdgeInsets.all(Util.mainPadding),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back_ios),
+                      onPressed: () {
+                        NavigationRouter.back(context);
+                      },
+                    ),
+                    const Text(
+                      Util.profileTitle,
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 20.0,
+                      ),
+                    ),
+                    const SizedBox.shrink(),
+                  ],
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  decoration: const BoxDecoration(
+                    boxShadow: <BoxShadow>[
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 30.0,
+                      ),
+                    ],
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/group.png'),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 10.0),
+                        child: Text(
+                          'James Hawkins',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(Util.profileContact),
+                      TextButton(
+                          onPressed: () {},
+                          child: const Text(
+                            Util.edit,
+                            style: TextStyle(color: Colors.blue),
+                          )),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        alignment: const Alignment(0, 0),
+                        child: const Icon(Icons.email_outlined),
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            'Email Address',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text('demo@gmail.com'),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        alignment: const Alignment(0, 0),
+                        child: const Icon(Icons.location_on_outlined),
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            'Location',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text('Kalamazoo, Michigan, USA'),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        alignment: const Alignment(0, 0),
+                        child: const Icon(Icons.person_outline),
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            'Gender',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text('Male'),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        alignment: const Alignment(0, 0),
+                        child: const Icon(Icons.calendar_month),
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            'Birth Date',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          Text('30 August 2023'),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     ];
 

@@ -6,6 +6,7 @@ class Util {
   static const String notification = "Notification";
   static const String seeAll = "See All";
   static const String categories = "Categories";
+  static const String edit = "Edit";
   // Splash Screen
   static const String splashCaption = "Welcome to Local Restaurant >>>";
   static const String startTitle = "Local Restaurant";
@@ -34,10 +35,15 @@ class Util {
   // Home Screen
   static const String homeTopBrands = "Top Brands Near You";
   static const String homeBestOffers = "Best offers for you";
+  // Profile Screen
+  static const String profileTitle = "Profile";
+  static const String profileUploadImg = "Upload Image";
+  static const String profileContact = "Contact";
   // Button Text
   static const String buttonGetStarted = "Get Started";
   static const String buttonLogin = "Login";
   static const String buttonSignup = "Create Account";
   static const String buttonSubmit = "Submit";
   static const String buttonOTP = "Get OTP";
+  static const String buttonSave = "Save";
 }
