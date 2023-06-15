@@ -3,8 +3,12 @@ class Util {
   static const double titleSize = 20.0;
   static const double descriptionSize = 12.0;
   // Common Text
+  static const String notification = "Notification";
+  static const String favorite = "Favorite";
+  static const String about = "About";
   static const String seeAll = "See All";
   static const String categories = "Categories";
+  static const String edit = "Edit";
   // Splash Screen
   static const String splashCaption = "Welcome to Local Restaurant >>>";
   static const String startTitle = "Local Restaurant";
@@ -33,10 +37,15 @@ class Util {
   // Home Screen
   static const String homeTopBrands = "Top Brands Near You";
   static const String homeBestOffers = "Best offers for you";
+  // Profile Screen
+  static const String profileTitle = "Profile";
+  static const String profileUploadImg = "Upload Image";
+  static const String profileContact = "Contact";
   // Button Text
   static const String buttonGetStarted = "Get Started";
   static const String buttonLogin = "Login";
   static const String buttonSignup = "Create Account";
   static const String buttonSubmit = "Submit";
   static const String buttonOTP = "Get OTP";
+  static const String buttonSave = "Save";
 }
