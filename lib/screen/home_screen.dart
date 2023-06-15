@@ -204,7 +204,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       const Text(Util.profileContact),
                       TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            NavigationRouter.switchToProfileEdit(context);
+                          },
                           child: const Text(
                             Util.edit,
                             style: TextStyle(color: Colors.blue),

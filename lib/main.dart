@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kalamazoo/screen/home_screen.dart';
 import 'package:kalamazoo/screen/notification_screen.dart';
 import 'package:kalamazoo/screen/search_screen.dart';
+import 'package:kalamazoo/screen/profileedit_screen.dart';
 import 'package:kalamazoo/screen/start_screen.dart';
 import 'package:kalamazoo/screen/login_screen.dart';
 import 'package:kalamazoo/screen/otp_screen.dart';
@@ -19,6 +20,7 @@ var routes = <String, WidgetBuilder>{
   "/HomeScreen": (BuildContext context) => const HomeScreen(),
   "/NotificationScreen": (BuildContext context) => const NotificationScreen(),
   "/SearchScreen": (BuildContext context) => const SearchScreen(),
+  "/ProfileEditScreen": (BuildContext context) => const ProfileEditScreen(),
   "/StartScreen": (BuildContext context) => const StartScreen(),
 };
 void main() {
