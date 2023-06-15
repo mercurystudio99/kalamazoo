@@ -625,6 +625,7 @@ class _ListBuilderState extends State<ListBuilder> {
               shadowColor: Colors.blue,
               margin: const EdgeInsets.symmetric(vertical: 8.0),
               child: ListTile(
+                onTap: () => NavigationRouter.switchToAbout(context),
                 contentPadding: const EdgeInsets.all(8),
                 leading: AspectRatio(
                   aspectRatio: 1.0,
