@@ -4,6 +4,8 @@ class Util {
   static const double descriptionSize = 12.0;
   // Common Text
   static const String notification = "Notification";
+  static const String favorite = "Favorite";
+  static const String about = "About";
   static const String seeAll = "See All";
   static const String categories = "Categories";
   static const String edit = "Edit";
