@@ -49,6 +49,10 @@ class NavigationRouter {
     Navigator.pushNamed(context, "/MenuScreen");
   }
 
+  static void switchToItem(BuildContext context) {
+    Navigator.pushNamed(context, "/ItemScreen");
+  }
+
   static void switchToStart(BuildContext context) {
     Navigator.pushNamed(context, "/StartScreen");
   }

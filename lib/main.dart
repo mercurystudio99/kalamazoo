@@ -5,6 +5,7 @@ import 'package:kalamazoo/screen/search_screen.dart';
 import 'package:kalamazoo/screen/profileedit_screen.dart';
 import 'package:kalamazoo/screen/about_screen.dart';
 import 'package:kalamazoo/screen/menu_screen.dart';
+import 'package:kalamazoo/screen/item_screen.dart';
 import 'package:kalamazoo/screen/start_screen.dart';
 import 'package:kalamazoo/screen/login_screen.dart';
 import 'package:kalamazoo/screen/otp_screen.dart';
@@ -25,6 +26,7 @@ var routes = <String, WidgetBuilder>{
   "/ProfileEditScreen": (BuildContext context) => const ProfileEditScreen(),
   "/AboutScreen": (BuildContext context) => const AboutScreen(),
   "/MenuScreen": (BuildContext context) => const MenuScreen(),
+  "/ItemScreen": (BuildContext context) => const ItemScreen(),
   "/StartScreen": (BuildContext context) => const StartScreen(),
 };
 void main() {

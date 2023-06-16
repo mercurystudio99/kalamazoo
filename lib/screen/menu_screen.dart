@@ -127,6 +127,9 @@ class _ListBuilderState extends State<ListBuilder> {
               shadowColor: Colors.blue,
               margin: const EdgeInsets.symmetric(vertical: 8.0),
               child: ListTile(
+                onTap: () {
+                  NavigationRouter.switchToItem(context);
+                },
                 contentPadding: const EdgeInsets.all(8),
                 leading: Image.asset('assets/group.png'),
                 title: const Text(
