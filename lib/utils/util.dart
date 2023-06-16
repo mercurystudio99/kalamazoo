@@ -9,6 +9,7 @@ class Util {
   static const String seeAll = "See All";
   static const String categories = "Categories";
   static const String edit = "Edit";
+  static const String fullMenu = "Full Menu";
   // Splash Screen
   static const String splashCaption = "Welcome to Local Restaurant >>>";
   static const String startTitle = "Local Restaurant";

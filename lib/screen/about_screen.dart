@@ -155,7 +155,9 @@ class _AboutScreenState extends State<AboutScreen> {
                   children: [
                     const Text('Top Dishes'),
                     TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          NavigationRouter.switchToMenu(context);
+                        },
                         child: const Text(
                           'Full menu',
                           style: TextStyle(color: Colors.blue),
