@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
+import 'package:kalamazoo/utils/color.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -44,27 +47,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Color getColor(Set<MaterialState> states) {
-      const Set<MaterialState> interactiveStates = <MaterialState>{
-        MaterialState.pressed,
-        MaterialState.hovered,
-        MaterialState.focused,
-      };
-      if (states.any(interactiveStates.contains)) {
-        return Colors.blue;
-      }
-      return Colors.red;
-    }
-
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Image.asset('assets/group.png'),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SvgPicture.asset('assets/background.svg'),
+            ],
+          ),
           Container(
             padding: const EdgeInsets.all(Util.mainPadding),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: ListView(
               children: <Widget>[
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -76,11 +71,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         NavigationRouter.switchToLogin(context);
                       },
                     ),
-                    const SizedBox(height: 50),
+                    const SizedBox(height: 35),
                     const Text(
                       Util.registerTitle,
                       style: TextStyle(
-                          color: Colors.blue,
+                          color: CustomColor.primaryColor,
                           fontWeight: FontWeight.bold,
                           fontSize: Util.titleSize),
                     ),
@@ -142,8 +137,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     onTap: _toggle,
                                     child: Icon(
                                         _obscureText
-                                            ? Icons.visibility_off_outlined
-                                            : Icons.remove_red_eye_outlined,
+                                            ? Icons.remove_red_eye_outlined
+                                            : Icons.visibility_off_outlined,
                                         size: 24),
                                   )),
                               // The validator receives the text that the user has entered.
@@ -158,7 +153,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               Checkbox(
                                 checkColor: Colors.white,
                                 fillColor:
-                                    MaterialStateProperty.resolveWith(getColor),
+                                    MaterialStateProperty.resolveWith<Color>(
+                                        (Set<MaterialState> states) {
+                                  if (states.contains(MaterialState.disabled)) {
+                                    return Colors.black.withOpacity(.32);
+                                  }
+                                  return Colors.black;
+                                }),
                                 value: _isChecked,
                                 onChanged: (bool? value) {
                                   setState(() {
@@ -171,26 +172,26 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   RichText(
-                                    text: const TextSpan(children: [
+                                    text: TextSpan(children: [
                                       TextSpan(
                                         text: 'By Signing up, I agree to the ',
-                                        style: TextStyle(
-                                            color: Colors.black45,
+                                        style: GoogleFonts.poppins(
+                                            color: CustomColor.textHeadColor,
                                             fontSize: Util.descriptionSize),
                                       ),
                                       TextSpan(
                                         text: 'term Of Service',
-                                        style: TextStyle(
-                                            color: Colors.black45,
+                                        style: GoogleFonts.poppins(
+                                            color: CustomColor.textHeadColor,
                                             fontWeight: FontWeight.bold,
                                             fontSize: Util.descriptionSize),
                                       ),
                                     ]),
                                   ),
-                                  const Text(
+                                  Text(
                                     '& privacy Policy',
-                                    style: TextStyle(
-                                        color: Colors.black45,
+                                    style: GoogleFonts.poppins(
+                                        color: CustomColor.textHeadColor,
                                         fontWeight: FontWeight.bold,
                                         fontSize: Util.descriptionSize),
                                   )
@@ -201,26 +202,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         ],
                       ),
                     ),
-                  ],
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
                     Align(
                       alignment: Alignment.center,
                       child: RichText(
                         text: TextSpan(children: [
-                          const TextSpan(
+                          TextSpan(
                             text: Util.registerQuestion,
-                            style: TextStyle(
-                                color: Colors.black45,
+                            style: GoogleFonts.poppins(
+                                color: CustomColor.textDetailColor,
                                 fontSize: Util.descriptionSize),
                           ),
                           const TextSpan(text: ' '),
                           TextSpan(
                               text: Util.loginTitle,
-                              style: const TextStyle(
-                                  color: Colors.blue,
+                              style: GoogleFonts.poppins(
+                                  color: CustomColor.primaryColor,
                                   fontSize: Util.descriptionSize),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
@@ -238,10 +234,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               .width, //width of button
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                                elevation: 3, //elevation of button
+                                elevation: 10, //elevation of button
                                 shape: RoundedRectangleBorder(
                                     //to set border radius to button
                                     borderRadius: BorderRadius.circular(10)),
+                                shadowColor: CustomColor.primaryColor,
                                 padding: const EdgeInsets.all(
                                     5) //content padding inside button
                                 ),

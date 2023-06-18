@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/util.dart';
+import 'package:kalamazoo/utils/color.dart';
 
 final List<String> imgList = [
   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
@@ -116,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final List<Widget> widgetOptions = <Widget>[
       Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
         Container(
-          color: Colors.blue,
+          color: CustomColor.primaryColor,
           padding: const EdgeInsets.only(top: 10.0),
           child: Column(children: [
             Padding(
@@ -164,7 +166,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   const badges.Badge(
-                    badgeContent: Text('1'),
+                    badgeContent: Text(
+                      '1',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     child: Icon(
                       Icons.notifications_outlined,
                       color: Colors.white,
@@ -213,12 +218,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   ]),
             ),
             SizedBox(
-                height: 50,
+                height: 80,
                 child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: countries.map((country) {
-                        return box(country, Colors.deepOrangeAccent);
+                        return box(country, CustomColor.primaryColor);
                       }).toList(),
                     ))),
           ]),
@@ -240,11 +245,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(Util.homeTopBrands),
+                      const Text(
+                        Util.homeTopBrands,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       GestureDetector(
                         onTap: () {},
                         child: const Text(
                           Util.seeAll,
+                          style: TextStyle(color: CustomColor.activeColor),
                         ),
                       ),
                     ]),
@@ -264,11 +273,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(Util.homeBestOffers),
+                      const Text(
+                        Util.homeBestOffers,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       GestureDetector(
                         onTap: () {},
                         child: const Text(
                           Util.seeAll,
+                          style: TextStyle(color: CustomColor.activeColor),
                         ),
                       ),
                     ]),
@@ -286,7 +299,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           margin: const EdgeInsets.all(4.0),
                           child: Column(
                             children: [
-                              Image.asset('assets/group.png'),
+                              Image.network(
+                                  'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80'),
                               Padding(
                                 padding: const EdgeInsets.all(4),
                                 child: Row(
@@ -391,7 +405,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           margin: const EdgeInsets.all(4.0),
                           child: Column(
                             children: [
-                              Image.asset('assets/group.png'),
+                              Image.network(
+                                  'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80'),
                               Padding(
                                 padding: const EdgeInsets.all(4),
                                 child: Row(
@@ -514,7 +529,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const Text(
                   Util.favorite,
                   style: TextStyle(
-                    color: Colors.blue,
+                    color: CustomColor.primaryColor,
                     fontSize: 20.0,
                   ),
                 ),
@@ -557,7 +572,12 @@ class _HomeScreenState extends State<HomeScreen> {
       Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Image.asset('assets/group.png'),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SvgPicture.asset('assets/background.svg'),
+            ],
+          ),
           Container(
             padding: const EdgeInsets.all(Util.mainPadding),
             child: Column(
@@ -576,7 +596,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const Text(
                       Util.profileTitle,
                       style: TextStyle(
-                        color: Colors.blue,
+                        color: CustomColor.primaryColor,
                         fontSize: 20.0,
                       ),
                     ),
@@ -586,14 +606,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
                     boxShadow: <BoxShadow>[
                       BoxShadow(
-                        color: Colors.black26,
+                        color: Colors.black.withOpacity(0.5),
                         blurRadius: 30.0,
                       ),
                     ],
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -604,7 +625,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         padding: EdgeInsets.symmetric(vertical: 10.0),
                         child: Text(
                           'James Hawkins',
-                          style: TextStyle(color: Colors.black),
                         ),
                       ),
                     ],
@@ -622,7 +642,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                           child: const Text(
                             Util.edit,
-                            style: TextStyle(color: Colors.blue),
+                            style: TextStyle(color: CustomColor.primaryColor),
                           )),
                     ],
                   ),
@@ -635,7 +655,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Container(
                         alignment: const Alignment(0, 0),
-                        child: const Icon(Icons.email_outlined),
+                        child: const Icon(Icons.email_outlined,
+                            color: CustomColor.textDetailColor),
                       ),
                       const SizedBox(
                         width: 10.0,
@@ -648,7 +669,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             'Email Address',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          Text('demo@gmail.com'),
+                          Text(
+                            'demo@gmail.com',
+                            style:
+                                TextStyle(color: CustomColor.textDetailColor),
+                          ),
                         ],
                       )
                     ],
@@ -662,7 +687,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Container(
                         alignment: const Alignment(0, 0),
-                        child: const Icon(Icons.location_on_outlined),
+                        child: const Icon(Icons.location_on_outlined,
+                            color: CustomColor.textDetailColor),
                       ),
                       const SizedBox(
                         width: 10.0,
@@ -675,7 +701,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             'Location',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          Text('Kalamazoo, Michigan, USA'),
+                          Text('Kalamazoo, Michigan, USA',
+                              style: TextStyle(
+                                  color: CustomColor.textDetailColor)),
                         ],
                       )
                     ],
@@ -689,7 +717,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Container(
                         alignment: const Alignment(0, 0),
-                        child: const Icon(Icons.person_outline),
+                        child: const Icon(Icons.person_outline,
+                            color: CustomColor.textDetailColor),
                       ),
                       const SizedBox(
                         width: 10.0,
@@ -702,7 +731,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             'Gender',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          Text('Male'),
+                          Text('Male',
+                              style: TextStyle(
+                                  color: CustomColor.textDetailColor)),
                         ],
                       )
                     ],
@@ -716,7 +747,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Container(
                         alignment: const Alignment(0, 0),
-                        child: const Icon(Icons.calendar_month),
+                        child: const Icon(
+                          Icons.calendar_month,
+                          color: CustomColor.textDetailColor,
+                        ),
                       ),
                       const SizedBox(
                         width: 10.0,
@@ -729,7 +763,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             'Birth Date',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
-                          Text('30 August 2023'),
+                          Text('30 August 2023',
+                              style: TextStyle(
+                                  color: CustomColor.textDetailColor)),
                         ],
                       )
                     ],
@@ -749,16 +785,11 @@ class _HomeScreenState extends State<HomeScreen> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return AdvancedDrawer(
-      backdrop: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Colors.blueGrey, Colors.blueGrey.withOpacity(0.2)],
-          ),
-        ),
+      backdrop: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SvgPicture.asset('assets/background.svg'),
+        ],
       ),
       controller: _advancedDrawerController,
       disabledGestures: true,
@@ -769,7 +800,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // Keep in mind that it may cause animation jerks.
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: Colors.black26,
+            color: CustomColor.primaryColor,
             blurRadius: 30.0,
           ),
         ],
@@ -777,8 +808,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       drawer: SafeArea(
         child: ListTileTheme(
-          textColor: Colors.black38,
-          iconColor: Colors.black38,
+          textColor: CustomColor.textDetailColor,
+          iconColor: CustomColor.textDetailColor,
           child: Padding(
             padding: const EdgeInsets.all(Util.mainPadding),
             child: Column(
@@ -799,7 +830,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Text(
                           'User Name',
                           style: TextStyle(
-                            color: Colors.blue,
+                            color: CustomColor.primaryColor,
                             fontWeight: FontWeight.bold,
                             fontSize: 16.0,
                           ),
@@ -807,7 +838,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Text(
                           'demo@gmail.com',
                           style: TextStyle(
-                            color: Colors.black38,
+                            color: CustomColor.textDetailColor,
                             fontSize: 16.0,
                           ),
                         ),
@@ -822,18 +853,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () {},
                   leading: const Icon(
                     Icons.home_outlined,
-                    color: Colors.red,
+                    color: CustomColor.activeColor,
                   ),
                   title: const Text(
                     'Home',
-                    style: TextStyle(color: Colors.red),
+                    style: TextStyle(color: CustomColor.activeColor),
                   ),
                 ),
-                ListTile(
-                  onTap: () {},
-                  leading: const Icon(Icons.wallet_giftcard),
-                  title: const Text('Offer & Promos'),
-                ),
+                // ListTile(
+                //   onTap: () {},
+                //   leading: const Icon(Icons.wallet_giftcard),
+                //   title: const Text('Offer & Promos'),
+                // ),
                 const SizedBox(
                   height: 40,
                 ),
@@ -861,24 +892,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   title: const Text('Notification'),
                   trailing: const Icon(Icons.arrow_forward_ios),
                 ),
+                // ListTile(
+                //   onTap: () {},
+                //   leading: const Icon(Icons.settings_outlined),
+                //   title: const Text('Setting'),
+                //   trailing: Switch(
+                //     // This bool value toggles the switch.
+                //     value: _setting,
+                //     // activeColor: Colors.red,
+                //     onChanged: (bool value) {
+                //       // This is called when the user toggles the switch.
+                //       setState(() {
+                //         _setting = value;
+                //       });
+                //     },
+                //   ),
+                // ),
                 ListTile(
-                  onTap: () {},
-                  leading: const Icon(Icons.settings_outlined),
-                  title: const Text('Setting'),
-                  trailing: Switch(
-                    // This bool value toggles the switch.
-                    value: _setting,
-                    // activeColor: Colors.red,
-                    onChanged: (bool value) {
-                      // This is called when the user toggles the switch.
-                      setState(() {
-                        _setting = value;
-                      });
-                    },
-                  ),
-                ),
-                ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    NavigationRouter.switchToLogin(context);
+                  },
                   leading: const Icon(Icons.logout_outlined),
                   title: const Text('Logout'),
                 ),
@@ -892,7 +925,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: widgetOptions.elementAt(_selectedIndex),
         ),
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.blueAccent,
+          backgroundColor: CustomColor.primaryColor,
           iconSize: 40,
           elevation: 0,
           unselectedIconTheme: const IconThemeData(
@@ -916,7 +949,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
           currentIndex: _selectedIndex,
-          selectedItemColor: Colors.redAccent,
+          selectedItemColor: CustomColor.activeColor,
           onTap: _onItemTapped,
         ),
       ),
@@ -928,12 +961,22 @@ class _HomeScreenState extends State<HomeScreen> {
         margin: const EdgeInsets.all(10),
         width: 80,
         decoration: BoxDecoration(
+          border: Border.all(color: Colors.white),
           borderRadius: BorderRadius.circular(10),
           color: backgroundcolor,
         ),
         alignment: Alignment.center,
-        child: Text(title,
-            style: const TextStyle(color: Colors.white, fontSize: 20)));
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.breakfast_dining_outlined,
+              color: Colors.white,
+            ),
+            Text(title,
+                style: const TextStyle(color: Colors.white, fontSize: 12))
+          ],
+        ));
   }
 }
 
@@ -960,20 +1003,19 @@ class _ListBuilderState extends State<ListBuilder> {
         itemCount: widget.selectedList.length,
         itemBuilder: (_, int index) {
           return Card(
-              shadowColor: Colors.blue,
+              shadowColor: CustomColor.primaryColor,
               margin: const EdgeInsets.symmetric(vertical: 8.0),
               child: ListTile(
                 onTap: () => NavigationRouter.switchToAbout(context),
                 contentPadding: const EdgeInsets.all(8),
                 leading: AspectRatio(
                   aspectRatio: 1.0,
-                  child: Container(
-                    decoration: const BoxDecoration(color: Colors.blue),
-                  ),
+                  child: Image.network(
+                      'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80'),
                 ),
                 trailing: const Icon(
                   Icons.bookmark,
-                  color: Colors.red,
+                  color: CustomColor.activeColor,
                 ),
                 title: const Padding(
                   padding: EdgeInsets.fromLTRB(20.0, 0.0, 2.0, 0.0),
@@ -1038,7 +1080,7 @@ class _ArticleDescription extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontSize: 12.0,
-                color: Colors.black54,
+                color: CustomColor.textDetailColor,
               ),
             ),
           ],
@@ -1066,14 +1108,14 @@ class _ArticleDescription extends StatelessWidget {
             ),
             const Icon(
               Icons.location_on,
-              color: Colors.red,
+              color: CustomColor.activeColor,
             ),
             Text(
               subtitle,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontSize: 12.0,
-                color: Colors.black54,
+                color: CustomColor.textDetailColor,
               ),
             ),
             const SizedBox(
@@ -1085,7 +1127,7 @@ class _ArticleDescription extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontSize: 12.0,
-                color: Colors.black54,
+                color: CustomColor.textDetailColor,
               ),
             ),
           ],
@@ -1095,14 +1137,14 @@ class _ArticleDescription extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18.0,
-            color: Colors.red,
+            color: CustomColor.activeColor,
           ),
         ),
         Text(
           '$publishDate  $readDuration',
           style: const TextStyle(
             fontSize: 12.0,
-            color: Colors.black54,
+            color: CustomColor.textDetailColor,
           ),
         ),
       ],

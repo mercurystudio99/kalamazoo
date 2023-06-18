@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
+import 'package:kalamazoo/utils/color.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -12,6 +15,14 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  bool _obscureText = true;
+
+  // Toggles the password show status
+  void _toggle() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
 
   String? _validatePassword(String value) {
     if (value.isEmpty) {
@@ -45,17 +56,24 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Image.asset('assets/group.png'),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SvgPicture.asset('assets/background.svg'),
+            ],
+          ),
           Container(
-            padding: const EdgeInsets.all(Util.mainPadding),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            padding: const EdgeInsets.fromLTRB(
+                Util.mainPadding, Util.mainPadding, Util.mainPadding, 0),
+            child: ListView(
               children: <Widget>[
+                const SizedBox(
+                  height: 80,
+                ),
                 const Text(
                   Util.loginTitle,
                   style: TextStyle(
-                      color: Colors.blue,
+                      color: CustomColor.primaryColor,
                       fontWeight: FontWeight.bold,
                       fontSize: Util.titleSize),
                 ),
@@ -65,7 +83,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 const Text(
                   Util.loginCaption,
                   style: TextStyle(
-                      color: Colors.black45, fontSize: Util.descriptionSize),
+                      color: CustomColor.textDetailColor,
+                      fontSize: Util.descriptionSize),
                 ),
                 const Padding(
                   padding: EdgeInsets.only(bottom: 15.0),
@@ -94,16 +113,22 @@ class _LoginScreenState extends State<LoginScreen> {
                       Padding(
                         padding: const EdgeInsets.only(top: 8),
                         child: TextFormField(
-                          obscureText: true, // Use secure text for passwords.
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
+                          obscureText:
+                              _obscureText, // Use secure text for passwords.
+                          decoration: InputDecoration(
+                              border: const OutlineInputBorder(),
                               labelText: 'Passwords',
-                              suffixIconConstraints: BoxConstraints(
+                              suffixIconConstraints: const BoxConstraints(
                                 minWidth: 50,
                                 minHeight: 2,
                               ),
                               suffixIcon: InkWell(
-                                  child: Icon(Icons.remove_red_eye_outlined,
+                                  onTap: _toggle,
+                                  child: Icon(
+                                      _obscureText
+                                          ? Icons.remove_red_eye_outlined
+                                          : Icons.visibility_off_outlined,
+                                      color: CustomColor.textDetailColor,
                                       size: 24))),
                           // The validator receives the text that the user has entered.
                           validator: (value) {
@@ -114,7 +139,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          const SizedBox(width: 10),
                           GestureDetector(
                             onTap: () {
                               NavigationRouter.switchToRetrievePass(context);
@@ -122,14 +146,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: const Text(
                               Util.loginForgotPassword,
                               style: TextStyle(
-                                  color: Colors.black45,
+                                  color: CustomColor.textDetailColor,
                                   fontSize: Util.descriptionSize),
                             ),
                           ),
                         ],
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        padding: const EdgeInsets.symmetric(vertical: 20.0),
                         child: SizedBox(
                             height: 50, //height of button
                             width: MediaQuery.of(context)
@@ -137,10 +161,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 .width, //width of button
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  elevation: 3, //elevation of button
+                                  elevation: 10, //elevation of button
                                   shape: RoundedRectangleBorder(
                                       //to set border radius to button
                                       borderRadius: BorderRadius.circular(10)),
+                                  shadowColor: CustomColor.primaryColor,
                                   padding: const EdgeInsets.all(
                                       5) //content padding inside button
                                   ),
@@ -159,7 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: const Text(
                                 Util.buttonLogin,
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: CustomColor.buttonTextColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16.0),
                               ),
@@ -173,18 +198,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 4.0, vertical: 4.0),
-                      child: Image.asset('assets/group.png'),
+                          horizontal: 16.0, vertical: 8.0),
+                      child: Image.asset('assets/google.png'),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 4.0, vertical: 4.0),
-                      child: Image.asset('assets/group.png'),
+                          horizontal: 16.0, vertical: 8.0),
+                      child: Image.asset('assets/facebook.png'),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 4.0, vertical: 4.0),
-                      child: Image.asset('assets/group.png'),
+                          horizontal: 16.0, vertical: 8.0),
+                      child: Image.asset('assets/apple.png'),
                     ),
                   ],
                 ),
@@ -192,17 +217,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   alignment: Alignment.center,
                   child: RichText(
                     text: TextSpan(children: [
-                      const TextSpan(
+                      TextSpan(
                         text: Util.loginQuestion,
-                        style: TextStyle(
-                            color: Colors.black45,
+                        style: GoogleFonts.poppins(
+                            color: CustomColor.textDetailColor,
                             fontSize: Util.descriptionSize),
                       ),
                       const TextSpan(text: ' '),
                       TextSpan(
                           text: Util.registerTitle,
-                          style: const TextStyle(
-                              color: Colors.blue,
+                          style: GoogleFonts.poppins(
+                              color: CustomColor.primaryColor,
                               fontSize: Util.descriptionSize),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
@@ -210,6 +235,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             }),
                     ]),
                   ),
+                ),
+                const SizedBox(
+                  height: Util.mainPadding,
                 ),
               ],
             ),

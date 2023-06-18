@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
+import 'package:kalamazoo/utils/color.dart';
 
 class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});
@@ -23,10 +25,13 @@ class _AboutScreenState extends State<AboutScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Image.asset('assets/group.png'),
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SvgPicture.asset('assets/background.svg'),
+            ],
+          ),
+          ListView(
             children: <Widget>[
               Padding(
                 padding:
@@ -44,7 +49,7 @@ class _AboutScreenState extends State<AboutScreen> {
                     const Text(
                       Util.about,
                       style: TextStyle(
-                        color: Colors.blue,
+                        color: CustomColor.primaryColor,
                         fontSize: 20.0,
                       ),
                     ),
@@ -57,7 +62,8 @@ class _AboutScreenState extends State<AboutScreen> {
                     horizontal: Util.mainPadding, vertical: 10),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.asset('assets/group.png'),
+                  child: Image.network(
+                      'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80'),
                 ),
               ),
               Padding(
@@ -69,7 +75,7 @@ class _AboutScreenState extends State<AboutScreen> {
                   children: [
                     const Text('Royal Dine Restaurant'),
                     Container(
-                      color: Colors.red,
+                      color: CustomColor.activeColor,
                       child: Row(
                         children: const [
                           Text(
@@ -129,13 +135,13 @@ class _AboutScreenState extends State<AboutScreen> {
                 leading: Container(
                   width: 50,
                   alignment: const Alignment(0, 0),
-                  child: const Icon(Icons.location_on),
+                  child: const Icon(Icons.location_on_outlined),
                 ),
                 trailing: TextButton(
                     onPressed: () {},
                     child: const Text(
                       'Open Map',
-                      style: TextStyle(color: Colors.blue),
+                      style: TextStyle(color: CustomColor.primaryColor),
                     )),
                 title: const Text(
                   'Location',
@@ -160,7 +166,7 @@ class _AboutScreenState extends State<AboutScreen> {
                         },
                         child: const Text(
                           'Full menu',
-                          style: TextStyle(color: Colors.blue),
+                          style: TextStyle(color: CustomColor.primaryColor),
                         )),
                   ],
                 ),
@@ -171,7 +177,7 @@ class _AboutScreenState extends State<AboutScreen> {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: dishes.map((dish) {
-                          return box(dish, Colors.deepOrangeAccent);
+                          return box(dish, Colors.white);
                         }).toList(),
                       ))),
             ],
@@ -190,7 +196,12 @@ class _AboutScreenState extends State<AboutScreen> {
           color: backgroundcolor,
         ),
         alignment: Alignment.center,
-        child: Text(title,
-            style: const TextStyle(color: Colors.white, fontSize: 20)));
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/group.png'),
+            Text(title, style: const TextStyle(fontSize: 20))
+          ],
+        ));
   }
 }

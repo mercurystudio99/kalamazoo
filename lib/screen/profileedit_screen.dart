@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
+import 'package:kalamazoo/utils/color.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   const ProfileEditScreen({super.key});
@@ -34,7 +36,12 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset('assets/group.png'),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SvgPicture.asset('assets/background.svg'),
+            ],
+          ),
           Container(
             padding: const EdgeInsets.all(Util.mainPadding),
             child: Column(
@@ -59,14 +66,16 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       Container(
                         width: double.infinity,
                         padding: const EdgeInsets.symmetric(vertical: 20.0),
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
                           boxShadow: <BoxShadow>[
                             BoxShadow(
-                              color: Colors.black26,
+                              color: Colors.black.withOpacity(0.5),
                               blurRadius: 30.0,
                             ),
                           ],
-                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(20)),
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -101,7 +110,6 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                 padding: EdgeInsets.symmetric(vertical: 10.0),
                                 child: Text(
                                   Util.profileUploadImg,
-                                  style: TextStyle(color: Colors.black),
                                 ),
                               ),
                             ),
@@ -110,7 +118,10 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       ),
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 4),
-                        child: Text('Name'),
+                        child: Text(
+                          'Name',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -123,7 +134,10 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       ),
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 4),
-                        child: Text('Location'),
+                        child: Text(
+                          'Location',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -136,7 +150,10 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       ),
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 4),
-                        child: Text('Email'),
+                        child: Text(
+                          'Email',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -149,7 +166,10 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       ),
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 4),
-                        child: Text('Gender'),
+                        child: Text(
+                          'Gender',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -174,7 +194,10 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                       ),
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 4),
-                        child: Text('Birthday'),
+                        child: Text(
+                          'Birthday',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -256,10 +279,11 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                 .width, //width of button
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  elevation: 3, //elevation of button
+                                  elevation: 10, //elevation of button
                                   shape: RoundedRectangleBorder(
                                       //to set border radius to button
                                       borderRadius: BorderRadius.circular(10)),
+                                  shadowColor: CustomColor.primaryColor,
                                   padding: const EdgeInsets.all(
                                       5) //content padding inside button
                                   ),
@@ -269,7 +293,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                               child: const Text(
                                 Util.buttonSave,
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: CustomColor.buttonTextColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16.0),
                               ),

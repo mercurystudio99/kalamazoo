@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
+import 'package:kalamazoo/utils/color.dart';
 
 class RetrievePassScreen extends StatefulWidget {
   const RetrievePassScreen({super.key});
@@ -28,24 +30,30 @@ class _RetrievePassScreenState extends State<RetrievePassScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Image.asset('assets/group.png'),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SvgPicture.asset('assets/background.svg'),
+            ],
+          ),
           Container(
             padding: const EdgeInsets.all(Util.mainPadding),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: ListView(
               children: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    NavigationRouter.switchToLogin(context);
-                  },
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back_ios),
+                    onPressed: () {
+                      NavigationRouter.back(context);
+                    },
+                  ),
                 ),
                 const SizedBox(height: 50),
                 const Text(
                   Util.retrievePassTitle,
                   style: TextStyle(
-                      color: Colors.blue,
+                      color: CustomColor.primaryColor,
                       fontWeight: FontWeight.bold,
                       fontSize: Util.titleSize),
                 ),
@@ -55,7 +63,8 @@ class _RetrievePassScreenState extends State<RetrievePassScreen> {
                 const Text(
                   Util.retrievePassCaption,
                   style: TextStyle(
-                      color: Colors.black45, fontSize: Util.descriptionSize),
+                      color: CustomColor.textDetailColor,
+                      fontSize: Util.descriptionSize),
                 ),
                 const Padding(
                   padding: EdgeInsets.only(bottom: 15.0),
@@ -90,10 +99,11 @@ class _RetrievePassScreenState extends State<RetrievePassScreen> {
                                 .width, //width of button
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  elevation: 3, //elevation of button
+                                  elevation: 10, //elevation of button
                                   shape: RoundedRectangleBorder(
                                       //to set border radius to button
                                       borderRadius: BorderRadius.circular(10)),
+                                  shadowColor: CustomColor.primaryColor,
                                   padding: const EdgeInsets.all(
                                       5) //content padding inside button
                                   ),
@@ -112,7 +122,7 @@ class _RetrievePassScreenState extends State<RetrievePassScreen> {
                               child: const Text(
                                 Util.buttonOTP,
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: CustomColor.buttonTextColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16.0),
                               ),

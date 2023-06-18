@@ -40,9 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
               child: Text(
                 Util.splashCaption,
                 style: TextStyle(
-                    color: Colors.white70,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0),
+                    color: CustomColor.buttonTextColor, fontSize: 20.0),
               ),
             ),
           ),

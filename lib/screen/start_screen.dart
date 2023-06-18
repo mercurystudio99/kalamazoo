@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/util.dart';
+import 'package:kalamazoo/utils/color.dart';
 
 class StartScreen extends StatefulWidget {
   const StartScreen({super.key});
@@ -20,33 +22,37 @@ class _StartScreenState extends State<StartScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          SvgPicture.asset('assets/start.svg'),
-          const Padding(
-            padding: EdgeInsets.only(bottom: 40.0),
+          Align(
+            alignment: Alignment.center,
+            child: SvgPicture.asset('assets/start.svg'),
           ),
-          const Text(
+          const Padding(
+            padding: EdgeInsets.only(bottom: 20.0),
+          ),
+          Text(
             Util.startTitle,
-            style: TextStyle(
-                color: Colors.blue,
+            style: GoogleFonts.poppins(
+                color: CustomColor.primaryColor,
                 fontWeight: FontWeight.bold,
-                fontSize: 20.0),
+                fontSize: 22.0),
           ),
           const Padding(
             padding: EdgeInsets.only(bottom: 15.0),
           ),
-          const Text(
+          Text(
             Util.startSubTitle,
-            style: TextStyle(
-                color: Colors.black45,
+            style: GoogleFonts.poppins(
+                color: CustomColor.textHeadColor,
                 fontWeight: FontWeight.bold,
-                fontSize: 20.0),
+                fontSize: 22.0),
           ),
           const Padding(
             padding: EdgeInsets.only(bottom: 15.0),
           ),
-          const Text(
+          Text(
             Util.startContent,
-            style: TextStyle(color: Colors.black12, fontSize: 12.0),
+            style: GoogleFonts.poppins(
+                color: CustomColor.textDetailColor, fontSize: 12.0),
           ),
           const SizedBox(height: 50),
           SizedBox(
@@ -54,10 +60,11 @@ class _StartScreenState extends State<StartScreen> {
               width: MediaQuery.of(context).size.width, //width of button
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    elevation: 3, //elevation of button
+                    elevation: 10, //elevation of button
                     shape: RoundedRectangleBorder(
                         //to set border radius to button
                         borderRadius: BorderRadius.circular(10)),
+                    shadowColor: CustomColor.primaryColor,
                     padding:
                         const EdgeInsets.all(5) //content padding inside button
                     ),
@@ -67,7 +74,7 @@ class _StartScreenState extends State<StartScreen> {
                 child: const Text(
                   Util.buttonGetStarted,
                   style: TextStyle(
-                      color: Colors.white,
+                      color: CustomColor.buttonTextColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 16.0),
                 ),

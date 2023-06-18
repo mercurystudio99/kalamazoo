@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
+import 'package:kalamazoo/utils/color.dart';
 
 class ResetPassScreen extends StatefulWidget {
   const ResetPassScreen({super.key});
@@ -43,24 +45,30 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Image.asset('assets/group.png'),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SvgPicture.asset('assets/background.svg'),
+            ],
+          ),
           Container(
             padding: const EdgeInsets.all(Util.mainPadding),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: ListView(
               children: <Widget>[
-                IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    NavigationRouter.switchToLogin(context);
-                  },
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back_ios),
+                    onPressed: () {
+                      NavigationRouter.back(context);
+                    },
+                  ),
                 ),
                 const SizedBox(height: 50),
                 const Text(
                   Util.resetPassTitle,
                   style: TextStyle(
-                      color: Colors.blue,
+                      color: CustomColor.primaryColor,
                       fontWeight: FontWeight.bold,
                       fontSize: Util.titleSize),
                 ),
@@ -88,8 +96,8 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
                                 onTap: _toggle1,
                                 child: Icon(
                                     _obscureText1
-                                        ? Icons.visibility_off_outlined
-                                        : Icons.remove_red_eye_outlined,
+                                        ? Icons.remove_red_eye_outlined
+                                        : Icons.visibility_off_outlined,
                                     size: 24),
                               )),
                           // The validator receives the text that the user has entered.
@@ -114,8 +122,8 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
                                 onTap: _toggle2,
                                 child: Icon(
                                     _obscureText2
-                                        ? Icons.visibility_off_outlined
-                                        : Icons.remove_red_eye_outlined,
+                                        ? Icons.remove_red_eye_outlined
+                                        : Icons.visibility_off_outlined,
                                     size: 24),
                               )),
                           // The validator receives the text that the user has entered.
@@ -133,10 +141,11 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
                                 .width, //width of button
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                  elevation: 3, //elevation of button
+                                  elevation: 10, //elevation of button
                                   shape: RoundedRectangleBorder(
                                       //to set border radius to button
                                       borderRadius: BorderRadius.circular(10)),
+                                  shadowColor: CustomColor.primaryColor,
                                   padding: const EdgeInsets.all(
                                       5) //content padding inside button
                                   ),

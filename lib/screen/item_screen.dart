@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
+import 'package:kalamazoo/utils/color.dart';
 
 class ItemScreen extends StatefulWidget {
   const ItemScreen({super.key});
@@ -16,10 +17,12 @@ class _ItemScreenState extends State<ItemScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: 100,
-            child: Image.asset('assets/group.png'),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Image.network(
+                  'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80'),
+            ],
           ),
           Container(
             padding: const EdgeInsets.fromLTRB(
@@ -33,14 +36,17 @@ class _ItemScreenState extends State<ItemScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_ios),
+                      icon: const Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.white,
+                      ),
                       onPressed: () {
                         NavigationRouter.back(context);
                       },
                     ),
                     const Icon(
                       Icons.bookmark,
-                      color: Colors.red,
+                      color: CustomColor.activeColor,
                     )
                   ],
                 ),
@@ -76,7 +82,7 @@ class _ItemScreenState extends State<ItemScreen> {
                           IconButton(
                             icon: const Icon(
                               Icons.add_circle,
-                              color: Colors.red,
+                              color: CustomColor.activeColor,
                             ),
                             onPressed: () {},
                           ),
@@ -94,7 +100,7 @@ class _ItemScreenState extends State<ItemScreen> {
                       Text(
                         'Steak',
                         style: TextStyle(
-                          color: Colors.blue,
+                          color: CustomColor.primaryColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -118,7 +124,7 @@ class _ItemScreenState extends State<ItemScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      color: Colors.red,
+                      color: CustomColor.activeColor,
                       child: Row(
                         children: const [
                           Text(
@@ -137,14 +143,14 @@ class _ItemScreenState extends State<ItemScreen> {
                     ),
                     const Icon(
                       Icons.location_on,
-                      color: Colors.red,
+                      color: CustomColor.activeColor,
                     ),
                     const Text(
                       '05.5km',
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 12.0,
-                        color: Colors.black54,
+                        color: CustomColor.textDetailColor,
                       ),
                     ),
                     const SizedBox(
@@ -152,14 +158,14 @@ class _ItemScreenState extends State<ItemScreen> {
                     ),
                     const Icon(
                       Icons.access_time,
-                      color: Colors.red,
+                      color: CustomColor.activeColor,
                     ),
                     const Text(
                       '15-20min',
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         fontSize: 12.0,
-                        color: Colors.black54,
+                        color: CustomColor.textDetailColor,
                       ),
                     ),
                   ],

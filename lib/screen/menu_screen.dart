@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
+import 'package:kalamazoo/utils/color.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
@@ -56,7 +57,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     const Text(
                       Util.fullMenu,
                       style: TextStyle(
-                        color: Colors.blue,
+                        color: CustomColor.primaryColor,
                         fontSize: 20.0,
                       ),
                     ),
@@ -124,7 +125,7 @@ class _ListBuilderState extends State<ListBuilder> {
         itemCount: widget.selectedList.length,
         itemBuilder: (_, int index) {
           return Card(
-              shadowColor: Colors.blue,
+              shadowColor: CustomColor.primaryColor,
               margin: const EdgeInsets.symmetric(vertical: 8.0),
               child: ListTile(
                 onTap: () {
@@ -135,7 +136,7 @@ class _ListBuilderState extends State<ListBuilder> {
                 title: const Text(
                   'Steak',
                   style: TextStyle(
-                      color: Colors.blue,
+                      color: CustomColor.primaryColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 16.0),
                 ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
+import 'package:kalamazoo/utils/color.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -55,7 +56,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     const Text(
                       Util.notification,
                       style: TextStyle(
-                        color: Colors.blue,
+                        color: CustomColor.primaryColor,
                         fontSize: 20.0,
                       ),
                     ),
@@ -105,20 +106,24 @@ class _ListBuilderState extends State<ListBuilder> {
         itemCount: widget.selectedList.length,
         itemBuilder: (_, int index) {
           return Card(
-              shadowColor: Colors.blue,
+              shadowColor: CustomColor.primaryColor,
               margin: const EdgeInsets.symmetric(vertical: 8.0),
               child: ListTile(
                 contentPadding: const EdgeInsets.all(8),
                 isThreeLine: false,
                 leading: Image.asset('assets/group.png'),
-                trailing: const Text('5 Min ago'),
+                trailing: const Text(
+                  '5 Min ago',
+                  style: TextStyle(color: CustomColor.textDetailColor),
+                ),
                 title: const Text(
                   'James Hawkins',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
                 ),
                 subtitle: const Text(
                   'Lorem Ipsum is simply dummy text',
-                  style: TextStyle(fontSize: 12.0),
+                  style: TextStyle(
+                      fontSize: 12.0, color: CustomColor.textDetailColor),
                 ),
               ));
         });

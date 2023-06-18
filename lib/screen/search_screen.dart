@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
+import 'package:kalamazoo/utils/color.dart';
 
 const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
 
@@ -57,7 +58,10 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                     DropdownButton<String>(
                       value: dropdownValue,
-                      hint: const Text('Kalamazoo, Michigan, USA'),
+                      hint: const Text(
+                        'Kalamazoo, Michigan, USA',
+                        style: TextStyle(color: CustomColor.textDetailColor),
+                      ),
                       borderRadius: BorderRadius.circular(10.0),
                       icon: const Icon(Icons.keyboard_arrow_down),
                       elevation: 16,
@@ -139,19 +143,20 @@ class _ListBuilderState extends State<ListBuilder> {
         itemCount: widget.selectedList.length,
         itemBuilder: (_, int index) {
           return Card(
-              shadowColor: Colors.blue,
+              shadowColor: CustomColor.primaryColor,
               margin: const EdgeInsets.symmetric(vertical: 8.0),
               child: ListTile(
                 contentPadding: const EdgeInsets.all(8),
                 leading: AspectRatio(
                   aspectRatio: 1.0,
                   child: Container(
-                    decoration: const BoxDecoration(color: Colors.blue),
+                    decoration:
+                        const BoxDecoration(color: CustomColor.primaryColor),
                   ),
                 ),
                 trailing: const Icon(
                   Icons.bookmark_border_outlined,
-                  color: Colors.red,
+                  color: CustomColor.activeColor,
                 ),
                 title: const Padding(
                   padding: EdgeInsets.fromLTRB(20.0, 0.0, 2.0, 0.0),
@@ -216,7 +221,7 @@ class _ArticleDescription extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontSize: 12.0,
-                color: Colors.black54,
+                color: CustomColor.textDetailColor,
               ),
             ),
           ],
@@ -225,7 +230,7 @@ class _ArticleDescription extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              color: Colors.red,
+              color: CustomColor.activeColor,
               child: Row(
                 children: const [
                   Text(
@@ -244,26 +249,26 @@ class _ArticleDescription extends StatelessWidget {
             ),
             const Icon(
               Icons.location_on,
-              color: Colors.red,
+              color: CustomColor.activeColor,
             ),
             Text(
               subtitle,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontSize: 12.0,
-                color: Colors.black54,
+                color: CustomColor.textDetailColor,
               ),
             ),
             const SizedBox(
               width: 10.0,
             ),
-            const Icon(Icons.access_time),
+            const Icon(Icons.access_time, color: CustomColor.textDetailColor),
             Text(
               subtitle,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontSize: 12.0,
-                color: Colors.black54,
+                color: CustomColor.textDetailColor,
               ),
             ),
           ],
@@ -273,14 +278,14 @@ class _ArticleDescription extends StatelessWidget {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18.0,
-            color: Colors.red,
+            color: CustomColor.activeColor,
           ),
         ),
         Text(
           '$publishDate  $readDuration',
           style: const TextStyle(
             fontSize: 12.0,
-            color: Colors.black54,
+            color: CustomColor.textDetailColor,
           ),
         ),
       ],

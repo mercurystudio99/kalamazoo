@@ -69,6 +69,11 @@ flutter:
   assets:
     - assets/start.svg
     - assets/logo.svg
+    - assets/background.svg
+    - assets/oval.svg
+    - assets/apple.png
+    - assets/facebook.png
+    - assets/google.png
     - assets/group.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
