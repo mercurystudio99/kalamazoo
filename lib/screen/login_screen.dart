@@ -104,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ListView(
             children: <Widget>[
               const SizedBox(
-                height: 80,
+                height: 120,
               ),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: Util.mainPadding),
