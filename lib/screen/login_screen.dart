@@ -58,8 +58,31 @@ class _LoginScreenState extends State<LoginScreen> {
         children: <Widget>[
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SvgPicture.asset('assets/background.svg'),
+              SvgPicture.asset(
+                'assets/background.svg',
+                width: MediaQuery.of(context).size.width,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.height * 0.2,
+                height: MediaQuery.of(context).size.height * 0.4,
+                decoration: BoxDecoration(
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: CustomColor.primaryColor.withOpacity(0.15),
+                      blurRadius: 30.0,
+                    ),
+                  ],
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.zero,
+                      topRight:
+                          Radius.circular(MediaQuery.of(context).size.width),
+                      bottomLeft: Radius.zero,
+                      bottomRight:
+                          Radius.circular(MediaQuery.of(context).size.width)),
+                ),
+              ),
             ],
           ),
           Container(

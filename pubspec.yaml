@@ -70,7 +70,6 @@ flutter:
     - assets/start.svg
     - assets/logo.svg
     - assets/background.svg
-    - assets/oval.svg
     - assets/apple.png
     - assets/facebook.png
     - assets/google.png
