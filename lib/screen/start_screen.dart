@@ -15,7 +15,8 @@ class StartScreen extends StatefulWidget {
 class _StartScreenState extends State<StartScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Scaffold(
+        body: Container(
       color: Colors.white,
       padding: const EdgeInsets.all(Util.mainPadding),
       child: Column(
@@ -34,7 +35,7 @@ class _StartScreenState extends State<StartScreen> {
             style: GoogleFonts.poppins(
                 color: CustomColor.primaryColor,
                 fontWeight: FontWeight.bold,
-                fontSize: 22.0),
+                fontSize: 24.0),
           ),
           const Padding(
             padding: EdgeInsets.only(bottom: 15.0),
@@ -52,9 +53,9 @@ class _StartScreenState extends State<StartScreen> {
           Text(
             Util.startContent,
             style: GoogleFonts.poppins(
-                color: CustomColor.textDetailColor, fontSize: 12.0),
+                color: CustomColor.textDetailColor, fontSize: 13.0),
           ),
-          const SizedBox(height: 50),
+          const Spacer(),
           SizedBox(
               height: 50, //height of button
               width: MediaQuery.of(context).size.width, //width of button
@@ -81,6 +82,6 @@ class _StartScreenState extends State<StartScreen> {
               )),
         ],
       ),
-    );
+    ));
   }
 }
