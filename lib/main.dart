@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:kalamazoo/utils/color.dart';
 import 'package:kalamazoo/screen/home_screen.dart';
 import 'package:kalamazoo/screen/notification_screen.dart';
 import 'package:kalamazoo/screen/search_screen.dart';
@@ -66,6 +67,18 @@ class MyApp extends StatelessWidget {
             // Notice that the counter didn't reset back to zero; the application
             // is not restarted.
             primarySwatch: defaultcolor,
+            inputDecorationTheme: const InputDecorationTheme(
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(14)),
+                    borderSide: BorderSide(color: Colors.white)),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(14)),
+                    borderSide: BorderSide(color: CustomColor.primaryColor)),
+                errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(14)),
+                    borderSide: BorderSide(color: CustomColor.activeColor)),
+                filled: true,
+                fillColor: Colors.white),
             textTheme: GoogleFonts.poppinsTextTheme(
               Theme.of(context).textTheme,
             )),

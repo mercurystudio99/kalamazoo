@@ -1,7 +1,7 @@
 class Util {
   static const double mainPadding = 32.0;
-  static const double titleSize = 20.0;
-  static const double descriptionSize = 12.0;
+  static const double titleSize = 24.0;
+  static const double descriptionSize = 13.0;
   // Common Text
   static const String notification = "Notification";
   static const String favorite = "Favorite";
