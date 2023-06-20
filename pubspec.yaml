@@ -70,6 +70,15 @@ flutter:
     - assets/start.svg
     - assets/logo.svg
     - assets/background.svg
+    - assets/coffeecup.svg
+    - assets/desert.svg
+    - assets/dish.svg
+    - assets/dosa.svg
+    - assets/samosa.svg
+    - assets/sandwich.svg
+    - assets/menu.png
+    - assets/camera.png
+    - assets/card.png
     - assets/apple.png
     - assets/facebook.png
     - assets/google.png

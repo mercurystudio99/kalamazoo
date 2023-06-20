@@ -18,43 +18,18 @@ final List<String> imgList = [
 
 final List<Widget> imageSliders = imgList
     .map((item) => Container(
-          child: Container(
-            margin: EdgeInsets.all(5.0),
-            child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                child: Stack(
-                  children: <Widget>[
-                    Image.network(item, fit: BoxFit.cover, width: 1000.0),
-                    Positioned(
-                      bottom: 0.0,
-                      left: 0.0,
-                      right: 0.0,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Color.fromARGB(200, 0, 0, 0),
-                              Color.fromARGB(0, 0, 0, 0)
-                            ],
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                          ),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 20.0),
-                        child: Text(
-                          'No. ${imgList.indexOf(item)} image',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
-          ),
+          margin: const EdgeInsets.all(5.0),
+          child: ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+              child: Stack(
+                children: <Widget>[
+                  Image.asset(
+                    'assets/card.png',
+                    fit: BoxFit.cover,
+                    width: 1000.0,
+                  ),
+                ],
+              )),
         ))
     .toList();
 
@@ -70,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _setting = true;
   int _selectedIndex = 0;
   bool isSelectionMode = false;
+  int carouselIndicatorCurrent = 0;
   final int listLength = 30;
   late List<bool> _selected;
 
@@ -106,13 +82,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> countries = [
+    List<String> categories = [
       "Tea",
       "Samosa",
       "Sandwich",
       "Dosa",
       "Dessert",
-      "Dessert"
+      "Dessert",
     ];
 
     final List<Widget> widgetOptions = <Widget>[
@@ -122,7 +98,8 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.only(top: 10.0),
           child: Column(children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: Util.mainPadding),
+              padding: const EdgeInsets.only(
+                  left: Util.mainPadding * 0.5, right: Util.mainPadding),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -134,10 +111,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       builder: (_, value, __) {
                         return AnimatedSwitcher(
                           duration: const Duration(milliseconds: 250),
-                          child: Icon(
-                            value.visible ? Icons.clear : Icons.menu,
+                          child: Image.asset(
+                            'assets/menu.png',
                             key: ValueKey<bool>(value.visible),
-                            color: Colors.white,
                           ),
                         );
                       },
@@ -148,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       const Text(
                         'Location',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: CustomColor.textDetailColor),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -172,6 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: Icon(
                       Icons.notifications_outlined,
+                      size: 32,
                       color: Colors.white,
                     ),
                   ),
@@ -180,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: Util.mainPadding, vertical: 10.0),
+                  horizontal: Util.mainPadding, vertical: 12.0),
               child: TextFormField(
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -218,12 +195,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   ]),
             ),
             SizedBox(
-                height: 80,
+                height: 70,
                 child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: countries.map((country) {
-                        return box(country, CustomColor.primaryColor);
+                      children: categories.map((category) {
+                        return categoryBox(
+                            category,
+                            categories.indexOf(category),
+                            CustomColor.primaryColor);
                       }).toList(),
                     ))),
           ]),
@@ -232,22 +212,48 @@ class _HomeScreenState extends State<HomeScreen> {
           child: ListView(
             children: [
               CarouselSlider(
-                options: CarouselOptions(
-                  aspectRatio: 2.0,
-                  enlargeCenterPage: true,
-                  pageViewKey: PageStorageKey<String>('carousel_slider'),
-                ),
                 items: imageSliders,
+                options: CarouselOptions(
+                    aspectRatio: 2.0,
+                    enlargeCenterPage: true,
+                    enableInfiniteScroll: false,
+                    initialPage: 0,
+                    autoPlay: true,
+                    pageViewKey:
+                        const PageStorageKey<String>('carousel_slider'),
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        carouselIndicatorCurrent = index;
+                      });
+                    }),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: imgList.asMap().entries.map((entry) {
+                  return Container(
+                    width: (carouselIndicatorCurrent == entry.key ? 34 : 16),
+                    height: 5.0,
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 4.0),
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        color: (carouselIndicatorCurrent == entry.key
+                            ? CustomColor.primaryColor
+                            : CustomColor.textDetailColor.withOpacity(0.5))),
+                  );
+                }).toList(),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: Util.mainPadding),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: Util.mainPadding, vertical: 4.0),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
                         Util.homeTopBrands,
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                       GestureDetector(
                         onTap: () {},
@@ -259,12 +265,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     ]),
               ),
               SizedBox(
-                  height: 100,
+                  height: 130,
                   child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
-                        children: countries.map((country) {
-                          return box(country, Colors.deepOrangeAccent);
+                        children: categories.map((category) {
+                          return brandBox(
+                              category, categories.indexOf(category));
                         }).toList(),
                       ))),
               Padding(
@@ -275,7 +282,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       const Text(
                         Util.homeBestOffers,
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                       GestureDetector(
                         onTap: () {},
@@ -287,222 +295,326 @@ class _HomeScreenState extends State<HomeScreen> {
                     ]),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: Util.mainPadding),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: Util.mainPadding, vertical: 10),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.4,
-                        child: Card(
-                          shadowColor: Colors.blue,
-                          margin: const EdgeInsets.all(4.0),
-                          child: Column(
-                            children: [
-                              Image.network(
-                                  'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80'),
-                              Padding(
-                                padding: const EdgeInsets.all(4),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: const [
-                                        Text(
-                                          'Royal Din',
-                                          style: TextStyle(fontSize: 10.0),
-                                        ),
-                                        Text(
-                                          'Western dishes',
-                                          softWrap: true,
-                                          style: TextStyle(fontSize: 10.0),
-                                        ),
-                                      ],
-                                    ),
-                                    Container(
-                                      color: Colors.red,
-                                      child: Row(
+                        child: Stack(children: [
+                          Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            shadowColor:
+                                CustomColor.primaryColor.withOpacity(0.2),
+                            elevation: 8,
+                            margin: const EdgeInsets.all(4.0),
+                            child: Column(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                  ),
+                                  child: Image.network(
+                                    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: const [
                                           Text(
-                                            '5.3',
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                            'Royal Din',
+                                            style: TextStyle(
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.bold),
                                           ),
-                                          Icon(
-                                            Icons.star,
-                                            color: Colors.white,
-                                          )
+                                          Text(
+                                            'Western dishes',
+                                            softWrap: true,
+                                            style: TextStyle(
+                                                fontSize: 10.0,
+                                                color: CustomColor
+                                                    .textDetailColor),
+                                          ),
                                         ],
                                       ),
-                                    ),
-                                  ],
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 4),
+                                        decoration: BoxDecoration(
+                                          color: CustomColor.activeColor,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Row(
+                                          children: const [
+                                            Text(
+                                              '5.3',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12),
+                                            ),
+                                            Icon(
+                                              Icons.star,
+                                              color: Colors.white,
+                                              size: 12,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(4),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: const [
-                                        Text(
-                                          '50% OFF',
-                                          style: TextStyle(
-                                              fontSize: 10.0,
-                                              color: Colors.red,
-                                              fontWeight: FontWeight.bold),
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: const [
+                                          Text(
+                                            '50% OFF',
+                                            style: TextStyle(
+                                                fontSize: 14.0,
+                                                color: CustomColor.activeColor,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            'UPTO \$100',
+                                            style: TextStyle(
+                                                fontSize: 10.0,
+                                                color: CustomColor
+                                                    .textDetailColor),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 8),
+                                        child: Row(
+                                          children: const [
+                                            Icon(
+                                              Icons.location_on,
+                                              color: CustomColor.activeColor,
+                                              size: 10,
+                                            ),
+                                            Text(
+                                              '1.2km',
+                                              style: TextStyle(
+                                                  fontSize: 10.0,
+                                                  color: CustomColor
+                                                      .textDetailColor),
+                                            ),
+                                            SizedBox(
+                                              width: 4,
+                                            ),
+                                            Icon(
+                                              Icons.access_time,
+                                              size: 10,
+                                              color:
+                                                  CustomColor.textDetailColor,
+                                            ),
+                                            Text(
+                                              '10min',
+                                              style: TextStyle(
+                                                  fontSize: 10.0,
+                                                  color: CustomColor
+                                                      .textDetailColor),
+                                            ),
+                                          ],
                                         ),
-                                        Text(
-                                          'UPTO \$100',
-                                          style: TextStyle(fontSize: 10.0),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: const [
-                                        Icon(
-                                          Icons.location_on,
-                                          color: Colors.red,
-                                          size: 10,
-                                        ),
-                                        Text(
-                                          '1.2km',
-                                          style: TextStyle(fontSize: 10.0),
-                                        ),
-                                        Icon(
-                                          Icons.access_time,
-                                          size: 10,
-                                        ),
-                                        Text(
-                                          '10min',
-                                          style: TextStyle(fontSize: 10.0),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
+                          const Positioned(
+                              right: 10,
+                              top: 10,
+                              child: Icon(
+                                Icons.bookmark,
+                                color: CustomColor.activeColor,
+                              ))
+                        ]),
                       ),
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.4,
-                        child: Card(
-                          shadowColor: Colors.blue,
-                          margin: const EdgeInsets.all(4.0),
-                          child: Column(
-                            children: [
-                              Image.network(
-                                  'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80'),
-                              Padding(
-                                padding: const EdgeInsets.all(4),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: const [
-                                        Text(
-                                          'Royal Din',
-                                          style: TextStyle(fontSize: 10.0),
-                                        ),
-                                        Text(
-                                          'Western dishes',
-                                          softWrap: true,
-                                          style: TextStyle(fontSize: 10.0),
-                                        ),
-                                      ],
-                                    ),
-                                    Container(
-                                      color: Colors.red,
-                                      child: Row(
+                        child: Stack(children: [
+                          Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            shadowColor:
+                                CustomColor.primaryColor.withOpacity(0.2),
+                            elevation: 8,
+                            margin: const EdgeInsets.all(4.0),
+                            child: Column(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                  ),
+                                  child: Image.network(
+                                    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: const [
                                           Text(
-                                            '5.3',
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                            'Royal Din',
+                                            style: TextStyle(
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.bold),
                                           ),
-                                          Icon(
-                                            Icons.star,
-                                            color: Colors.white,
-                                          )
+                                          Text(
+                                            'Western dishes',
+                                            softWrap: true,
+                                            style: TextStyle(
+                                                fontSize: 10.0,
+                                                color: CustomColor
+                                                    .textDetailColor),
+                                          ),
                                         ],
                                       ),
-                                    ),
-                                  ],
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 4),
+                                        decoration: BoxDecoration(
+                                          color: CustomColor.activeColor,
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child: Row(
+                                          children: const [
+                                            Text(
+                                              '5.3',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12),
+                                            ),
+                                            Icon(
+                                              Icons.star,
+                                              color: Colors.white,
+                                              size: 12,
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(4),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: const [
-                                        Text(
-                                          '50% OFF',
-                                          style: TextStyle(
-                                              fontSize: 10.0,
-                                              color: Colors.red,
-                                              fontWeight: FontWeight.bold),
+                                Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: const [
+                                          Text(
+                                            '50% OFF',
+                                            style: TextStyle(
+                                                fontSize: 14.0,
+                                                color: CustomColor.activeColor,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(
+                                            'UPTO \$100',
+                                            style: TextStyle(
+                                                fontSize: 10.0,
+                                                color: CustomColor
+                                                    .textDetailColor),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 8),
+                                        child: Row(
+                                          children: const [
+                                            Icon(
+                                              Icons.location_on,
+                                              color: CustomColor.activeColor,
+                                              size: 10,
+                                            ),
+                                            Text(
+                                              '1.2km',
+                                              style: TextStyle(
+                                                  fontSize: 10.0,
+                                                  color: CustomColor
+                                                      .textDetailColor),
+                                            ),
+                                            SizedBox(
+                                              width: 4,
+                                            ),
+                                            Icon(
+                                              Icons.access_time,
+                                              size: 10,
+                                              color:
+                                                  CustomColor.textDetailColor,
+                                            ),
+                                            Text(
+                                              '10min',
+                                              style: TextStyle(
+                                                  fontSize: 10.0,
+                                                  color: CustomColor
+                                                      .textDetailColor),
+                                            ),
+                                          ],
                                         ),
-                                        Text(
-                                          'UPTO \$100',
-                                          style: TextStyle(fontSize: 10.0),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: const [
-                                        Icon(
-                                          Icons.location_on,
-                                          color: Colors.red,
-                                          size: 10,
-                                        ),
-                                        Text(
-                                          '1.2km',
-                                          style: TextStyle(fontSize: 10.0),
-                                        ),
-                                        Icon(
-                                          Icons.access_time,
-                                          size: 10,
-                                        ),
-                                        Text(
-                                          '10min',
-                                          style: TextStyle(fontSize: 10.0),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
+                          const Positioned(
+                              right: 10,
+                              top: 10,
+                              child: Icon(
+                                Icons.bookmark,
+                                color: CustomColor.activeColor,
+                              ))
+                        ]),
                       ),
                     ]),
               ),
@@ -956,10 +1068,19 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget box(String title, Color backgroundcolor) {
+  Widget categoryBox(String title, int index, Color backgroundcolor) {
+    List<String> categoryImgs = [
+      "assets/coffeecup.svg",
+      "assets/samosa.svg",
+      "assets/sandwich.svg",
+      "assets/dosa.svg",
+      "assets/desert.svg",
+      "assets/desert.svg",
+    ];
+
     return Container(
-        margin: const EdgeInsets.all(10),
-        width: 80,
+        margin: const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 12),
+        width: 60,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.white),
           borderRadius: BorderRadius.circular(10),
@@ -969,14 +1090,124 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.breakfast_dining_outlined,
-              color: Colors.white,
-            ),
-            Text(title,
-                style: const TextStyle(color: Colors.white, fontSize: 12))
+            SvgPicture.asset(categoryImgs[index]),
+            Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Text(title,
+                    style: const TextStyle(color: Colors.white, fontSize: 10))),
           ],
         ));
+  }
+
+  Widget brandBox(String title, int index) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      padding: const EdgeInsets.all(4),
+      width: 250,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: <BoxShadow>[
+          BoxShadow(
+            color: CustomColor.primaryColor.withOpacity(0.2),
+            blurRadius: 8.0,
+          ),
+        ],
+        border: Border.all(color: Colors.white),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      alignment: Alignment.center,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+              width: 100,
+              child: Image.asset(
+                'assets/group.png',
+                fit: BoxFit.cover,
+              )),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const Text('Mc Donald\'S'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SvgPicture.asset('assets/dish.svg'),
+                  const Text(
+                    'Burger',
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      color: CustomColor.textDetailColor,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  const Icon(
+                    Icons.location_on,
+                    color: CustomColor.activeColor,
+                    size: 12,
+                  ),
+                  const Text(
+                    '1.2km',
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      color: CustomColor.textDetailColor,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                      color: CustomColor.activeColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Row(
+                      children: const [
+                        Text(
+                          '5.3',
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                        Icon(
+                          Icons.star,
+                          color: Colors.white,
+                          size: 12,
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10.0,
+                  ),
+                  const Icon(
+                    Icons.access_time,
+                    size: 12,
+                  ),
+                  const Text(
+                    '10min',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      color: CustomColor.textDetailColor,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const Icon(
+            Icons.bookmark,
+            color: CustomColor.activeColor,
+          ),
+        ],
+      ),
+    );
   }
 }
 
