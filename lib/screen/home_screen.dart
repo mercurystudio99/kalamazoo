@@ -899,8 +899,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return AdvancedDrawer(
       backdrop: Column(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SvgPicture.asset('assets/background.svg'),
+          SvgPicture.asset(
+            'assets/background.svg',
+            width: MediaQuery.of(context).size.width,
+          ),
         ],
       ),
       controller: _advancedDrawerController,

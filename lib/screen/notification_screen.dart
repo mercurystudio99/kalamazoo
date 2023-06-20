@@ -37,13 +37,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(Util.mainPadding),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: Util.mainPadding * 0.5),
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -57,25 +61,27 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       Util.notification,
                       style: TextStyle(
                         color: CustomColor.primaryColor,
-                        fontSize: 20.0,
+                        fontSize: 22.0,
                       ),
                     ),
-                    const SizedBox.shrink(),
+                    const SizedBox(
+                      width: Util.mainPadding,
+                    ),
                   ],
                 ),
-                Expanded(
-                  child: ListBuilder(
-                    isSelectionMode: isSelectionMode,
-                    selectedList: _selected,
-                    onSelectionChange: (bool x) {
-                      setState(() {
-                        isSelectionMode = x;
-                      });
-                    },
-                  ),
+              ),
+              Expanded(
+                child: ListBuilder(
+                  isSelectionMode: isSelectionMode,
+                  selectedList: _selected,
+                  onSelectionChange: (bool x) {
+                    setState(() {
+                      isSelectionMode = x;
+                    });
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           )
         ],
       ),
@@ -105,27 +111,49 @@ class _ListBuilderState extends State<ListBuilder> {
     return ListView.builder(
         itemCount: widget.selectedList.length,
         itemBuilder: (_, int index) {
-          return Card(
-              shadowColor: CustomColor.primaryColor,
-              margin: const EdgeInsets.symmetric(vertical: 8.0),
-              child: ListTile(
-                contentPadding: const EdgeInsets.all(8),
-                isThreeLine: false,
-                leading: Image.asset('assets/group.png'),
-                trailing: const Text(
-                  '5 Min ago',
-                  style: TextStyle(color: CustomColor.textDetailColor),
-                ),
-                title: const Text(
-                  'James Hawkins',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-                ),
-                subtitle: const Text(
-                  'Lorem Ipsum is simply dummy text',
-                  style: TextStyle(
-                      fontSize: 12.0, color: CustomColor.textDetailColor),
-                ),
-              ));
+          return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Util.mainPadding),
+              child: Card(
+                  color: (widget.isSelectionMode
+                      ? CustomColor.primaryColor
+                      : Colors.white),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  shadowColor: CustomColor.primaryColor.withOpacity(0.2),
+                  elevation: 8,
+                  margin: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                    isThreeLine: false,
+                    leading: Image.asset('assets/group.png'),
+                    trailing: Text(
+                      '5 Min ago',
+                      style: TextStyle(
+                          color: (widget.isSelectionMode
+                              ? Colors.white
+                              : CustomColor.textDetailColor),
+                          fontSize: 10),
+                    ),
+                    title: Text(
+                      'James Hawkins',
+                      style: TextStyle(
+                          color: (widget.isSelectionMode
+                              ? Colors.white
+                              : Colors.black),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0),
+                    ),
+                    subtitle: Text(
+                      'Lorem Ipsum is simply dummy text',
+                      style: TextStyle(
+                        overflow: TextOverflow.ellipsis,
+                        fontSize: 12.0,
+                        color: (widget.isSelectionMode
+                            ? Colors.white
+                            : CustomColor.textDetailColor),
+                      ),
+                    ),
+                  )));
         });
   }
 }
