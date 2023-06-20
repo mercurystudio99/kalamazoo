@@ -37,14 +37,39 @@ class _MenuScreenState extends State<MenuScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
-          Container(
-            padding: const EdgeInsets.fromLTRB(
-                Util.mainPadding, Util.mainPadding, Util.mainPadding, 0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
+          Positioned(
+            left: 0,
+            bottom: 0,
+            child: Container(
+              width: MediaQuery.of(context).size.height * 0.4,
+              height: MediaQuery.of(context).size.height * 0.4,
+              decoration: BoxDecoration(
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: CustomColor.primaryColor.withOpacity(0.1),
+                    blurRadius: 30.0,
+                  ),
+                ],
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.zero,
+                    topRight:
+                        Radius.circular(MediaQuery.of(context).size.width),
+                    bottomLeft: Radius.zero,
+                    bottomRight: Radius.zero),
+              ),
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: Util.mainPadding * 0.5),
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -58,14 +83,24 @@ class _MenuScreenState extends State<MenuScreen> {
                       Util.fullMenu,
                       style: TextStyle(
                         color: CustomColor.primaryColor,
-                        fontSize: 20.0,
+                        fontSize: 22.0,
                       ),
                     ),
-                    const SizedBox.shrink(),
+                    const SizedBox(
+                      width: Util.mainPadding,
+                    ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: Util.mainPadding,
+                    right: Util.mainPadding,
+                    bottom: 20),
+                child: Material(
+                  borderRadius: const BorderRadius.all(Radius.circular(14)),
+                  elevation: 8,
+                  shadowColor: CustomColor.primaryColor.withOpacity(0.2),
                   child: TextFormField(
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
@@ -82,19 +117,19 @@ class _MenuScreenState extends State<MenuScreen> {
                         return null;
                       }),
                 ),
-                Expanded(
-                  child: ListBuilder(
-                    isSelectionMode: isSelectionMode,
-                    selectedList: _selected,
-                    onSelectionChange: (bool x) {
-                      setState(() {
-                        isSelectionMode = x;
-                      });
-                    },
-                  ),
+              ),
+              Expanded(
+                child: ListBuilder(
+                  isSelectionMode: isSelectionMode,
+                  selectedList: _selected,
+                  onSelectionChange: (bool x) {
+                    setState(() {
+                      isSelectionMode = x;
+                    });
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           )
         ],
       ),
@@ -124,27 +159,43 @@ class _ListBuilderState extends State<ListBuilder> {
     return ListView.builder(
         itemCount: widget.selectedList.length,
         itemBuilder: (_, int index) {
-          return Card(
-              shadowColor: CustomColor.primaryColor,
-              margin: const EdgeInsets.symmetric(vertical: 8.0),
-              child: ListTile(
-                onTap: () {
-                  NavigationRouter.switchToItem(context);
-                },
-                contentPadding: const EdgeInsets.all(8),
-                leading: Image.asset('assets/group.png'),
-                title: const Text(
-                  'Steak',
-                  style: TextStyle(
-                      color: CustomColor.primaryColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16.0),
-                ),
-                subtitle: const Text(
-                  '\$120',
-                  style: TextStyle(fontSize: 12.0),
-                ),
-              ));
+          return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Util.mainPadding),
+              child: Card(
+                  color: (widget.isSelectionMode
+                      ? CustomColor.primaryColor
+                      : Colors.white),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  shadowColor: CustomColor.primaryColor.withOpacity(0.2),
+                  elevation: 8,
+                  margin: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: ListTile(
+                    onTap: () {
+                      NavigationRouter.switchToItem(context);
+                    },
+                    contentPadding: const EdgeInsets.all(8),
+                    leading: Image.asset('assets/group.png'),
+                    title: Text(
+                      'Steak',
+                      style: TextStyle(
+                          color: (widget.isSelectionMode
+                              ? Colors.white
+                              : CustomColor.primaryColor),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18.0),
+                    ),
+                    subtitle: Text(
+                      '\$120',
+                      style: TextStyle(
+                          overflow: TextOverflow.ellipsis,
+                          fontSize: 12.0,
+                          color: (widget.isSelectionMode
+                              ? Colors.white
+                              : Colors.black),
+                          fontWeight: FontWeight.bold),
+                    ),
+                  )));
         });
   }
 }
