@@ -19,10 +19,7 @@ class _ItemScreenState extends State<ItemScreen> {
         children: <Widget>[
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Image.network(
-                  'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80'),
-            ],
+            children: [Image.asset('assets/item_background.png')],
           ),
           Positioned(
             left: 0,
@@ -91,9 +88,10 @@ class _ItemScreenState extends State<ItemScreen> {
                       color: Colors.white,
                       border:
                           Border.all(width: 4, color: CustomColor.activeColor),
-                      borderRadius: BorderRadius.all(Radius.circular(100))),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(100))),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(100)),
+                    borderRadius: const BorderRadius.all(Radius.circular(100)),
                     child: Image.asset(
                       'assets/group.png',
                       fit: BoxFit.cover,
