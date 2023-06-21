@@ -141,15 +141,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       )
                     ],
                   ),
-                  const badges.Badge(
-                    badgeContent: Text(
-                      '1',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    child: Icon(
-                      Icons.notifications_outlined,
-                      size: 32,
-                      color: Colors.white,
+                  GestureDetector(
+                    onTap: () {
+                      NavigationRouter.switchToSearch(context);
+                    },
+                    child: const badges.Badge(
+                      badgeContent: Text(
+                        '1',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      child: Icon(
+                        Icons.notifications_outlined,
+                        size: 32,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ],
