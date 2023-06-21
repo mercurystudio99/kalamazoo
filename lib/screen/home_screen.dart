@@ -702,16 +702,69 @@ class _HomeScreenState extends State<HomeScreen> {
         children: <Widget>[
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SvgPicture.asset('assets/background.svg'),
+              SvgPicture.asset(
+                'assets/background.svg',
+                width: MediaQuery.of(context).size.width,
+              ),
             ],
           ),
-          Container(
-            padding: const EdgeInsets.all(Util.mainPadding),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
+          Positioned(
+            left: 0,
+            top: MediaQuery.of(context).size.height * 0.25,
+            child: Container(
+              width: MediaQuery.of(context).size.height * 0.25,
+              height: MediaQuery.of(context).size.height * 0.4,
+              decoration: BoxDecoration(
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: CustomColor.primaryColor.withOpacity(0.1),
+                    blurRadius: 30.0,
+                  ),
+                ],
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.zero,
+                    topRight:
+                        Radius.circular(MediaQuery.of(context).size.width),
+                    bottomLeft: Radius.zero,
+                    bottomRight:
+                        Radius.circular(MediaQuery.of(context).size.width)),
+              ),
+            ),
+          ),
+          Positioned(
+            left: 0,
+            bottom: 0,
+            child: Container(
+              width: MediaQuery.of(context).size.height * 0.4,
+              height: MediaQuery.of(context).size.height * 0.4,
+              decoration: BoxDecoration(
+                boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: CustomColor.primaryColor.withOpacity(0.1),
+                    blurRadius: 30.0,
+                  ),
+                ],
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.zero,
+                    topRight:
+                        Radius.circular(MediaQuery.of(context).size.width),
+                    bottomLeft: Radius.zero,
+                    bottomRight: Radius.zero),
+              ),
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: 20,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: Util.mainPadding * 0.5),
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -725,182 +778,219 @@ class _HomeScreenState extends State<HomeScreen> {
                       Util.profileTitle,
                       style: TextStyle(
                         color: CustomColor.primaryColor,
-                        fontSize: 20.0,
+                        fontSize: 22.0,
                       ),
                     ),
-                    const SizedBox.shrink(),
+                    const SizedBox(
+                      width: Util.mainPadding,
+                    ),
                   ],
                 ),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        blurRadius: 30.0,
+              ),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                margin: const EdgeInsets.symmetric(
+                    horizontal: Util.mainPadding, vertical: 20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 30.0,
+                    ),
+                  ],
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ClipRRect(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      child: Image.asset('assets/group.png'),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10.0),
+                      child: Text(
+                        'James Hawkins',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
                       ),
-                    ],
-                    borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Image.asset('assets/group.png'),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10.0),
-                        child: Text(
-                          'James Hawkins',
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 4.0, horizontal: Util.mainPadding),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      Util.profileContact,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          NavigationRouter.switchToProfileEdit(context);
+                        },
+                        child: const Text(
+                          Util.edit,
+                          style: TextStyle(color: CustomColor.primaryColor),
+                        )),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: Util.mainPadding),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.only(right: 10),
+                      decoration: const BoxDecoration(
+                          color: Colors.white, shape: BoxShape.circle),
+                      alignment: const Alignment(0, 0),
+                      child: const Icon(Icons.email_outlined,
+                          color: CustomColor.textDetailColor),
+                    ),
+                    const SizedBox(
+                      width: 10.0,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          'Email Address',
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(Util.profileContact),
-                      TextButton(
-                          onPressed: () {
-                            NavigationRouter.switchToProfileEdit(context);
-                          },
-                          child: const Text(
-                            Util.edit,
-                            style: TextStyle(color: CustomColor.primaryColor),
-                          )),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        alignment: const Alignment(0, 0),
-                        child: const Icon(Icons.email_outlined,
-                            color: CustomColor.textDetailColor),
-                      ),
-                      const SizedBox(
-                        width: 10.0,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            'Email Address',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            'demo@gmail.com',
-                            style:
-                                TextStyle(color: CustomColor.textDetailColor),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        alignment: const Alignment(0, 0),
-                        child: const Icon(Icons.location_on_outlined,
-                            color: CustomColor.textDetailColor),
-                      ),
-                      const SizedBox(
-                        width: 10.0,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            'Location',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text('Kalamazoo, Michigan, USA',
-                              style: TextStyle(
-                                  color: CustomColor.textDetailColor)),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        alignment: const Alignment(0, 0),
-                        child: const Icon(Icons.person_outline,
-                            color: CustomColor.textDetailColor),
-                      ),
-                      const SizedBox(
-                        width: 10.0,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            'Gender',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text('Male',
-                              style: TextStyle(
-                                  color: CustomColor.textDetailColor)),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        alignment: const Alignment(0, 0),
-                        child: const Icon(
-                          Icons.calendar_month,
-                          color: CustomColor.textDetailColor,
+                        Text(
+                          'demo@gmail.com',
+                          style: TextStyle(
+                              color: CustomColor.textDetailColor, fontSize: 12),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 10.0,
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            'Birth Date',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          Text('30 August 2023',
-                              style: TextStyle(
-                                  color: CustomColor.textDetailColor)),
-                        ],
-                      )
-                    ],
-                  ),
+                      ],
+                    )
+                  ],
                 ),
-              ],
-            ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: Util.mainPadding),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.only(right: 10),
+                      decoration: const BoxDecoration(
+                          color: Colors.white, shape: BoxShape.circle),
+                      alignment: const Alignment(0, 0),
+                      child: const Icon(Icons.location_on_outlined,
+                          color: CustomColor.textDetailColor),
+                    ),
+                    const SizedBox(
+                      width: 10.0,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          'Location',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text('Kalamazoo, Michigan, USA',
+                            style: TextStyle(
+                                color: CustomColor.textDetailColor,
+                                fontSize: 12)),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: Util.mainPadding),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.only(right: 10),
+                      decoration: const BoxDecoration(
+                          color: Colors.white, shape: BoxShape.circle),
+                      alignment: const Alignment(0, 0),
+                      child: const Icon(Icons.person_outline,
+                          color: CustomColor.textDetailColor),
+                    ),
+                    const SizedBox(
+                      width: 10.0,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          'Gender',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text('Male',
+                            style: TextStyle(
+                                color: CustomColor.textDetailColor,
+                                fontSize: 12)),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 10.0, horizontal: Util.mainPadding),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.only(right: 10),
+                      decoration: const BoxDecoration(
+                          color: Colors.white, shape: BoxShape.circle),
+                      alignment: const Alignment(0, 0),
+                      child: const Icon(
+                        Icons.calendar_month,
+                        color: CustomColor.textDetailColor,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10.0,
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          'Birth Date',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text('30 August 2023',
+                            style: TextStyle(
+                                color: CustomColor.textDetailColor,
+                                fontSize: 12)),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
