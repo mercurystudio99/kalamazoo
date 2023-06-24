@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:email_otp/email_otp.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
@@ -13,7 +14,9 @@ class RetrievePassScreen extends StatefulWidget {
 
 class _RetrievePassScreenState extends State<RetrievePassScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
   final FocusNode _focusEmail = FocusNode();
+  EmailOTP myauth = EmailOTP();
 
   @override
   void initState() {
@@ -28,7 +31,7 @@ class _RetrievePassScreenState extends State<RetrievePassScreen> {
 
   String? _validateEmail(String value) {
     if (value.isEmpty) {
-      return 'Please enter some text';
+      return 'Please enter your email.';
     }
     if (!(value.isNotEmpty && value.contains("@") && value.contains("."))) {
       return 'The E-mail Address must be a valid email address.';
@@ -130,6 +133,7 @@ class _RetrievePassScreenState extends State<RetrievePassScreen> {
                         elevation: 5,
                         shadowColor: Colors.black,
                         child: TextFormField(
+                          controller: _emailController,
                           focusNode: _focusEmail,
                           keyboardType: TextInputType
                               .emailAddress, // Use email input type for emails.
@@ -163,7 +167,7 @@ class _RetrievePassScreenState extends State<RetrievePassScreen> {
                                 padding: const EdgeInsets.all(
                                     5) //content padding inside button
                                 ),
-                            onPressed: () {
+                            onPressed: () async {
                               // Validate returns true if the form is valid, or false otherwise.
                               if (_formKey.currentState!.validate()) {
                                 // If the form is valid, display a snackbar. In the real world,
@@ -172,7 +176,20 @@ class _RetrievePassScreenState extends State<RetrievePassScreen> {
                                   const SnackBar(
                                       content: Text('Processing Data')),
                                 );
-                                NavigationRouter.switchToOTP(context);
+                                myauth.setConfig(
+                                    appEmail: "kalamazoo@gmail.com",
+                                    appName: 'Kalamazoo',
+                                    userEmail: _emailController.text.trim(),
+                                    otpLength: 4,
+                                    otpType: OTPType.digitsOnly);
+                                if (await myauth.sendOTP() == true) {
+                                  NavigationRouter.switchToOTP(context);
+                                } else {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content: Text("Oops, OTP send failed"),
+                                  ));
+                                }
                               }
                             },
                             child: const Text(
