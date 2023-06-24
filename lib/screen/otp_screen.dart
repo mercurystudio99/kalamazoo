@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kalamazoo/models/app_model.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
@@ -24,7 +25,7 @@ class _OTPScreenState extends State<OTPScreen> {
 
   // This is the entered code
   // It will be displayed in a Text widget
-  String? _otp;
+  String _otp = '';
 
   void _getOTPcode() {
     setState(() {
@@ -158,11 +159,23 @@ class _OTPScreenState extends State<OTPScreen> {
                           ),
                       onPressed: () {
                         _getOTPcode();
-                        NavigationRouter.switchToResetPass(context);
+                        AppModel().verifyOTP(
+                            otp: _otp,
+                            onSuccess: () {
+                              Future(() {
+                                NavigationRouter.switchToResetPass(context);
+                              });
+                            },
+                            onError: () {
+                              // Show error message
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Invalid OTP')),
+                              );
+                            });
                       },
-                      child: Text(
-                        _otp ?? Util.buttonSubmit,
-                        style: const TextStyle(
+                      child: const Text(
+                        Util.buttonSubmit,
+                        style: TextStyle(
                             color: CustomColor.buttonTextColor,
                             fontWeight: FontWeight.bold,
                             fontSize: 16.0),

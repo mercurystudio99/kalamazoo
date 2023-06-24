@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:email_otp/email_otp.dart';
 
 class AppModel extends Model {
   /// Create Singleton factory for [AppModel]
@@ -12,6 +13,7 @@ class AppModel extends Model {
   }
   AppModel._internal();
   // End
+  EmailOTP myauth = EmailOTP();
 
   // user sign up method
   void userSignUp({
@@ -44,7 +46,7 @@ class AppModel extends Model {
     }
   }
 
-  // user sign up method
+  // user sign in method
   void userSignIn({
     required String email,
     required String password,
@@ -74,6 +76,40 @@ class AppModel extends Model {
       onError(result);
     } catch (e) {
       onError('Network error!');
+    }
+  }
+
+  // user send OTP method
+  void sendOTP({
+    required String email,
+    // callback functions
+    required VoidCallback onSuccess,
+    required VoidCallback onError,
+  }) async {
+    myauth.setConfig(
+        appEmail: "kalamazoo@gmail.com",
+        appName: 'Kalamazoo',
+        userEmail: email,
+        otpLength: 4,
+        otpType: OTPType.digitsOnly);
+    if (await myauth.sendOTP() == true) {
+      onSuccess();
+    } else {
+      onError();
+    }
+  }
+
+  // user verify OTP method
+  void verifyOTP({
+    required String otp,
+    // callback functions
+    required VoidCallback onSuccess,
+    required VoidCallback onError,
+  }) async {
+    if (await myauth.verifyOTP(otp: otp) == true) {
+      onSuccess();
+    } else {
+      onError();
     }
   }
 }

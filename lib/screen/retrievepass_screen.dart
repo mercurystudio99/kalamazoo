@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:email_otp/email_otp.dart';
+import 'package:kalamazoo/models/app_model.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
@@ -16,7 +16,6 @@ class _RetrievePassScreenState extends State<RetrievePassScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final FocusNode _focusEmail = FocusNode();
-  EmailOTP myauth = EmailOTP();
 
   @override
   void initState() {
@@ -167,7 +166,7 @@ class _RetrievePassScreenState extends State<RetrievePassScreen> {
                                 padding: const EdgeInsets.all(
                                     5) //content padding inside button
                                 ),
-                            onPressed: () async {
+                            onPressed: () {
                               // Validate returns true if the form is valid, or false otherwise.
                               if (_formKey.currentState!.validate()) {
                                 // If the form is valid, display a snackbar. In the real world,
@@ -176,20 +175,22 @@ class _RetrievePassScreenState extends State<RetrievePassScreen> {
                                   const SnackBar(
                                       content: Text('Processing Data')),
                                 );
-                                myauth.setConfig(
-                                    appEmail: "kalamazoo@gmail.com",
-                                    appName: 'Kalamazoo',
-                                    userEmail: _emailController.text.trim(),
-                                    otpLength: 4,
-                                    otpType: OTPType.digitsOnly);
-                                if (await myauth.sendOTP() == true) {
-                                  NavigationRouter.switchToOTP(context);
-                                } else {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(const SnackBar(
-                                    content: Text("Oops, OTP send failed"),
-                                  ));
-                                }
+                                AppModel().sendOTP(
+                                    email: _emailController.text.trim(),
+                                    onSuccess: () {
+                                      Future(() {
+                                        NavigationRouter.switchToOTP(context);
+                                      });
+                                    },
+                                    onError: () {
+                                      // Show error message
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                            content:
+                                                Text('Oops, OTP send failed')),
+                                      );
+                                    });
                               }
                             },
                             child: const Text(
