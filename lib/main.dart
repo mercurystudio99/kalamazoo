@@ -35,6 +35,7 @@ var routes = <String, WidgetBuilder>{
   "/StartScreen": (BuildContext context) => const StartScreen(),
 };
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

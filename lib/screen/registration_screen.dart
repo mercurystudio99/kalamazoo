@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
+import 'package:kalamazoo/models/app_model.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -15,12 +16,17 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passController = TextEditingController();
+
   final FocusNode _focusUser = FocusNode();
   final FocusNode _focusEmail = FocusNode();
   final FocusNode _focusPass = FocusNode();
 
   bool _obscureText = true;
   bool _isChecked = false;
+  bool _checkConfirm = false;
 
   @override
   void initState() {
@@ -158,6 +164,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         elevation: 5,
                         shadowColor: Colors.black,
                         child: TextFormField(
+                          controller: _usernameController,
                           focusNode: _focusUser,
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(),
@@ -175,6 +182,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         elevation: 5,
                         shadowColor: Colors.black,
                         child: TextFormField(
+                          controller: _emailController,
                           focusNode: _focusEmail,
                           keyboardType: TextInputType
                               .emailAddress, // Use email input type for emails.
@@ -199,6 +207,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         elevation: 5,
                         shadowColor: Colors.black,
                         child: TextFormField(
+                          controller: _passController,
                           focusNode: _focusPass,
                           obscureText:
                               _obscureText, // Use secure text for passwords.
@@ -233,9 +242,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           fillColor: MaterialStateProperty.resolveWith<Color>(
                               (Set<MaterialState> states) {
                             if (states.contains(MaterialState.disabled)) {
-                              return Colors.black.withOpacity(.32);
+                              return (_checkConfirm
+                                  ? CustomColor.activeColor
+                                  : Colors.black.withOpacity(.32));
                             }
-                            return Colors.black;
+                            return (_checkConfirm
+                                ? CustomColor.activeColor
+                                : Colors.black);
                           }),
                           value: _isChecked,
                           onChanged: (bool? value) {
@@ -319,6 +332,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               5) //content padding inside button
                           ),
                       onPressed: () {
+                        if (_isChecked) {
+                          _checkConfirm = false;
+                        } else {
+                          _checkConfirm = true;
+                          return;
+                        }
                         // Validate returns true if the form is valid, or false otherwise.
                         if (_formKey.currentState!.validate()) {
                           // If the form is valid, display a snackbar. In the real world,
@@ -326,6 +345,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Processing Data')),
                           );
+                          // sign up
+                          AppModel().userSignUp(
+                              email: _emailController.text.trim(),
+                              password: _passController.text.trim(),
+                              onSuccess: () {
+                                // Go to Home
+                                Future(() {
+                                  NavigationRouter.switchToHome(context);
+                                });
+                              },
+                              onError: (String text) {
+                                // Show error message
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(text)),
+                                );
+                              });
                         }
                       },
                       child: const Text(
