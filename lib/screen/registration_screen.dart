@@ -50,7 +50,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   String? _validatePassword(String value) {
     if (value.isEmpty) {
-      return 'Please enter some text';
+      return 'Please enter your password';
     }
     if (value.length < 8) {
       return 'The Password must be at least 8 characters.';
@@ -60,7 +60,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   String? _validateEmail(String value) {
     if (value.isEmpty) {
-      return 'Please enter some text';
+      return 'Please enter your email';
     }
     if (!(value.isNotEmpty && value.contains("@") && value.contains("."))) {
       return 'The E-mail Address must be a valid email address.';
@@ -194,6 +194,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           // The validator receives the text that the user has entered.
                           validator: (value) {
                             _validateEmail(value!);
+                            return null;
                           },
                         ),
                       ),
@@ -229,6 +230,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           // The validator receives the text that the user has entered.
                           validator: (value) {
                             _validatePassword(value!);
+                            return null;
                           },
                         ),
                       ),

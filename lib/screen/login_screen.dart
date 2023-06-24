@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
+import 'package:kalamazoo/models/app_model.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,6 +16,10 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _emailController = TextEditingController();
+  final _passController = TextEditingController();
+
   final FocusNode _focusEmail = FocusNode();
   final FocusNode _focusPass = FocusNode();
 
@@ -41,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   String? _validatePassword(String value) {
     if (value.isEmpty) {
-      return 'Please enter some text';
+      return 'Please enter your password';
     }
     if (value.length < 8) {
       return 'The Password must be at least 8 characters.';
@@ -51,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   String? _validateEmail(String value) {
     if (value.isEmpty) {
-      return 'Please enter some text';
+      return "Please enter your email";
     }
     if (!(value.isNotEmpty && value.contains("@") && value.contains("."))) {
       return 'The E-mail Address must be a valid email address.';
@@ -68,6 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+      key: _scaffoldKey,
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
@@ -145,6 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         elevation: 5,
                         shadowColor: Colors.black,
                         child: TextFormField(
+                          controller: _emailController,
                           focusNode: _focusEmail,
                           keyboardType: TextInputType
                               .emailAddress, // Use email input type for emails.
@@ -156,6 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           // The validator receives the text that the user has entered.
                           validator: (value) {
                             _validateEmail(value!);
+                            return null;
                           },
                         ),
                       ),
@@ -169,6 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         elevation: 5,
                         shadowColor: Colors.black,
                         child: TextFormField(
+                          controller: _passController,
                           focusNode: _focusPass,
                           obscureText:
                               _obscureText, // Use secure text for passwords.
@@ -190,6 +199,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           // The validator receives the text that the user has entered.
                           validator: (value) {
                             _validatePassword(value!);
+                            return null;
                           },
                         ),
                       ),
@@ -241,7 +251,23 @@ class _LoginScreenState extends State<LoginScreen> {
                                   const SnackBar(
                                       content: Text('Processing Data')),
                                 );
-                                NavigationRouter.switchToHome(context);
+                                // sign in
+                                AppModel().userSignIn(
+                                    email: _emailController.text.trim(),
+                                    password: _passController.text.trim(),
+                                    onSuccess: () {
+                                      // Go to Home
+                                      Future(() {
+                                        NavigationRouter.switchToHome(context);
+                                      });
+                                    },
+                                    onError: (String text) {
+                                      // Show error message
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(content: Text(text)),
+                                      );
+                                    });
                               }
                             },
                             child: const Text(
