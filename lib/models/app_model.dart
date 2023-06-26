@@ -11,6 +11,7 @@ class AppModel extends Model {
   List<DocumentSnapshot<Map<String, dynamic>>> users = [];
 
   String? retrieveEmail;
+  String? retrieveID;
 
   /// Create Singleton factory for [AppModel]
   ///
@@ -109,6 +110,10 @@ class AppModel extends Model {
       (querySnapshot) {
         if (querySnapshot.docs.isNotEmpty) {
           retrieveEmail = email;
+          for (var docSnapshot in querySnapshot.docs) {
+            retrieveID = docSnapshot.id;
+            break;
+          }
           onSuccess();
         } else {
           onError('No user found for that email.');
@@ -150,5 +155,19 @@ class AppModel extends Model {
     } else {
       onError();
     }
+  }
+
+  // user reset password method
+  void userResetPassword({
+    required String password,
+    // callback functions
+    required VoidCallback onSuccess,
+    required Function(String) onError,
+  }) {
+    _firestore
+        .collection(C_USERS)
+        .doc(retrieveID)
+        .update({USER_PASS: password}).then((value) => onSuccess(),
+            onError: (e) => debugPrint("Error updating document $e"));
   }
 }

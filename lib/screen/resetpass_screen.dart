@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kalamazoo/models/app_model.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
@@ -13,6 +14,8 @@ class ResetPassScreen extends StatefulWidget {
 
 class _ResetPassScreenState extends State<ResetPassScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _newController = TextEditingController();
+  final _confirmController = TextEditingController();
   final FocusNode _focusNew = FocusNode();
   final FocusNode _focusConfirm = FocusNode();
   bool _obscureText1 = true;
@@ -136,6 +139,7 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
                         elevation: 5,
                         shadowColor: Colors.black,
                         child: TextFormField(
+                          controller: _newController,
                           focusNode: _focusNew,
                           obscureText:
                               _obscureText1, // Use secure text for passwords.
@@ -170,6 +174,7 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
                         elevation: 5,
                         shadowColor: Colors.black,
                         child: TextFormField(
+                          controller: _confirmController,
                           focusNode: _focusConfirm,
                           obscureText:
                               _obscureText2, // Use secure text for passwords.
@@ -222,7 +227,18 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
                                   const SnackBar(
                                       content: Text('Processing Data')),
                                 );
-                                NavigationRouter.switchToLogin(context);
+                                AppModel().userResetPassword(
+                                    password: _newController.text.trim(),
+                                    onSuccess: () {
+                                      NavigationRouter.switchToHome(context);
+                                    },
+                                    onError: (String text) {
+                                      // Show error message
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        SnackBar(content: Text(text)),
+                                      );
+                                    });
                               }
                             },
                             child: const Text(
