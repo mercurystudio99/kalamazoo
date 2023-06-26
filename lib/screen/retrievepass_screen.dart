@@ -175,20 +175,30 @@ class _RetrievePassScreenState extends State<RetrievePassScreen> {
                                   const SnackBar(
                                       content: Text('Processing Data')),
                                 );
-                                AppModel().sendOTP(
+                                AppModel().userExist(
                                     email: _emailController.text.trim(),
                                     onSuccess: () {
-                                      Future(() {
-                                        NavigationRouter.switchToOTP(context);
-                                      });
+                                      AppModel().sendOTP(
+                                          email: _emailController.text.trim(),
+                                          onSuccess: () {
+                                            NavigationRouter.switchToOTP(
+                                                context);
+                                          },
+                                          onError: () {
+                                            // Show error message
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                  content: Text(
+                                                      'Oops, OTP send failed')),
+                                            );
+                                          });
                                     },
-                                    onError: () {
+                                    onError: (String text) {
                                       // Show error message
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
-                                        const SnackBar(
-                                            content:
-                                                Text('Oops, OTP send failed')),
+                                        SnackBar(content: Text(text)),
                                       );
                                     });
                               }

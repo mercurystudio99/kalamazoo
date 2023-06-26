@@ -10,6 +10,8 @@ class AppModel extends Model {
   final _firestore = FirebaseFirestore.instance;
   List<DocumentSnapshot<Map<String, dynamic>>> users = [];
 
+  String? retrieveEmail;
+
   /// Create Singleton factory for [AppModel]
   ///
   static final AppModel _appModel = AppModel._internal();
@@ -90,6 +92,30 @@ class AppModel extends Model {
     //   result = 'Something went wrong.';
     // }
     // onError(result);
+  }
+
+  // user exist method
+  void userExist({
+    required String email,
+    // callback functions
+    required VoidCallback onSuccess,
+    required Function(String) onError,
+  }) {
+    _firestore
+        .collection(C_USERS)
+        .where(USER_EMAIL, isEqualTo: email)
+        .get()
+        .then(
+      (querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          retrieveEmail = email;
+          onSuccess();
+        } else {
+          onError('No user found for that email.');
+        }
+      },
+      onError: (e) => debugPrint("Error completing: $e"),
+    );
   }
 
   // user send OTP method
