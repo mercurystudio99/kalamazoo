@@ -1,10 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:kalamazoo/utils/constants.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_otp/email_otp.dart';
 
 class AppModel extends Model {
+  // Variables
+  final _firestore = FirebaseFirestore.instance;
+  List<DocumentSnapshot<Map<String, dynamic>>> users = [];
+
   /// Create Singleton factory for [AppModel]
   ///
   static final AppModel _appModel = AppModel._internal();
@@ -17,67 +22,68 @@ class AppModel extends Model {
 
   // user sign up method
   void userSignUp({
+    required String name,
     required String email,
     required String password,
     // callback functions
     required VoidCallback onSuccess,
     required Function(String) onError,
-  }) async {
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      onSuccess();
-    } on FirebaseAuthException catch (e) {
-      String result = '';
-      if (e.code == 'weak-password') {
-        result = 'The password provided is too weak.';
-      } else if (e.code == 'invalid-email') {
-        result = 'The email address is badly formatted.';
-      } else if (e.code == 'email-already-in-use') {
-        result = 'The account already exists for that email.';
-      } else {
-        result = 'Something went wrong.';
-      }
-      onError(result);
-    } catch (e) {
-      onError('Network error!');
-    }
+  }) {
+    final user = <String, dynamic>{
+      USER_FULLNAME: name,
+      USER_EMAIL: email,
+      USER_PASS: password
+    };
+    _firestore.collection(C_USERS).add(user).then((DocumentReference doc) =>
+        debugPrint('DocumentSnapshot added with ID: ${doc.id}'));
+
+    // onSuccess();
+    // String result = '';
+    // if (e.code == 'weak-password') {
+    //   result = 'The password provided is too weak.';
+    // } else if (e.code == 'invalid-email') {
+    //   result = 'The email address is badly formatted.';
+    // } else if (e.code == 'email-already-in-use') {
+    //   result = 'The account already exists for that email.';
+    // } else {
+    //   result = 'Something went wrong.';
+    // }
+    // onError(result);
+    // onError('Network error!');
   }
 
-  // user sign in method
-  void userSignIn({
-    required String email,
-    required String password,
-    // callback functions
-    required VoidCallback onSuccess,
-    required Function(String) onError,
-  }) async {
-    try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      onSuccess();
-    } on FirebaseAuthException catch (e) {
-      String result = '';
-      if (e.code == 'user-not-found') {
-        result = 'No user found for that email.';
-      } else if (e.code == 'invalid-email') {
-        result = 'The email address is badly formatted.';
-      } else if (e.code == 'wrong-password') {
-        result = 'Wrong password provided for that user.';
-      } else {
-        debugPrint(e.code);
-        result = 'Something went wrong.';
-      }
-      onError(result);
-    } catch (e) {
-      onError('Network error!');
-    }
-  }
+  // // user sign in method
+  // void userSignIn({
+  //   required String email,
+  //   required String password,
+  //   // callback functions
+  //   required VoidCallback onSuccess,
+  //   required Function(String) onError,
+  // }) async {
+  //   try {
+  //     UserCredential userCredential =
+  //         await FirebaseAuth.instance.signInWithEmailAndPassword(
+  //       email: email,
+  //       password: password,
+  //     );
+  //     onSuccess();
+  //   } on FirebaseAuthException catch (e) {
+  //     String result = '';
+  //     if (e.code == 'user-not-found') {
+  //       result = 'No user found for that email.';
+  //     } else if (e.code == 'invalid-email') {
+  //       result = 'The email address is badly formatted.';
+  //     } else if (e.code == 'wrong-password') {
+  //       result = 'Wrong password provided for that user.';
+  //     } else {
+  //       debugPrint(e.code);
+  //       result = 'Something went wrong.';
+  //     }
+  //     onError(result);
+  //   } catch (e) {
+  //     onError('Network error!');
+  //   }
+  // }
 
   // user send OTP method
   void sendOTP({

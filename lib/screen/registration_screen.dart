@@ -349,13 +349,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           );
                           // sign up
                           AppModel().userSignUp(
+                              name: _usernameController.text.trim(),
                               email: _emailController.text.trim(),
                               password: _passController.text.trim(),
                               onSuccess: () {
                                 // Go to Home
-                                Future(() {
-                                  NavigationRouter.switchToHome(context);
-                                });
+                                NavigationRouter.switchToHome(context);
                               },
                               onError: (String text) {
                                 // Show error message
