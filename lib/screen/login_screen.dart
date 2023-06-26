@@ -257,9 +257,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     password: _passController.text.trim(),
                                     onSuccess: () {
                                       // Go to Home
-                                      Future(() {
-                                        NavigationRouter.switchToHome(context);
-                                      });
+                                      NavigationRouter.switchToHome(context);
                                     },
                                     onError: (String text) {
                                       // Show error message

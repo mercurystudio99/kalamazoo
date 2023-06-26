@@ -52,38 +52,45 @@ class AppModel extends Model {
     // onError('Network error!');
   }
 
-  // // user sign in method
-  // void userSignIn({
-  //   required String email,
-  //   required String password,
-  //   // callback functions
-  //   required VoidCallback onSuccess,
-  //   required Function(String) onError,
-  // }) async {
-  //   try {
-  //     UserCredential userCredential =
-  //         await FirebaseAuth.instance.signInWithEmailAndPassword(
-  //       email: email,
-  //       password: password,
-  //     );
-  //     onSuccess();
-  //   } on FirebaseAuthException catch (e) {
-  //     String result = '';
-  //     if (e.code == 'user-not-found') {
-  //       result = 'No user found for that email.';
-  //     } else if (e.code == 'invalid-email') {
-  //       result = 'The email address is badly formatted.';
-  //     } else if (e.code == 'wrong-password') {
-  //       result = 'Wrong password provided for that user.';
-  //     } else {
-  //       debugPrint(e.code);
-  //       result = 'Something went wrong.';
-  //     }
-  //     onError(result);
-  //   } catch (e) {
-  //     onError('Network error!');
-  //   }
-  // }
+  // user sign in method
+  void userSignIn({
+    required String email,
+    required String password,
+    // callback functions
+    required VoidCallback onSuccess,
+    required Function(String) onError,
+  }) {
+    _firestore
+        .collection(C_USERS)
+        .where(USER_EMAIL, isEqualTo: email)
+        .get()
+        .then(
+      (querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          for (var docSnapshot in querySnapshot.docs) {
+            docSnapshot.data()[USER_PASS] == password
+                ? onSuccess()
+                : onError('Wrong password provided for that user.');
+            break;
+          }
+        }
+      },
+      onError: (e) => debugPrint("Error completing: $e"),
+    );
+    // onSuccess();
+    // String result = '';
+    // if (e.code == 'user-not-found') {
+    //   result = 'No user found for that email.';
+    // } else if (e.code == 'invalid-email') {
+    //   result = 'The email address is badly formatted.';
+    // } else if (e.code == 'wrong-password') {
+    //   result = 'Wrong password provided for that user.';
+    // } else {
+    //   debugPrint(e.code);
+    //   result = 'Something went wrong.';
+    // }
+    // onError(result);
+  }
 
   // user send OTP method
   void sendOTP({
