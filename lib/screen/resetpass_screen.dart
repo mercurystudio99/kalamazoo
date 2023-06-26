@@ -36,7 +36,7 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
 
   String? _validatePassword(String value) {
     if (value.isEmpty) {
-      return 'Please enter some text';
+      return 'Please enter your password';
     }
     if (value.length < 8) {
       return 'The Password must be at least 8 characters.';
