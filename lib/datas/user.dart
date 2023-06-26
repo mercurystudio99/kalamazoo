@@ -11,6 +11,7 @@ class User {
   final int userBirthYear;
   final String userPhoneNumber;
   final String userEmail;
+  final String userPass;
   final String userStatus;
   final bool userIsVerified;
   final DateTime userRegDate;
@@ -27,6 +28,7 @@ class User {
     required this.userBirthYear,
     required this.userPhoneNumber,
     required this.userEmail,
+    required this.userPass,
     required this.userStatus,
     required this.userIsVerified,
     required this.userRegDate,
@@ -45,6 +47,7 @@ class User {
       userBirthYear: doc[USER_BIRTH_YEAR],
       userPhoneNumber: doc[USER_PHONE_NUMBER] ?? '',
       userEmail: doc[USER_EMAIL] ?? '',
+      userPass: doc[USER_PASS] ?? '',
       userStatus: doc[USER_STATUS],
       userIsVerified: doc[USER_IS_VERIFIED] ?? false,
       userRegDate: doc[USER_REG_DATE].toDate(), // Firestore Timestamp
