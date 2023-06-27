@@ -30,10 +30,10 @@ class _RetrievePassScreenState extends State<RetrievePassScreen> {
 
   String? _validateEmail(String value) {
     if (value.isEmpty) {
-      return 'Please enter your email.';
+      return '\u26A0 Please enter your email.';
     }
     if (!(value.isNotEmpty && value.contains("@") && value.contains("."))) {
-      return 'The E-mail Address must be a valid email address.';
+      return '\u26A0 The E-mail Address must be a valid email address.';
     }
     return null;
   }
@@ -126,26 +126,37 @@ class _RetrievePassScreenState extends State<RetrievePassScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: Util.mainPadding),
-                      child: Material(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(14)),
-                        elevation: 5,
-                        shadowColor: Colors.black,
-                        child: TextFormField(
-                          controller: _emailController,
-                          focusNode: _focusEmail,
-                          keyboardType: TextInputType
-                              .emailAddress, // Use email input type for emails.
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'you@example.com',
-                            labelText: 'Email Address',
+                      child: Stack(
+                        children: [
+                          Container(
+                            height: 60,
+                            decoration: const BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(14)),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 5,
+                                    spreadRadius: 1),
+                              ],
+                            ),
                           ),
-                          // The validator receives the text that the user has entered.
-                          validator: (value) {
-                            _validateEmail(value!);
-                          },
-                        ),
+                          TextFormField(
+                            controller: _emailController,
+                            focusNode: _focusEmail,
+                            keyboardType: TextInputType
+                                .emailAddress, // Use email input type for emails.
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: 'you@example.com',
+                              labelText: 'Email Address',
+                            ),
+                            // The validator receives the text that the user has entered.
+                            validator: (value) {
+                              return _validateEmail(value!);
+                            },
+                          ),
+                        ],
                       ),
                     ),
                     Padding(
