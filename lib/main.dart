@@ -86,6 +86,9 @@ class MyApp extends StatelessWidget {
                 errorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(14)),
                     borderSide: BorderSide(color: CustomColor.activeColor)),
+                focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(14)),
+                    borderSide: BorderSide(color: CustomColor.activeColor)),
                 filled: true,
                 fillColor: Colors.white),
             textTheme: GoogleFonts.poppinsTextTheme(

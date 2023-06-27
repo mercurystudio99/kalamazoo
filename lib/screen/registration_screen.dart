@@ -50,20 +50,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   String? _validatePassword(String value) {
     if (value.isEmpty) {
-      return 'Please enter your password';
+      return '\u26A0 Please enter your password';
     }
     if (value.length < 8) {
-      return 'The Password must be at least 8 characters.';
+      return '\u26A0 The Password must be at least 8 characters.';
     }
     return null;
   }
 
   String? _validateEmail(String value) {
     if (value.isEmpty) {
-      return 'Please enter your email';
+      return '\u26A0 Please enter your email';
     }
     if (!(value.isNotEmpty && value.contains("@") && value.contains("."))) {
-      return 'The E-mail Address must be a valid email address.';
+      return '\u26A0 The E-mail Address must be a valid email address.';
+    }
+    return null;
+  }
+
+  String? _validateUsername(String value) {
+    if (value.isEmpty) {
+      return '\u26A0 Please enter your name';
     }
     return null;
   }
@@ -158,81 +165,116 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: Util.mainPadding),
-                      child: Material(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(14)),
-                        elevation: 5,
-                        shadowColor: Colors.black,
-                        child: TextFormField(
-                          controller: _usernameController,
-                          focusNode: _focusUser,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'User Name',
+                      child: Stack(
+                        children: [
+                          Container(
+                            height: 60,
+                            decoration: const BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(14)),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 5,
+                                    spreadRadius: 1),
+                              ],
+                            ),
                           ),
-                        ),
+                          TextFormField(
+                            controller: _usernameController,
+                            focusNode: _focusUser,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'User Name',
+                            ),
+                            // The validator receives the text that the user has entered.
+                            validator: (value) {
+                              return _validateUsername(value!);
+                            },
+                          ),
+                        ],
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: Util.mainPadding),
-                      child: Material(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(14)),
-                        elevation: 5,
-                        shadowColor: Colors.black,
-                        child: TextFormField(
-                          controller: _emailController,
-                          focusNode: _focusEmail,
-                          keyboardType: TextInputType
-                              .emailAddress, // Use email input type for emails.
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'you@example.com',
-                            labelText: 'Email Address',
+                      child: Stack(
+                        children: [
+                          Container(
+                            height: 60,
+                            decoration: const BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(14)),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 5,
+                                    spreadRadius: 1),
+                              ],
+                            ),
                           ),
-                          // The validator receives the text that the user has entered.
-                          validator: (value) {
-                            _validateEmail(value!);
-                            return null;
-                          },
-                        ),
+                          TextFormField(
+                            controller: _emailController,
+                            focusNode: _focusEmail,
+                            keyboardType: TextInputType
+                                .emailAddress, // Use email input type for emails.
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: 'you@example.com',
+                              labelText: 'Email Address',
+                            ),
+                            // The validator receives the text that the user has entered.
+                            validator: (value) {
+                              return _validateEmail(value!);
+                            },
+                          ),
+                        ],
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: Util.mainPadding),
-                      child: Material(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(14)),
-                        elevation: 5,
-                        shadowColor: Colors.black,
-                        child: TextFormField(
-                          controller: _passController,
-                          focusNode: _focusPass,
-                          obscureText:
-                              _obscureText, // Use secure text for passwords.
-                          decoration: InputDecoration(
-                              border: const OutlineInputBorder(),
-                              labelText: 'Password',
-                              suffixIconConstraints: const BoxConstraints(
-                                minWidth: 50,
-                                minHeight: 2,
-                              ),
-                              suffixIcon: InkWell(
-                                onTap: _toggle,
-                                child: Icon(
-                                    _obscureText
-                                        ? Icons.remove_red_eye_outlined
-                                        : Icons.visibility_off_outlined,
-                                    size: 24),
-                              )),
-                          // The validator receives the text that the user has entered.
-                          validator: (value) {
-                            _validatePassword(value!);
-                            return null;
-                          },
-                        ),
+                      child: Stack(
+                        children: [
+                          Container(
+                            height: 60,
+                            decoration: const BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(14)),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 5,
+                                    spreadRadius: 1),
+                              ],
+                            ),
+                          ),
+                          TextFormField(
+                            controller: _passController,
+                            focusNode: _focusPass,
+                            obscureText:
+                                _obscureText, // Use secure text for passwords.
+                            decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                labelText: 'Password',
+                                suffixIconConstraints: const BoxConstraints(
+                                  minWidth: 50,
+                                  minHeight: 2,
+                                ),
+                                suffixIcon: InkWell(
+                                  onTap: _toggle,
+                                  child: Icon(
+                                      _obscureText
+                                          ? Icons.remove_red_eye_outlined
+                                          : Icons.visibility_off_outlined,
+                                      size: 24),
+                                )),
+                            // The validator receives the text that the user has entered.
+                            validator: (value) {
+                              return _validatePassword(value!);
+                            },
+                          ),
+                        ],
                       ),
                     ),
                     Padding(
