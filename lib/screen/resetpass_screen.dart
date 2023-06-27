@@ -250,7 +250,8 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
                                       content: Text('Processing Data')),
                                 );
                                 AppModel().userResetPassword(
-                                    password: _newController.text.trim(),
+                                    newPass: _newController.text.trim(),
+                                    confirmPass: _confirmController.text.trim(),
                                     onSuccess: () {
                                       NavigationRouter.switchToHome(context);
                                     },

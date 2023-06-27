@@ -37,22 +37,10 @@ class AppModel extends Model {
       USER_EMAIL: email,
       USER_PASS: password
     };
-    _firestore.collection(C_USERS).add(user).then((DocumentReference doc) =>
-        debugPrint('DocumentSnapshot added with ID: ${doc.id}'));
-
-    // onSuccess();
-    // String result = '';
-    // if (e.code == 'weak-password') {
-    //   result = 'The password provided is too weak.';
-    // } else if (e.code == 'invalid-email') {
-    //   result = 'The email address is badly formatted.';
-    // } else if (e.code == 'email-already-in-use') {
-    //   result = 'The account already exists for that email.';
-    // } else {
-    //   result = 'Something went wrong.';
-    // }
-    // onError(result);
-    // onError('Network error!');
+    _firestore
+        .collection(C_USERS)
+        .add(user)
+        .then((DocumentReference doc) => onSuccess());
   }
 
   // user sign in method
@@ -76,23 +64,12 @@ class AppModel extends Model {
                 : onError('Wrong password provided for that user.');
             break;
           }
+        } else {
+          onError('No user found for that email.');
         }
       },
       onError: (e) => debugPrint("Error completing: $e"),
     );
-    // onSuccess();
-    // String result = '';
-    // if (e.code == 'user-not-found') {
-    //   result = 'No user found for that email.';
-    // } else if (e.code == 'invalid-email') {
-    //   result = 'The email address is badly formatted.';
-    // } else if (e.code == 'wrong-password') {
-    //   result = 'Wrong password provided for that user.';
-    // } else {
-    //   debugPrint(e.code);
-    //   result = 'Something went wrong.';
-    // }
-    // onError(result);
   }
 
   // user exist method
@@ -159,15 +136,18 @@ class AppModel extends Model {
 
   // user reset password method
   void userResetPassword({
-    required String password,
+    required String newPass,
+    required String confirmPass,
     // callback functions
     required VoidCallback onSuccess,
     required Function(String) onError,
   }) {
-    _firestore
-        .collection(C_USERS)
-        .doc(retrieveID)
-        .update({USER_PASS: password}).then((value) => onSuccess(),
-            onError: (e) => debugPrint("Error updating document $e"));
+    (newPass == confirmPass)
+        ? _firestore
+            .collection(C_USERS)
+            .doc(retrieveID)
+            .update({USER_PASS: newPass}).then((value) => onSuccess(),
+                onError: (e) => debugPrint("Error updating document $e"))
+        : onError('Passwords must match.');
   }
 }
