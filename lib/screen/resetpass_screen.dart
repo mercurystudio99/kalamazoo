@@ -36,10 +36,10 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
 
   String? _validatePassword(String value) {
     if (value.isEmpty) {
-      return 'Please enter your password';
+      return '\u26A0 Please enter your password';
     }
     if (value.length < 8) {
-      return 'The Password must be at least 8 characters.';
+      return '\u26A0 The Password must be at least 8 characters.';
     }
     return null;
   }
@@ -133,71 +133,93 @@ class _ResetPassScreenState extends State<ResetPassScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: Util.mainPadding),
-                      child: Material(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(14)),
-                        elevation: 5,
-                        shadowColor: Colors.black,
-                        child: TextFormField(
-                          controller: _newController,
-                          focusNode: _focusNew,
-                          obscureText:
-                              _obscureText1, // Use secure text for passwords.
-                          decoration: InputDecoration(
-                              border: const OutlineInputBorder(),
-                              labelText: 'New Password',
-                              suffixIconConstraints: const BoxConstraints(
-                                minWidth: 50,
-                                minHeight: 2,
-                              ),
-                              suffixIcon: InkWell(
-                                onTap: _toggle1,
-                                child: Icon(
-                                    _obscureText1
-                                        ? Icons.remove_red_eye_outlined
-                                        : Icons.visibility_off_outlined,
-                                    size: 24),
-                              )),
-                          // The validator receives the text that the user has entered.
-                          validator: (value) {
-                            _validatePassword(value!);
-                          },
-                        ),
+                      child: Stack(
+                        children: [
+                          Container(
+                            height: 60,
+                            decoration: const BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(14)),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 5,
+                                    spreadRadius: 1),
+                              ],
+                            ),
+                          ),
+                          TextFormField(
+                            controller: _newController,
+                            focusNode: _focusNew,
+                            obscureText:
+                                _obscureText1, // Use secure text for passwords.
+                            decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                labelText: 'New Password',
+                                suffixIconConstraints: const BoxConstraints(
+                                  minWidth: 50,
+                                  minHeight: 2,
+                                ),
+                                suffixIcon: InkWell(
+                                  onTap: _toggle1,
+                                  child: Icon(
+                                      _obscureText1
+                                          ? Icons.remove_red_eye_outlined
+                                          : Icons.visibility_off_outlined,
+                                      size: 24),
+                                )),
+                            // The validator receives the text that the user has entered.
+                            validator: (value) {
+                              return _validatePassword(value!);
+                            },
+                          ),
+                        ],
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: Util.mainPadding),
-                      child: Material(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(14)),
-                        elevation: 5,
-                        shadowColor: Colors.black,
-                        child: TextFormField(
-                          controller: _confirmController,
-                          focusNode: _focusConfirm,
-                          obscureText:
-                              _obscureText2, // Use secure text for passwords.
-                          decoration: InputDecoration(
-                              border: const OutlineInputBorder(),
-                              labelText: 'Confirm New Password',
-                              suffixIconConstraints: const BoxConstraints(
-                                minWidth: 50,
-                                minHeight: 2,
-                              ),
-                              suffixIcon: InkWell(
-                                onTap: _toggle2,
-                                child: Icon(
-                                    _obscureText2
-                                        ? Icons.remove_red_eye_outlined
-                                        : Icons.visibility_off_outlined,
-                                    size: 24),
-                              )),
-                          // The validator receives the text that the user has entered.
-                          validator: (value) {
-                            _validatePassword(value!);
-                          },
-                        ),
+                      child: Stack(
+                        children: [
+                          Container(
+                            height: 60,
+                            decoration: const BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(14)),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 5,
+                                    spreadRadius: 1),
+                              ],
+                            ),
+                          ),
+                          TextFormField(
+                            controller: _confirmController,
+                            focusNode: _focusConfirm,
+                            obscureText:
+                                _obscureText2, // Use secure text for passwords.
+                            decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                labelText: 'Confirm New Password',
+                                suffixIconConstraints: const BoxConstraints(
+                                  minWidth: 50,
+                                  minHeight: 2,
+                                ),
+                                suffixIcon: InkWell(
+                                  onTap: _toggle2,
+                                  child: Icon(
+                                      _obscureText2
+                                          ? Icons.remove_red_eye_outlined
+                                          : Icons.visibility_off_outlined,
+                                      size: 24),
+                                )),
+                            // The validator receives the text that the user has entered.
+                            validator: (value) {
+                              return _validatePassword(value!);
+                            },
+                          ),
+                        ],
                       ),
                     ),
                     Padding(
