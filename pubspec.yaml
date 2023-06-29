@@ -75,7 +75,6 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/start.svg
-    - assets/logo.svg
     - assets/background.svg
     - assets/coffeecup.svg
     - assets/desert.svg
@@ -83,6 +82,7 @@ flutter:
     - assets/dosa.svg
     - assets/samosa.svg
     - assets/sandwich.svg
+    - assets/logo.png
     - assets/menu.png
     - assets/camera.png
     - assets/card.png

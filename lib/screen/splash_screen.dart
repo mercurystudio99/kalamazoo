@@ -45,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           ),
           Center(
-            child: SvgPicture.asset('assets/logo.svg'),
+            child: Image.asset('assets/logo.png'),
           ),
         ],
       ),
