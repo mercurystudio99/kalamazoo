@@ -2,7 +2,9 @@
 
 /// DATABASE COLLECTION NAMES USED IN APP
 ///
+const String C_APPINFO = "AppInfo";
 const String C_USERS = "Users";
+const String C_RESTAURANTS = "Restaurants";
 
 /// DATABASE FIELDS FOR USER COLLECTION  ///
 ///

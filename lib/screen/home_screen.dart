@@ -6,6 +6,7 @@ import 'package:badges/badges.dart' as badges;
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/color.dart';
+import 'package:kalamazoo/models/app_model.dart';
 
 final List<String> imgList = [
   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
@@ -48,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int carouselIndicatorCurrent = 0;
   final int listLength = 30;
   late List<bool> _selected;
+  static List<String> categories = [];
 
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -71,26 +73,23 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void initializeSelection() {
+    AppModel().getCategory(onSuccess: (Map<String, dynamic> param) {
+      param.forEach((key, value) {
+        if (value) categories.add(key);
+      });
+    });
     _selected = List<bool>.generate(listLength, (_) => false);
   }
 
   @override
   void dispose() {
     _selected.clear();
+    categories.clear();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<String> categories = [
-      "Tea",
-      "Samosa",
-      "Sandwich",
-      "Dosa",
-      "Dessert",
-      "Dessert",
-    ];
-
     final List<Widget> widgetOptions = <Widget>[
       Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
         Container(
@@ -1190,7 +1189,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Container(
         margin: const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 12),
-        width: 60,
+        width: 65,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.white),
           borderRadius: BorderRadius.circular(10),

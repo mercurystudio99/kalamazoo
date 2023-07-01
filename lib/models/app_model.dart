@@ -12,6 +12,7 @@ class AppModel extends Model {
 
   String? retrieveEmail;
   String? retrieveID;
+  Map<String, dynamic> categories = {};
 
   /// Create Singleton factory for [AppModel]
   ///
@@ -149,5 +150,33 @@ class AppModel extends Model {
             .update({USER_PASS: newPass}).then((value) => onSuccess(),
                 onError: (e) => debugPrint("Error updating document $e"))
         : onError('Passwords must match.');
+  }
+
+  // category method
+  void getCategory({
+    // callback functions
+    required Function(Map<String, dynamic>) onSuccess,
+  }) async {
+    final snapshots =
+        await _firestore.collection(C_APPINFO).doc('categories').get();
+    categories = snapshots.data()!;
+    onSuccess(categories);
+  }
+
+  void getData({
+    // callback functions
+    required Function(List<Map<String, dynamic>>) onSuccess,
+  }) {
+    categories.forEach((key, value) {
+      if (value) {
+        Query query = _firestore.collection(key).limit(2);
+        query.get().then(
+          (querySnapshot) {
+            debugPrint("limit 2");
+          },
+          onError: (e) => debugPrint("Error completing: $e"),
+        );
+      }
+    });
   }
 }
