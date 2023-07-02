@@ -6,6 +6,7 @@ import 'package:badges/badges.dart' as badges;
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/color.dart';
+import 'package:kalamazoo/utils/constants.dart';
 import 'package:kalamazoo/models/app_model.dart';
 
 final List<String> imgList = [
@@ -50,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final int listLength = 30;
   late List<bool> _selected;
   static List<String> categories = [];
+  static List<Map<String, dynamic>> bestOffers = [];
 
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -77,6 +79,9 @@ class _HomeScreenState extends State<HomeScreen> {
       param.forEach((key, value) {
         if (value) categories.add(key);
       });
+      AppModel().getData(onSuccess: (List<Map<String, dynamic>> param) {
+        bestOffers = param;
+      });
     });
     _selected = List<bool>.generate(listLength, (_) => false);
   }
@@ -85,11 +90,162 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _selected.clear();
     categories.clear();
+    bestOffers.clear();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> bestOffersView = [];
+    for (var element in bestOffers) {
+      Widget widget = SizedBox(
+        width: MediaQuery.of(context).size.width * 0.4,
+        child: Stack(children: [
+          Card(
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shadowColor: CustomColor.primaryColor.withOpacity(0.2),
+            elevation: 8,
+            margin: const EdgeInsets.all(4.0),
+            child: Column(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    topRight: Radius.circular(10),
+                  ),
+                  child: Image.network(
+                    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            element[RESTAURANT_BUSINESSNAME].length < 15
+                                ? element[RESTAURANT_BUSINESSNAME]
+                                : element[RESTAURANT_BUSINESSNAME]
+                                        .substring(0, 12) +
+                                    '...',
+                            style: const TextStyle(
+                                fontSize: 14.0, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            element[RESTAURANT_URL].length < 18
+                                ? element[RESTAURANT_URL]
+                                : element[RESTAURANT_URL].substring(0, 15) +
+                                    '...',
+                            style: const TextStyle(
+                                fontSize: 10.0,
+                                color: CustomColor.textDetailColor),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        decoration: BoxDecoration(
+                          color: CustomColor.activeColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          children: const [
+                            Text(
+                              '5.3',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 12),
+                            ),
+                            Icon(
+                              Icons.star,
+                              color: Colors.white,
+                              size: 12,
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            '50% OFF',
+                            style: TextStyle(
+                                fontSize: 14.0,
+                                color: CustomColor.activeColor,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            'UPTO \$100',
+                            style: TextStyle(
+                                fontSize: 10.0,
+                                color: CustomColor.textDetailColor),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Row(
+                          children: const [
+                            Icon(
+                              Icons.location_on,
+                              color: CustomColor.activeColor,
+                              size: 10,
+                            ),
+                            Text(
+                              '1.2km',
+                              style: TextStyle(
+                                  fontSize: 10.0,
+                                  color: CustomColor.textDetailColor),
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Icon(
+                              Icons.access_time,
+                              size: 10,
+                              color: CustomColor.textDetailColor,
+                            ),
+                            Text(
+                              '10min',
+                              style: TextStyle(
+                                  fontSize: 10.0,
+                                  color: CustomColor.textDetailColor),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Positioned(
+              right: 10,
+              top: 10,
+              child: Icon(
+                Icons.bookmark,
+                color: CustomColor.activeColor,
+              ))
+        ]),
+      );
+      bestOffersView.add(widget);
+    }
     final List<Widget> widgetOptions = <Widget>[
       Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
         Container(
@@ -303,324 +459,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     horizontal: Util.mainPadding, vertical: 10),
                 child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.4,
-                        child: Stack(children: [
-                          Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            shadowColor:
-                                CustomColor.primaryColor.withOpacity(0.2),
-                            elevation: 8,
-                            margin: const EdgeInsets.all(4.0),
-                            child: Column(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                  ),
-                                  child: Image.network(
-                                    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: const [
-                                          Text(
-                                            'Royal Din',
-                                            style: TextStyle(
-                                                fontSize: 14.0,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            'Western dishes',
-                                            softWrap: true,
-                                            style: TextStyle(
-                                                fontSize: 10.0,
-                                                color: CustomColor
-                                                    .textDetailColor),
-                                          ),
-                                        ],
-                                      ),
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 4),
-                                        decoration: BoxDecoration(
-                                          color: CustomColor.activeColor,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: Row(
-                                          children: const [
-                                            Text(
-                                              '5.3',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 12),
-                                            ),
-                                            Icon(
-                                              Icons.star,
-                                              color: Colors.white,
-                                              size: 12,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: const [
-                                          Text(
-                                            '50% OFF',
-                                            style: TextStyle(
-                                                fontSize: 14.0,
-                                                color: CustomColor.activeColor,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            'UPTO \$100',
-                                            style: TextStyle(
-                                                fontSize: 10.0,
-                                                color: CustomColor
-                                                    .textDetailColor),
-                                          ),
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 8),
-                                        child: Row(
-                                          children: const [
-                                            Icon(
-                                              Icons.location_on,
-                                              color: CustomColor.activeColor,
-                                              size: 10,
-                                            ),
-                                            Text(
-                                              '1.2km',
-                                              style: TextStyle(
-                                                  fontSize: 10.0,
-                                                  color: CustomColor
-                                                      .textDetailColor),
-                                            ),
-                                            SizedBox(
-                                              width: 4,
-                                            ),
-                                            Icon(
-                                              Icons.access_time,
-                                              size: 10,
-                                              color:
-                                                  CustomColor.textDetailColor,
-                                            ),
-                                            Text(
-                                              '10min',
-                                              style: TextStyle(
-                                                  fontSize: 10.0,
-                                                  color: CustomColor
-                                                      .textDetailColor),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Positioned(
-                              right: 10,
-                              top: 10,
-                              child: Icon(
-                                Icons.bookmark,
-                                color: CustomColor.activeColor,
-                              ))
-                        ]),
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.4,
-                        child: Stack(children: [
-                          Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            shadowColor:
-                                CustomColor.primaryColor.withOpacity(0.2),
-                            elevation: 8,
-                            margin: const EdgeInsets.all(4.0),
-                            child: Column(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                  ),
-                                  child: Image.network(
-                                    'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: const [
-                                          Text(
-                                            'Royal Din',
-                                            style: TextStyle(
-                                                fontSize: 14.0,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            'Western dishes',
-                                            softWrap: true,
-                                            style: TextStyle(
-                                                fontSize: 10.0,
-                                                color: CustomColor
-                                                    .textDetailColor),
-                                          ),
-                                        ],
-                                      ),
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 4),
-                                        decoration: BoxDecoration(
-                                          color: CustomColor.activeColor,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: Row(
-                                          children: const [
-                                            Text(
-                                              '5.3',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 12),
-                                            ),
-                                            Icon(
-                                              Icons.star,
-                                              color: Colors.white,
-                                              size: 12,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: const [
-                                          Text(
-                                            '50% OFF',
-                                            style: TextStyle(
-                                                fontSize: 14.0,
-                                                color: CustomColor.activeColor,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(
-                                            'UPTO \$100',
-                                            style: TextStyle(
-                                                fontSize: 10.0,
-                                                color: CustomColor
-                                                    .textDetailColor),
-                                          ),
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 8),
-                                        child: Row(
-                                          children: const [
-                                            Icon(
-                                              Icons.location_on,
-                                              color: CustomColor.activeColor,
-                                              size: 10,
-                                            ),
-                                            Text(
-                                              '1.2km',
-                                              style: TextStyle(
-                                                  fontSize: 10.0,
-                                                  color: CustomColor
-                                                      .textDetailColor),
-                                            ),
-                                            SizedBox(
-                                              width: 4,
-                                            ),
-                                            Icon(
-                                              Icons.access_time,
-                                              size: 10,
-                                              color:
-                                                  CustomColor.textDetailColor,
-                                            ),
-                                            Text(
-                                              '10min',
-                                              style: TextStyle(
-                                                  fontSize: 10.0,
-                                                  color: CustomColor
-                                                      .textDetailColor),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Positioned(
-                              right: 10,
-                              top: 10,
-                              child: Icon(
-                                Icons.bookmark,
-                                color: CustomColor.activeColor,
-                              ))
-                        ]),
-                      ),
-                    ]),
+                    children: bestOffersView),
               ),
             ],
           ),

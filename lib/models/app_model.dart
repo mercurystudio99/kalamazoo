@@ -169,10 +169,13 @@ class AppModel extends Model {
   }) {
     categories.forEach((key, value) {
       if (value) {
-        Query query = _firestore.collection(key).limit(2);
-        query.get().then(
+        _firestore.collection(key).limit(2).get().then(
           (querySnapshot) {
-            debugPrint("limit 2");
+            List<Map<String, dynamic>> result = [];
+            for (var snapshot in querySnapshot.docs) {
+              result.add(snapshot.data());
+            }
+            onSuccess(result);
           },
           onError: (e) => debugPrint("Error completing: $e"),
         );
