@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class NavigationRouter {
+  static void back(BuildContext context) {
+    Navigator.pop(context);
+  }
+
   static void switchToLogin(BuildContext context) {
     Navigator.pushNamed(context, "/LoginScreen");
   }
@@ -23,6 +27,30 @@ class NavigationRouter {
 
   static void switchToHome(BuildContext context) {
     Navigator.pushNamed(context, "/HomeScreen");
+  }
+
+  static void switchToNotification(BuildContext context) {
+    Navigator.pushNamed(context, "/NotificationScreen");
+  }
+
+  static void switchToSearch(BuildContext context) {
+    Navigator.pushNamed(context, "/SearchScreen");
+  }
+
+  static void switchToProfileEdit(BuildContext context) {
+    Navigator.pushNamed(context, "/ProfileEditScreen");
+  }
+
+  static void switchToAbout(BuildContext context) {
+    Navigator.pushNamed(context, "/AboutScreen");
+  }
+
+  static void switchToMenu(BuildContext context) {
+    Navigator.pushNamed(context, "/MenuScreen");
+  }
+
+  static void switchToItem(BuildContext context) {
+    Navigator.pushNamed(context, "/ItemScreen");
   }
 
   static void switchToStart(BuildContext context) {

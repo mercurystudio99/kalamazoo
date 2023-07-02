@@ -1,4 +1,5 @@
 # Miscellaneous
+*.json
 *.class
 *.log
 *.pyc
@@ -42,3 +43,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Google Services (e.g. APIs or Firebase)
+GoogleService-Info.plist
+google-services.json
+
+# firebase configure
+firebase_options.dart
