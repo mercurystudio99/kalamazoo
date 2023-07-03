@@ -217,4 +217,28 @@ class AppModel extends Model {
     }).then((value) => onSuccess(),
         onError: (e) => debugPrint("Error updating document $e"));
   }
+
+  // profile get method
+  void getProfile({
+    // callback functions
+    required Function(Map<String, dynamic>) onSuccess,
+  }) {
+    _firestore
+        .collection(C_USERS)
+        .where(USER_EMAIL, isEqualTo: globals.userEmail)
+        .get()
+        .then(
+      (querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          Map<String, dynamic> data = {};
+          for (var docSnapshot in querySnapshot.docs) {
+            data = docSnapshot.data();
+            break;
+          }
+          onSuccess(data);
+        }
+      },
+      onError: (e) => debugPrint("Error completing: $e"),
+    );
+  }
 }

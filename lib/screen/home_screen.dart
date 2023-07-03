@@ -52,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late List<bool> _selected;
   static List<String> categories = [];
   static List<Map<String, dynamic>> bestOffers = [];
+  static Map<String, dynamic> profile = {};
 
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -82,6 +83,9 @@ class _HomeScreenState extends State<HomeScreen> {
       AppModel().getData(onSuccess: (List<Map<String, dynamic>> param) {
         bestOffers = param;
       });
+    });
+    AppModel().getProfile(onSuccess: (Map<String, dynamic> param) {
+      profile = param;
     });
     _selected = List<bool>.generate(listLength, (_) => false);
   }
@@ -646,13 +650,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      child: Image.asset('assets/group.png'),
+                      child: profile.isEmpty
+                          ? Container(color: Colors.blueGrey)
+                          : Image.network(
+                              profile[USER_PROFILE_PHOTO],
+                              width: MediaQuery.of(context).size.width * 0.25,
+                            ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Text(
-                        'James Hawkins',
-                        style: TextStyle(
+                        profile.isEmpty ? '' : profile[USER_FULLNAME],
+                        style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                     ),
@@ -703,14 +712,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'Email Address',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          'demo@gmail.com',
-                          style: TextStyle(
+                          profile.isEmpty ? '' : profile[USER_EMAIL],
+                          style: const TextStyle(
                               color: CustomColor.textDetailColor, fontSize: 12),
                         ),
                       ],
@@ -745,7 +754,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           'Location',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Text('Kalamazoo, Michigan, USA',
+                        Text('',
                             style: TextStyle(
                                 color: CustomColor.textDetailColor,
                                 fontSize: 12)),
@@ -776,13 +785,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'Gender',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Text('Male',
-                            style: TextStyle(
+                        Text(profile.isEmpty ? '' : profile[USER_GENDER],
+                            style: const TextStyle(
                                 color: CustomColor.textDetailColor,
                                 fontSize: 12)),
                       ],
@@ -814,13 +823,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'Birth Date',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Text('30 August 2023',
-                            style: TextStyle(
+                        Text(
+                            profile.isEmpty
+                                ? ''
+                                : '${profile[USER_BIRTH_DAY]} ${profile[USER_BIRTH_MONTH]} ${profile[USER_BIRTH_YEAR]}',
+                            style: const TextStyle(
                                 color: CustomColor.textDetailColor,
                                 fontSize: 12)),
                       ],
