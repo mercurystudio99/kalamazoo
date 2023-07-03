@@ -2,10 +2,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
+import 'package:kalamazoo/utils/globals.dart' as globals;
+import 'package:kalamazoo/models/app_model.dart';
 
 class ProfileEditScreen extends StatefulWidget {
   const ProfileEditScreen({super.key});
@@ -18,9 +21,34 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
   XFile? image;
 
   final ImagePicker picker = ImagePicker();
+  final _storage = FirebaseStorage.instance;
 
-  static const List<String> list = <String>['Male', 'Female'];
-  String dropdownValue = list.first;
+  final _nameController = TextEditingController();
+  final _locationController = TextEditingController();
+  final _emailController = TextEditingController();
+
+  static const List<String> listGender = <String>['Male', 'Female'];
+  static List<String> listYear = [];
+  static const List<String> listMonth = <String>[
+    'January',
+    'Febrary',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ];
+  static List<String> listDate = [];
+
+  String gender = '';
+  String birthYear = '';
+  String birthMonth = '';
+  String birthDate = '';
   //we can upload image from camera or from gallery based on parameter
   Future getImage(ImageSource media) async {
     var img = await picker.pickImage(source: media);
@@ -28,6 +56,65 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     setState(() {
       image = img;
     });
+  }
+
+  void _save(
+      {required VoidCallback onCallback,
+      required Function(String) onError}) async {
+    if (image != null) {
+      var imageFile = File(image!.path);
+      //Upload to Firebase
+      UploadTask uploadTask = _storage
+          .ref()
+          .child('avatar/${globals.userEmail}')
+          .putFile(imageFile);
+      await uploadTask.whenComplete(() async {
+        var url = await _storage
+            .ref()
+            .child('avatar/${globals.userEmail}')
+            .getDownloadURL();
+        AppModel().saveProfile(
+            imageUrl: url.toString(),
+            name: _nameController.text.trim(),
+            location: _locationController.text.trim(),
+            email: _emailController.text.trim(),
+            gender: gender,
+            birthYear: birthYear,
+            birthMonth: birthMonth,
+            birthDate: birthDate,
+            onSuccess: () {
+              onCallback();
+            },
+            onError: (String text) {});
+      });
+    } else {
+      onError("Please upload your image.");
+    }
+  }
+
+  String? _validateEmail(String value) {
+    if (value.isEmpty) {
+      return "\u26A0 Please enter your email";
+    }
+    if (!(value.isNotEmpty && value.contains("@") && value.contains("."))) {
+      return '\u26A0 The E-mail Address must be a valid email address.';
+    }
+    return null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    for (var i = 1950; i < 2024; i++) {
+      listYear.add(i.toString());
+    }
+    for (var i = 1; i < 32; i++) {
+      listDate.add(i.toString());
+    }
+    gender = listGender.first;
+    birthMonth = listMonth.first;
+    birthDate = listDate.first;
+    birthYear = listYear.first;
   }
 
   @override
@@ -193,6 +280,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         elevation: 5,
                         shadowColor: Colors.black,
                         child: TextFormField(
+                          controller: _nameController,
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: 'Your Name',
@@ -220,6 +308,7 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         elevation: 5,
                         shadowColor: Colors.black,
                         child: TextFormField(
+                          controller: _locationController,
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: '****** ** *****',
@@ -247,10 +336,17 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                         elevation: 5,
                         shadowColor: Colors.black,
                         child: TextFormField(
+                          controller: _emailController,
+                          keyboardType: TextInputType
+                              .emailAddress, // Use email input type for emails.
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: 'Email Address',
                           ),
+                          // The validator receives the text that the user has entered.
+                          validator: (value) {
+                            return _validateEmail(value!);
+                          },
                         ),
                       ),
                     ),
@@ -284,17 +380,16 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                           underline: const SizedBox(
                             width: 1,
                           ),
-                          value: dropdownValue,
-                          hint: const Text('MM'),
+                          value: gender,
                           borderRadius: BorderRadius.circular(10.0),
                           icon: const Icon(Icons.keyboard_arrow_down),
                           elevation: 16,
                           onChanged: (String? value) {
                             setState(() {
-                              dropdownValue = value!;
+                              gender = value!;
                             });
                           },
-                          items: list
+                          items: listGender
                               .map<DropdownMenuItem<String>>((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
@@ -340,17 +435,17 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                               underline: const SizedBox(
                                 width: 1,
                               ),
-                              value: dropdownValue,
+                              value: birthMonth,
                               hint: const Text('MM'),
                               borderRadius: BorderRadius.circular(10.0),
                               icon: const Icon(Icons.keyboard_arrow_down),
                               elevation: 16,
                               onChanged: (String? value) {
                                 setState(() {
-                                  dropdownValue = value!;
+                                  birthMonth = value!;
                                 });
                               },
-                              items: list.map<DropdownMenuItem<String>>(
+                              items: listMonth.map<DropdownMenuItem<String>>(
                                   (String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
@@ -378,17 +473,17 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                               underline: const SizedBox(
                                 width: 1,
                               ),
-                              value: dropdownValue,
-                              hint: const Text('MM'),
+                              value: birthDate,
+                              hint: const Text('DD'),
                               borderRadius: BorderRadius.circular(10.0),
                               icon: const Icon(Icons.keyboard_arrow_down),
                               elevation: 16,
                               onChanged: (String? value) {
                                 setState(() {
-                                  dropdownValue = value!;
+                                  birthDate = value!;
                                 });
                               },
-                              items: list.map<DropdownMenuItem<String>>(
+                              items: listDate.map<DropdownMenuItem<String>>(
                                   (String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
@@ -416,17 +511,17 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                               underline: const SizedBox(
                                 width: 1,
                               ),
-                              value: dropdownValue,
-                              hint: const Text('MM'),
+                              value: birthYear,
+                              hint: const Text('YY'),
                               borderRadius: BorderRadius.circular(10.0),
                               icon: const Icon(Icons.keyboard_arrow_down),
                               elevation: 16,
                               onChanged: (String? value) {
                                 setState(() {
-                                  dropdownValue = value!;
+                                  birthYear = value!;
                                 });
                               },
-                              items: list.map<DropdownMenuItem<String>>(
+                              items: listYear.map<DropdownMenuItem<String>>(
                                   (String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,
@@ -457,7 +552,15 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                                     5) //content padding inside button
                                 ),
                             onPressed: () {
-                              NavigationRouter.switchToHome(context);
+                              _save(onCallback: () {
+                                // Go to Home
+                                NavigationRouter.switchToHome(context);
+                              }, onError: (String text) {
+                                // Show error message
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(text)),
+                                );
+                              });
                             },
                             child: const Text(
                               Util.buttonSave,

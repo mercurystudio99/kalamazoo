@@ -39,10 +39,11 @@ class AppModel extends Model {
       USER_EMAIL: email,
       USER_PASS: password
     };
-    _firestore
-        .collection(C_USERS)
-        .add(user)
-        .then((DocumentReference doc) => onSuccess());
+    _firestore.collection(C_USERS).add(user).then((DocumentReference doc) {
+      globals.userEmail = email;
+      globals.userID = doc.id;
+      onSuccess();
+    });
   }
 
   // user sign in method
@@ -63,6 +64,7 @@ class AppModel extends Model {
           for (var docSnapshot in querySnapshot.docs) {
             if (docSnapshot.data()[USER_PASS] == password) {
               globals.userEmail = email;
+              globals.userID = docSnapshot.id;
               onSuccess();
             } else {
               onError('Wrong password provided for that user.');
@@ -151,8 +153,11 @@ class AppModel extends Model {
         ? _firestore
             .collection(C_USERS)
             .doc(retrieveID)
-            .update({USER_PASS: newPass}).then((value) => onSuccess(),
-                onError: (e) => debugPrint("Error updating document $e"))
+            .update({USER_PASS: newPass}).then((value) {
+            globals.userEmail = retrieveEmail!;
+            globals.userID = retrieveID!;
+            onSuccess();
+          }, onError: (e) => debugPrint("Error updating document $e"))
         : onError('Passwords must match.');
   }
 
@@ -185,5 +190,31 @@ class AppModel extends Model {
         );
       }
     });
+  }
+
+  // profile save method
+  void saveProfile({
+    required String imageUrl,
+    required String name,
+    required String location,
+    required String email,
+    required String gender,
+    required String birthYear,
+    required String birthMonth,
+    required String birthDate,
+    // callback functions
+    required VoidCallback onSuccess,
+    required Function(String) onError,
+  }) {
+    _firestore.collection(C_USERS).doc(globals.userID).update({
+      USER_PROFILE_PHOTO: imageUrl,
+      USER_FULLNAME: name,
+      USER_EMAIL: email,
+      USER_GENDER: gender,
+      USER_BIRTH_YEAR: birthYear,
+      USER_BIRTH_MONTH: birthMonth,
+      USER_BIRTH_DAY: birthDate
+    }).then((value) => onSuccess(),
+        onError: (e) => debugPrint("Error updating document $e"));
   }
 }
