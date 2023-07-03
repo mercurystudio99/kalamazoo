@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:kalamazoo/utils/constants.dart';
+import 'package:kalamazoo/utils/globals.dart' as globals;
 import 'package:scoped_model/scoped_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_otp/email_otp.dart';
@@ -60,9 +61,12 @@ class AppModel extends Model {
       (querySnapshot) {
         if (querySnapshot.docs.isNotEmpty) {
           for (var docSnapshot in querySnapshot.docs) {
-            docSnapshot.data()[USER_PASS] == password
-                ? onSuccess()
-                : onError('Wrong password provided for that user.');
+            if (docSnapshot.data()[USER_PASS] == password) {
+              globals.userEmail = email;
+              onSuccess();
+            } else {
+              onError('Wrong password provided for that user.');
+            }
             break;
           }
         } else {
