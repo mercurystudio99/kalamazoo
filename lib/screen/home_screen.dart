@@ -152,27 +152,28 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        decoration: BoxDecoration(
-                          color: CustomColor.activeColor,
-                          borderRadius: BorderRadius.circular(10),
+                      if (element[RESTAURANT_RATING] != null)
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          decoration: BoxDecoration(
+                            color: CustomColor.activeColor,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                element[RESTAURANT_RATING],
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 12),
+                              ),
+                              const Icon(
+                                Icons.star,
+                                color: Colors.white,
+                                size: 12,
+                              )
+                            ],
+                          ),
                         ),
-                        child: Row(
-                          children: const [
-                            Text(
-                              '5.3',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 12),
-                            ),
-                            Icon(
-                              Icons.star,
-                              color: Colors.white,
-                              size: 12,
-                            )
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -185,20 +186,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Text(
-                            '50% OFF',
-                            style: TextStyle(
-                                fontSize: 14.0,
-                                color: CustomColor.activeColor,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            'UPTO \$100',
-                            style: TextStyle(
-                                fontSize: 10.0,
-                                color: CustomColor.textDetailColor),
-                          ),
+                        children: [
+                          if (element[RESTAURANT_DISCOUNT] != null)
+                            Text(
+                              '${element[RESTAURANT_DISCOUNT]}% OFF',
+                              style: const TextStyle(
+                                  fontSize: 14.0,
+                                  color: CustomColor.activeColor,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          if (element[RESTAURANT_MINCOST] != null)
+                            Text(
+                              'UPTO \$${element[RESTAURANT_MINCOST]}',
+                              style: const TextStyle(
+                                  fontSize: 10.0,
+                                  color: CustomColor.textDetailColor),
+                            ),
                         ],
                       ),
                       Padding(
