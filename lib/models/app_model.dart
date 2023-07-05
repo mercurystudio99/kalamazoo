@@ -270,4 +270,28 @@ class AppModel extends Model {
       onError: (e) => debugPrint("Error completing: $e"),
     );
   }
+
+  // restaurant get method
+  void getRestaurant({
+    // callback functions
+    required Function(Map<String, dynamic>) onSuccess,
+  }) {
+    _firestore
+        .collection(C_RESTAURANTS)
+        .where(RESTAURANT_ID, isEqualTo: globals.restaurantID)
+        .get()
+        .then(
+      (querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          Map<String, dynamic> data = {};
+          for (var docSnapshot in querySnapshot.docs) {
+            data = docSnapshot.data();
+            break;
+          }
+          onSuccess(data);
+        }
+      },
+      onError: (e) => debugPrint("Error completing: $e"),
+    );
+  }
 }

@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
+import 'package:kalamazoo/utils/constants.dart';
+import 'package:kalamazoo/models/app_model.dart';
 
 class AboutScreen extends StatefulWidget {
   const AboutScreen({super.key});
@@ -12,6 +14,26 @@ class AboutScreen extends StatefulWidget {
 }
 
 class _AboutScreenState extends State<AboutScreen> {
+  static Map<String, dynamic> restaurant = {};
+
+  @override
+  void initState() {
+    super.initState();
+    initialize();
+  }
+
+  void initialize() {
+    AppModel().getRestaurant(onSuccess: (Map<String, dynamic> param) {
+      restaurant = param;
+    });
+  }
+
+  @override
+  void dispose() {
+    restaurant.clear();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     List<String> dishes = [
@@ -120,31 +142,34 @@ class _AboutScreenState extends State<AboutScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text(
-                      'Royal Dine Restaurant',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 4),
-                      decoration: BoxDecoration(
-                        color: CustomColor.activeColor,
-                        borderRadius: BorderRadius.circular(10),
+                    if (restaurant[RESTAURANT_BUSINESSNAME] != null)
+                      Text(
+                        restaurant[RESTAURANT_BUSINESSNAME],
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                      child: Row(
-                        children: const [
-                          Text(
-                            '5.3',
-                            style: TextStyle(color: Colors.white, fontSize: 12),
-                          ),
-                          Icon(
-                            Icons.star,
-                            color: Colors.white,
-                            size: 12,
-                          )
-                        ],
+                    if (restaurant[RESTAURANT_RATING] != null)
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        decoration: BoxDecoration(
+                          color: CustomColor.activeColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          children: [
+                            Text(
+                              restaurant[RESTAURANT_RATING],
+                              style: const TextStyle(
+                                  color: Colors.white, fontSize: 12),
+                            ),
+                            const Icon(
+                              Icons.star,
+                              color: Colors.white,
+                              size: 12,
+                            )
+                          ],
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),
@@ -163,9 +188,9 @@ class _AboutScreenState extends State<AboutScreen> {
                   'Phone',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
                 ),
-                subtitle: const Text(
-                  '0123456789',
-                  style: TextStyle(
+                subtitle: Text(
+                  restaurant[RESTAURANT_PHONE] ?? '',
+                  style: const TextStyle(
                       fontSize: 12.0, color: CustomColor.textDetailColor),
                 ),
               ),
@@ -184,9 +209,9 @@ class _AboutScreenState extends State<AboutScreen> {
                   'E-mail',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
                 ),
-                subtitle: const Text(
-                  'royaldine247@gmail.com',
-                  style: TextStyle(
+                subtitle: Text(
+                  restaurant[RESTAURANT_EMAIL] ?? '',
+                  style: const TextStyle(
                       fontSize: 12.0, color: CustomColor.textDetailColor),
                 ),
               ),
@@ -211,9 +236,9 @@ class _AboutScreenState extends State<AboutScreen> {
                   'Location',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
                 ),
-                subtitle: const Text(
-                  'Kalamazoo, Michigan, USA',
-                  style: TextStyle(
+                subtitle: Text(
+                  restaurant[RESTAURANT_ADDRESS] ?? '',
+                  style: const TextStyle(
                       fontSize: 12.0, color: CustomColor.textDetailColor),
                 ),
               ),
