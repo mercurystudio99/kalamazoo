@@ -48,10 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   bool isSelectionMode = false;
   int carouselIndicatorCurrent = 0;
-  final int listLength = 30;
-  late List<bool> _selected;
   static List<String> categories = [];
   static List<Map<String, dynamic>> bestOffers = [];
+  static List<Map<String, dynamic>> favourites = [];
   static Map<String, dynamic> profile = {};
 
   static const TextStyle optionStyle =
@@ -84,15 +83,17 @@ class _HomeScreenState extends State<HomeScreen> {
         bestOffers = param;
       });
     });
+    AppModel().getFavourites(onSuccess: (List<Map<String, dynamic>> param) {
+      favourites = param;
+    });
     AppModel().getProfile(onSuccess: (Map<String, dynamic> param) {
       profile = param;
     });
-    _selected = List<bool>.generate(listLength, (_) => false);
   }
 
   @override
   void dispose() {
-    _selected.clear();
+    favourites.clear();
     categories.clear();
     bestOffers.clear();
     super.dispose();
@@ -532,7 +533,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             child: ListBuilder(
               isSelectionMode: isSelectionMode,
-              selectedList: _selected,
+              list: favourites,
               onSelectionChange: (bool x) {
                 setState(() {
                   isSelectionMode = x;
@@ -1177,13 +1178,13 @@ class _HomeScreenState extends State<HomeScreen> {
 class ListBuilder extends StatefulWidget {
   const ListBuilder({
     super.key,
-    required this.selectedList,
+    required this.list,
     required this.isSelectionMode,
     required this.onSelectionChange,
   });
 
   final bool isSelectionMode;
-  final List<bool> selectedList;
+  final List<Map<String, dynamic>> list;
   final Function(bool)? onSelectionChange;
 
   @override
@@ -1194,7 +1195,7 @@ class _ListBuilderState extends State<ListBuilder> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: widget.selectedList.length,
+        itemCount: widget.list.length,
         itemBuilder: (_, int index) {
           return GestureDetector(
             onTap: () {

@@ -65,6 +65,9 @@ class AppModel extends Model {
             if (docSnapshot.data()[USER_PASS] == password) {
               globals.userEmail = email;
               globals.userID = docSnapshot.id;
+              if (docSnapshot.data()[USER_FAVOURITIES].isNotEmpty) {
+                globals.userFavourites = docSnapshot.data()[USER_FAVOURITIES];
+              }
               onSuccess();
             } else {
               onError('Wrong password provided for that user.');
@@ -96,6 +99,9 @@ class AppModel extends Model {
           retrieveEmail = email;
           for (var docSnapshot in querySnapshot.docs) {
             retrieveID = docSnapshot.id;
+            if (docSnapshot.data()[USER_FAVOURITIES].isNotEmpty) {
+              globals.userFavourites = docSnapshot.data()[USER_FAVOURITIES];
+            }
             break;
           }
           onSuccess();
@@ -190,6 +196,29 @@ class AppModel extends Model {
         );
       }
     });
+  }
+
+  // favourites get method
+  void getFavourites({
+    // callback functions
+    required Function(List<Map<String, dynamic>>) onSuccess,
+  }) {
+    List<Map<String, dynamic>> favourites = [];
+    _firestore
+        .collection(C_RESTAURANTS)
+        .where(RESTAURANT_ID, whereIn: globals.userFavourites)
+        .get()
+        .then(
+      (querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          for (var docSnapshot in querySnapshot.docs) {
+            favourites.add(docSnapshot.data());
+          }
+          onSuccess(favourites);
+        }
+      },
+      onError: (e) => debugPrint("Error completing: $e"),
+    );
   }
 
   // profile save method
