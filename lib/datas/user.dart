@@ -12,7 +12,7 @@ class User {
   final String userPhoneNumber;
   final String userEmail;
   final String userPass;
-  final List<int> userFavourites;
+  final List<dynamic> userFavourites;
   final String userStatus;
   final bool userIsVerified;
   final DateTime userRegDate;
