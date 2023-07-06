@@ -1197,9 +1197,12 @@ class _ListBuilderState extends State<ListBuilder> {
     return ListView.builder(
         itemCount: widget.list.length,
         itemBuilder: (_, int index) {
+          final Map<String, dynamic> restaurant = widget.list[index];
           return GestureDetector(
             onTap: () {
-              NavigationRouter.switchToAbout(context);
+              AppModel().setRestaurantID(
+                  id: restaurant[RESTAURANT_ID],
+                  onSuccess: () => NavigationRouter.switchToAbout(context));
             },
             child: Container(
               margin: const EdgeInsets.symmetric(
@@ -1227,10 +1230,10 @@ class _ListBuilderState extends State<ListBuilder> {
                         'assets/group.png',
                         fit: BoxFit.cover,
                       )),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: _ArticleDescription(
-                      title: 'Royal Din',
+                      title: restaurant[RESTAURANT_BUSINESSNAME],
                       subtitle: 'Coffee',
                       author: '50% OFF',
                       publishDate: 'UPTO',
@@ -1275,8 +1278,7 @@ class _ArticleDescription extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              title,
-              overflow: TextOverflow.ellipsis,
+              title.length < 14 ? title : '${title.substring(0, 10)}...',
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             const Icon(

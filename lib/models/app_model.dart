@@ -271,6 +271,16 @@ class AppModel extends Model {
     );
   }
 
+  // restaurant ID set method
+  void setRestaurantID({
+    required int id,
+    // callback functions
+    required VoidCallback onSuccess,
+  }) {
+    globals.restaurantID = id;
+    onSuccess();
+  }
+
   // restaurant get method
   Future<QuerySnapshot<Map<String, dynamic>>> getRestaurant() async {
     return await _firestore
