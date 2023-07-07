@@ -273,7 +273,7 @@ class AppModel extends Model {
 
   // restaurant ID set method
   void setRestaurantID({
-    required int id,
+    required String id,
     // callback functions
     required VoidCallback onSuccess,
   }) {
@@ -286,6 +286,15 @@ class AppModel extends Model {
     return await _firestore
         .collection(C_RESTAURANTS)
         .where(RESTAURANT_ID, isEqualTo: globals.restaurantID)
+        .get();
+  }
+
+  // menu get method
+  Future<QuerySnapshot<Map<String, dynamic>>> getMenu() async {
+    return await _firestore
+        .collection(C_RESTAURANTS)
+        .doc(globals.restaurantID)
+        .collection(C_C_MENU)
         .get();
   }
 }

@@ -28,13 +28,6 @@ class _AboutScreenState extends State<AboutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> dishes = [
-      "Steak",
-      "Barbecue Ribs",
-      "Steak",
-      "Steak",
-    ];
-
     return Scaffold(
         backgroundColor: Colors.white,
         body: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
@@ -278,13 +271,26 @@ class _AboutScreenState extends State<AboutScreen> {
                         ),
                         SizedBox(
                             height: 160,
-                            child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: Row(
-                                  children: dishes.map((dish) {
-                                    return box(dish, Colors.white);
-                                  }).toList(),
-                                ))),
+                            child: FutureBuilder<
+                                    QuerySnapshot<Map<String, dynamic>>>(
+                                future: AppModel().getMenu(),
+                                builder: (context,
+                                    AsyncSnapshot<
+                                            QuerySnapshot<Map<String, dynamic>>>
+                                        snapshot) {
+                                  if (snapshot.hasData) {
+                                    List<Widget> dishView = [];
+                                    for (var menu in snapshot.data!.docs) {
+                                      dishView
+                                          .add(box(menu.data(), Colors.white));
+                                    }
+                                    return SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(children: dishView));
+                                  } else {
+                                    return const Processing();
+                                  }
+                                }))
                       ],
                     )
                   ],
@@ -295,7 +301,7 @@ class _AboutScreenState extends State<AboutScreen> {
             }));
   }
 
-  Widget box(String title, Color backgroundcolor) {
+  Widget box(Map<String, dynamic> menu, Color backgroundcolor) {
     return Container(
         margin: const EdgeInsets.only(left: 8, right: 8, bottom: 20),
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -315,7 +321,7 @@ class _AboutScreenState extends State<AboutScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Image.asset('assets/group.png'),
-            Text(title, style: const TextStyle(fontSize: 18))
+            Text(menu[MENU_NAME], style: const TextStyle(fontSize: 18))
           ],
         ));
   }

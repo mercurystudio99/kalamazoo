@@ -5,6 +5,7 @@
 const String C_APPINFO = "AppInfo";
 const String C_USERS = "Users";
 const String C_RESTAURANTS = "Restaurants";
+const String C_C_MENU = "Menu";
 
 /// DATABASE FIELDS FOR USER COLLECTION  ///
 ///
@@ -38,3 +39,7 @@ const String RESTAURANT_HOURS = "hours";
 const String RESTAURANT_AMENITIES = "amenities";
 const String RESTAURANT_DISCOUNT = "discount";
 const String RESTAURANT_MINCOST = "mincost";
+
+const String MENU_ID = "id";
+const String MENU_NAME = "name";
+const String MENU_PRICE = "price";
