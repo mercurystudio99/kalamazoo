@@ -273,7 +273,7 @@ class _AboutScreenState extends State<AboutScreen> {
                             height: 160,
                             child: FutureBuilder<
                                     QuerySnapshot<Map<String, dynamic>>>(
-                                future: AppModel().getMenu(),
+                                future: AppModel().getFullMenu(),
                                 builder: (context,
                                     AsyncSnapshot<
                                             QuerySnapshot<Map<String, dynamic>>>

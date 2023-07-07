@@ -43,3 +43,4 @@ const String RESTAURANT_MINCOST = "mincost";
 const String MENU_ID = "id";
 const String MENU_NAME = "name";
 const String MENU_PRICE = "price";
+const String MENU_DESCRIPTION = "description";

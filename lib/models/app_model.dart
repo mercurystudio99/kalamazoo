@@ -272,12 +272,13 @@ class AppModel extends Model {
   }
 
   // restaurant ID set method
-  void setRestaurantID({
-    required String id,
+  void setRestaurant({
+    required Map<String, dynamic> restaurant,
     // callback functions
     required VoidCallback onSuccess,
   }) {
-    globals.restaurantID = id;
+    globals.restaurantID = restaurant[RESTAURANT_ID];
+    globals.restaurantRating = restaurant[RESTAURANT_RATING] ?? 0;
     onSuccess();
   }
 
@@ -289,12 +290,32 @@ class AppModel extends Model {
         .get();
   }
 
-  // menu get method
-  Future<QuerySnapshot<Map<String, dynamic>>> getMenu() async {
+  // menu ID set method
+  void setMenuID({
+    required String id,
+    // callback functions
+    required VoidCallback onSuccess,
+  }) {
+    globals.menuID = id;
+    onSuccess();
+  }
+
+  // all menu get method
+  Future<QuerySnapshot<Map<String, dynamic>>> getFullMenu() async {
     return await _firestore
         .collection(C_RESTAURANTS)
         .doc(globals.restaurantID)
         .collection(C_C_MENU)
+        .get();
+  }
+
+  // one menu get method
+  Future<DocumentSnapshot<Map<String, dynamic>>> getMenu() async {
+    return await _firestore
+        .collection(C_RESTAURANTS)
+        .doc(globals.restaurantID)
+        .collection(C_C_MENU)
+        .doc(globals.menuID)
         .get();
   }
 }

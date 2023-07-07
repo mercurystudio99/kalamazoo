@@ -1200,8 +1200,8 @@ class _ListBuilderState extends State<ListBuilder> {
           final Map<String, dynamic> restaurant = widget.list[index];
           return GestureDetector(
             onTap: () {
-              AppModel().setRestaurantID(
-                  id: restaurant[RESTAURANT_ID],
+              AppModel().setRestaurant(
+                  restaurant: restaurant,
                   onSuccess: () => NavigationRouter.switchToAbout(context));
             },
             child: Container(

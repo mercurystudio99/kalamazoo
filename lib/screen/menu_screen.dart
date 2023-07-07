@@ -31,7 +31,7 @@ class _MenuScreenState extends State<MenuScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      future: AppModel().getMenu(),
+      future: AppModel().getFullMenu(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final List<QueryDocumentSnapshot<Map<String, dynamic>>> menu =
@@ -179,7 +179,11 @@ class _ListBuilderState extends State<ListBuilder> {
                   margin: const EdgeInsets.symmetric(vertical: 8.0),
                   child: ListTile(
                     onTap: () {
-                      NavigationRouter.switchToItem(context);
+                      AppModel().setMenuID(
+                          id: menu[MENU_ID],
+                          onSuccess: () {
+                            NavigationRouter.switchToItem(context);
+                          });
                     },
                     contentPadding: const EdgeInsets.all(8),
                     leading: Image.asset('assets/group.png'),
