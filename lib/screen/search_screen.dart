@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
+import 'package:kalamazoo/utils/constants.dart';
+import 'package:kalamazoo/models/app_model.dart';
 
 const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
 
@@ -15,23 +17,32 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   bool isSelectionMode = false;
-  final int listLength = 30;
-  late List<bool> _selected;
   String dropdownValue = list.first;
+
+  static List<Map<String, dynamic>> searchResults = [];
 
   @override
   void initState() {
     super.initState();
-    initializeSelection();
   }
 
-  void initializeSelection() {
-    _selected = List<bool>.generate(listLength, (_) => false);
+  _onSearch(String text) async {
+    searchResults.clear();
+    if (text.isEmpty) {
+      return;
+    }
+    AppModel().getSearch(
+        keyword: text,
+        onSuccess: (List<Map<String, dynamic>> param) {
+          setState(() {
+            searchResults = param;
+          });
+        });
   }
 
   @override
   void dispose() {
-    _selected.clear();
+    searchResults.clear();
     super.dispose();
   }
 
@@ -136,26 +147,23 @@ class _SearchScreenState extends State<SearchScreen> {
                   elevation: 8,
                   shadowColor: CustomColor.primaryColor.withOpacity(0.2),
                   child: TextFormField(
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Search Restaurant or Food...',
-                        prefixIconConstraints: BoxConstraints(
-                          minWidth: 50,
-                          minHeight: 2,
-                        ),
-                        prefixIcon: Icon(Icons.search_outlined, size: 24),
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Search Restaurant or Food...',
+                      prefixIconConstraints: BoxConstraints(
+                        minWidth: 50,
+                        minHeight: 2,
                       ),
-                      autovalidateMode: AutovalidateMode.always,
-                      validator: (value) {
-                        if (value!.contains('\n')) {}
-                        return null;
-                      }),
+                      prefixIcon: Icon(Icons.search_outlined, size: 24),
+                    ),
+                    onChanged: _onSearch,
+                  ),
                 ),
               ),
               Expanded(
                 child: ListBuilder(
                   isSelectionMode: isSelectionMode,
-                  selectedList: _selected,
+                  list: searchResults,
                   onSelectionChange: (bool x) {
                     setState(() {
                       isSelectionMode = x;
@@ -174,13 +182,13 @@ class _SearchScreenState extends State<SearchScreen> {
 class ListBuilder extends StatefulWidget {
   const ListBuilder({
     super.key,
-    required this.selectedList,
+    required this.list,
     required this.isSelectionMode,
     required this.onSelectionChange,
   });
 
   final bool isSelectionMode;
-  final List<bool> selectedList;
+  final List<Map<String, dynamic>> list;
   final Function(bool)? onSelectionChange;
 
   @override
@@ -191,7 +199,7 @@ class _ListBuilderState extends State<ListBuilder> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        itemCount: widget.selectedList.length,
+        itemCount: widget.list.length,
         itemBuilder: (_, int index) {
           return Container(
             margin: const EdgeInsets.symmetric(
@@ -219,10 +227,10 @@ class _ListBuilderState extends State<ListBuilder> {
                       'assets/group.png',
                       fit: BoxFit.cover,
                     )),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: _ArticleDescription(
-                    title: 'Royal Din',
+                    title: widget.list[index][RESTAURANT_BUSINESSNAME],
                     subtitle: 'Coffee',
                     author: '50% OFF',
                     publishDate: 'UPTO',
@@ -266,8 +274,7 @@ class _ArticleDescription extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              title,
-              overflow: TextOverflow.ellipsis,
+              title.length < 16 ? title : '${title.substring(0, 12)}...',
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             const Icon(

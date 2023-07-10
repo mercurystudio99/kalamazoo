@@ -167,6 +167,30 @@ class AppModel extends Model {
         : onError('Passwords must match.');
   }
 
+  // search get method
+  void getSearch({
+    required String keyword,
+    // callback functions
+    required Function(List<Map<String, dynamic>>) onSuccess,
+  }) {
+    List<Map<String, dynamic>> results = [];
+    _firestore
+        .collection(C_RESTAURANTS)
+        .where(RESTAURANT_BUSINESSNAME, isEqualTo: keyword)
+        .get()
+        .then(
+      (querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          for (var docSnapshot in querySnapshot.docs) {
+            results.add(docSnapshot.data());
+          }
+          onSuccess(results);
+        }
+      },
+      onError: (e) => debugPrint("Error completing: $e"),
+    );
+  }
+
   // category method
   void getCategory({
     // callback functions

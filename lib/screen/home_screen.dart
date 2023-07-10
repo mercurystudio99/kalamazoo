@@ -344,22 +344,19 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.symmetric(
                   horizontal: Util.mainPadding, vertical: 12.0),
               child: TextFormField(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Search Restaurant or Food...',
-                    prefixIconConstraints: BoxConstraints(
-                      minWidth: 50,
-                      minHeight: 2,
-                    ),
-                    prefixIcon: Icon(Icons.search_outlined, size: 24),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Search Restaurant or Food...',
+                  prefixIconConstraints: BoxConstraints(
+                    minWidth: 50,
+                    minHeight: 2,
                   ),
-                  autovalidateMode: AutovalidateMode.always,
-                  validator: (value) {
-                    if (value!.contains('\n')) {
-                      NavigationRouter.switchToSearch(context);
-                    }
-                    return null;
-                  }),
+                  prefixIcon: Icon(Icons.search_outlined, size: 24),
+                ),
+                onTap: () {
+                  NavigationRouter.switchToSearch(context);
+                },
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: Util.mainPadding),
