@@ -53,8 +53,25 @@ class _HomeScreenState extends State<HomeScreen> {
   static List<Map<String, dynamic>> favourites = [];
   static Map<String, dynamic> profile = {};
 
+  final _searchFavoriteController = TextEditingController();
+
+  static final List<Map<String, dynamic>> _searchFavorites = [];
+
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
+  _onSearchFavorite(String text) async {
+    _searchFavorites.clear();
+    if (text.isEmpty) {
+      return;
+    }
+
+    for (var favorite in favourites) {
+      if (favorite[RESTAURANT_BUSINESSNAME].contains(text)) {
+        _searchFavorites.add(favorite);
+      }
+    }
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -514,26 +531,32 @@ class _HomeScreenState extends State<HomeScreen> {
               elevation: 8,
               shadowColor: CustomColor.primaryColor.withOpacity(0.2),
               child: TextFormField(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Search Restaurant or Food...',
-                    prefixIconConstraints: BoxConstraints(
-                      minWidth: 50,
-                      minHeight: 2,
-                    ),
-                    prefixIcon: Icon(Icons.search_outlined, size: 24),
+                controller: _searchFavoriteController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Search Restaurant or Food...',
+                  prefixIconConstraints: BoxConstraints(
+                    minWidth: 50,
+                    minHeight: 2,
                   ),
-                  autovalidateMode: AutovalidateMode.always,
-                  validator: (value) {
-                    if (value!.contains('\n')) {}
-                    return null;
-                  }),
+                  prefixIcon: Icon(Icons.search_outlined, size: 24),
+                ),
+                autovalidateMode: AutovalidateMode.always,
+                validator: (value) {
+                  if (value!.contains('\n')) {}
+                  return null;
+                },
+                onChanged: _onSearchFavorite,
+              ),
             ),
           ),
           Expanded(
             child: ListBuilder(
               isSelectionMode: isSelectionMode,
-              list: favourites,
+              list: (_searchFavorites.isNotEmpty ||
+                      _searchFavoriteController.text.isNotEmpty)
+                  ? _searchFavorites
+                  : favourites,
               onSelectionChange: (bool x) {
                 setState(() {
                   isSelectionMode = x;
