@@ -222,6 +222,26 @@ class AppModel extends Model {
     });
   }
 
+  // favourite set method
+  void setFavourite({
+    required String restaurantID,
+    // callback functions
+    required VoidCallback onSuccess,
+  }) {
+    if (globals.userFavourites.contains(restaurantID)) {
+      globals.userFavourites.remove(restaurantID);
+    } else {
+      globals.userFavourites.add(restaurantID);
+    }
+
+    _firestore
+        .collection(C_USERS)
+        .doc(globals.userID)
+        .update({USER_FAVOURITIES: globals.userFavourites}).then(
+            (value) => onSuccess(),
+            onError: (e) => debugPrint("Error updating document $e"));
+  }
+
   // favourites get method
   void getFavourites({
     // callback functions

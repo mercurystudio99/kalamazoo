@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
+import 'package:kalamazoo/utils/globals.dart' as globals;
 import 'package:kalamazoo/utils/constants.dart';
 import 'package:kalamazoo/models/app_model.dart';
 import 'package:kalamazoo/widget/processing.dart';
@@ -248,7 +249,7 @@ class _ListBuilderState extends State<ListBuilder> {
                       fit: BoxFit.cover,
                     )),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
                   child: _ArticleDescription(
                     title: widget.list[index][RESTAURANT_BUSINESSNAME],
                     subtitle: 'Coffee',
@@ -258,9 +259,21 @@ class _ListBuilderState extends State<ListBuilder> {
                   ),
                 ),
                 const Spacer(),
-                const Icon(
-                  Icons.bookmark_outline,
-                  color: CustomColor.activeColor,
+                IconButton(
+                  onPressed: () {
+                    AppModel().setFavourite(
+                        restaurantID: widget.list[index][RESTAURANT_ID],
+                        onSuccess: () {
+                          setState(() {});
+                        });
+                  },
+                  icon: Icon(
+                    globals.userFavourites
+                            .contains(widget.list[index][RESTAURANT_ID])
+                        ? Icons.bookmark
+                        : Icons.bookmark_outline,
+                    color: CustomColor.activeColor,
+                  ),
                 ),
               ],
             ),

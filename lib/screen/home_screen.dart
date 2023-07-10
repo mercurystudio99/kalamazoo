@@ -674,7 +674,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      child: profile.isEmpty
+                      child: (profile[USER_PROFILE_PHOTO] == null)
                           ? Container(color: Colors.blueGrey)
                           : Image.network(
                               profile[USER_PROFILE_PHOTO],
@@ -684,7 +684,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Text(
-                        profile.isEmpty ? '' : profile[USER_FULLNAME],
+                        profile[USER_FULLNAME] ?? '',
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
@@ -742,7 +742,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          profile.isEmpty ? '' : profile[USER_EMAIL],
+                          profile[USER_EMAIL] ?? '',
                           style: const TextStyle(
                               color: CustomColor.textDetailColor, fontSize: 12),
                         ),
@@ -814,7 +814,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           'Gender',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Text(profile.isEmpty ? '' : profile[USER_GENDER],
+                        Text(profile[USER_GENDER] ?? '',
                             style: const TextStyle(
                                 color: CustomColor.textDetailColor,
                                 fontSize: 12)),
@@ -853,7 +853,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                            profile.isEmpty
+                            (profile[USER_BIRTH_DAY] == null ||
+                                    profile[USER_BIRTH_MONTH] == null ||
+                                    profile[USER_BIRTH_YEAR] == null)
                                 ? ''
                                 : '${profile[USER_BIRTH_DAY]} ${profile[USER_BIRTH_MONTH]} ${profile[USER_BIRTH_YEAR]}',
                             style: const TextStyle(
