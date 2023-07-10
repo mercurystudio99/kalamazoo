@@ -307,6 +307,11 @@ class AppModel extends Model {
   }
 
   // restaurant get method
+  Future<QuerySnapshot<Map<String, dynamic>>> getAllRestaurant() async {
+    return await _firestore.collection(C_RESTAURANTS).get();
+  }
+
+  // restaurant get method
   Future<QuerySnapshot<Map<String, dynamic>>> getRestaurant() async {
     return await _firestore
         .collection(C_RESTAURANTS)

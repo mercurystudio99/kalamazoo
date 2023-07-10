@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kalamazoo/utils/util.dart';
@@ -5,6 +6,7 @@ import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
 import 'package:kalamazoo/utils/constants.dart';
 import 'package:kalamazoo/models/app_model.dart';
+import 'package:kalamazoo/widget/processing.dart';
 
 const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
 
@@ -19,7 +21,8 @@ class _SearchScreenState extends State<SearchScreen> {
   bool isSelectionMode = false;
   String dropdownValue = list.first;
 
-  static List<Map<String, dynamic>> searchResults = [];
+  static final List<Map<String, dynamic>> searchResults = [];
+  static List<Map<String, dynamic>> restaurants = [];
 
   @override
   void initState() {
@@ -31,17 +34,18 @@ class _SearchScreenState extends State<SearchScreen> {
     if (text.isEmpty) {
       return;
     }
-    AppModel().getSearch(
-        keyword: text,
-        onSuccess: (List<Map<String, dynamic>> param) {
-          setState(() {
-            searchResults = param;
-          });
-        });
+
+    for (var restaurant in restaurants) {
+      if (restaurant[RESTAURANT_BUSINESSNAME].contains(text)) {
+        searchResults.add(restaurant);
+      }
+    }
+    setState(() {});
   }
 
   @override
   void dispose() {
+    restaurants.clear();
     searchResults.clear();
     super.dispose();
   }
@@ -49,133 +53,149 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+        body: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+      future: AppModel().getAllRestaurant(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          restaurants.clear();
+          for (var doc in snapshot.data!.docs) {
+            restaurants.add(doc.data());
+          }
+          return Stack(
+            fit: StackFit.expand,
             children: <Widget>[
-              const SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: Util.mainPadding * 0.5, vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back_ios),
-                      onPressed: () {
-                        NavigationRouter.back(context);
-                      },
-                    ),
-                    Stack(
-                      children: <Widget>[
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(100)),
-                            boxShadow: [
-                              BoxShadow(
-                                color:
-                                    CustomColor.primaryColor.withOpacity(0.2),
-                                blurRadius: 8.0,
-                                offset: const Offset(1.0, 1.0),
-                              ),
-                            ],
-                          ),
-                          padding: const EdgeInsets.only(left: 44.0, right: 8),
-                          margin: const EdgeInsets.only(top: 15.0),
-                          child: DropdownButton<String>(
-                            underline: const SizedBox(
-                              width: 1,
-                            ),
-                            value: dropdownValue,
-                            hint: const Text(
-                              'Kalamazoo, Michigan, USA',
-                              style:
-                                  TextStyle(color: CustomColor.textDetailColor),
-                            ),
-                            borderRadius: BorderRadius.circular(10.0),
-                            icon: const Icon(
-                              Icons.keyboard_arrow_down,
-                              color: Colors.black,
-                            ),
-                            elevation: 16,
-                            onChanged: (String? value) {
-                              // This is called when the user selects an item.
-                              setState(() {
-                                dropdownValue = value!;
-                              });
-                            },
-                            items: list
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: Util.mainPadding * 0.5, vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back_ios),
+                          onPressed: () {
+                            NavigationRouter.back(context);
+                          },
                         ),
-                        Container(
-                          margin: const EdgeInsets.only(top: 30.0, left: 12.0),
-                          child: const Icon(
-                            Icons.location_on,
-                            color: CustomColor.activeColor,
-                            size: 20.0,
-                          ),
+                        Stack(
+                          children: <Widget>[
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(100)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: CustomColor.primaryColor
+                                        .withOpacity(0.2),
+                                    blurRadius: 8.0,
+                                    offset: const Offset(1.0, 1.0),
+                                  ),
+                                ],
+                              ),
+                              padding:
+                                  const EdgeInsets.only(left: 44.0, right: 8),
+                              margin: const EdgeInsets.only(top: 15.0),
+                              child: DropdownButton<String>(
+                                underline: const SizedBox(
+                                  width: 1,
+                                ),
+                                value: dropdownValue,
+                                hint: const Text(
+                                  'Kalamazoo, Michigan, USA',
+                                  style: TextStyle(
+                                      color: CustomColor.textDetailColor),
+                                ),
+                                borderRadius: BorderRadius.circular(10.0),
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: Colors.black,
+                                ),
+                                elevation: 16,
+                                onChanged: (String? value) {
+                                  // This is called when the user selects an item.
+                                  setState(() {
+                                    dropdownValue = value!;
+                                  });
+                                },
+                                items: list.map<DropdownMenuItem<String>>(
+                                    (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                            Container(
+                              margin:
+                                  const EdgeInsets.only(top: 30.0, left: 12.0),
+                              child: const Icon(
+                                Icons.location_on,
+                                color: CustomColor.activeColor,
+                                size: 20.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          width: Util.mainPadding,
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      width: Util.mainPadding,
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: Util.mainPadding,
-                    right: Util.mainPadding,
-                    bottom: 20.0),
-                child: Material(
-                  borderRadius: const BorderRadius.all(Radius.circular(14)),
-                  elevation: 8,
-                  shadowColor: CustomColor.primaryColor.withOpacity(0.2),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Search Restaurant or Food...',
-                      prefixIconConstraints: BoxConstraints(
-                        minWidth: 50,
-                        minHeight: 2,
-                      ),
-                      prefixIcon: Icon(Icons.search_outlined, size: 24),
-                    ),
-                    onChanged: _onSearch,
                   ),
-                ),
-              ),
-              Expanded(
-                child: ListBuilder(
-                  isSelectionMode: isSelectionMode,
-                  list: searchResults,
-                  onSelectionChange: (bool x) {
-                    setState(() {
-                      isSelectionMode = x;
-                    });
-                  },
-                ),
-              ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: Util.mainPadding,
+                        right: Util.mainPadding,
+                        bottom: 20.0),
+                    child: Material(
+                      borderRadius: const BorderRadius.all(Radius.circular(14)),
+                      elevation: 8,
+                      shadowColor: CustomColor.primaryColor.withOpacity(0.2),
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Search Restaurant or Food...',
+                          prefixIconConstraints: BoxConstraints(
+                            minWidth: 50,
+                            minHeight: 2,
+                          ),
+                          prefixIcon: Icon(Icons.search_outlined, size: 24),
+                        ),
+                        onChanged: _onSearch,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: ListBuilder(
+                      isSelectionMode: isSelectionMode,
+                      list: (searchResults.isNotEmpty)
+                          ? searchResults
+                          : restaurants,
+                      onSelectionChange: (bool x) {
+                        setState(() {
+                          isSelectionMode = x;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              )
             ],
-          )
-        ],
-      ),
-    );
+          );
+        } else {
+          return const Processing();
+        }
+      },
+    ));
   }
 }
 
@@ -274,7 +294,7 @@ class _ArticleDescription extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              title.length < 16 ? title : '${title.substring(0, 12)}...',
+              title.length < 12 ? title : '${title.substring(0, 8)}...',
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
             const Icon(
