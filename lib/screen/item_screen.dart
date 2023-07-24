@@ -103,10 +103,10 @@ class _ItemScreenState extends State<ItemScreen> {
                       child: ClipRRect(
                         borderRadius:
                             const BorderRadius.all(Radius.circular(100)),
-                        child: Image.asset(
-                          'assets/group.png',
-                          fit: BoxFit.cover,
-                        ),
+                        child: menu![MENU_PHOTO] != null
+                            ? Image.network(menu[MENU_PHOTO], fit: BoxFit.cover)
+                            : Image.asset('assets/group.png',
+                                fit: BoxFit.cover),
                       ),
                     ),
                   ),
@@ -149,7 +149,9 @@ class _ItemScreenState extends State<ItemScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          menu![MENU_NAME],
+                          (menu[MENU_NAME].toString().length > 30)
+                              ? '${menu[MENU_NAME].toString().substring(0, 26)}...'
+                              : menu[MENU_NAME],
                           style: const TextStyle(
                               color: CustomColor.primaryColor,
                               fontWeight: FontWeight.bold,

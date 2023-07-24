@@ -186,7 +186,10 @@ class _ListBuilderState extends State<ListBuilder> {
                           });
                     },
                     contentPadding: const EdgeInsets.all(8),
-                    leading: Image.asset('assets/group.png'),
+                    leading: menu[MENU_PHOTO] != null
+                        ? Image.network(menu[MENU_PHOTO],
+                            width: 80, height: 80, fit: BoxFit.cover)
+                        : Image.asset('assets/group.png'),
                     title: Text(
                       menu[MENU_NAME],
                       style: TextStyle(

@@ -320,8 +320,15 @@ class _AboutScreenState extends State<AboutScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Image.asset('assets/group.png'),
-            Text(menu[MENU_NAME], style: const TextStyle(fontSize: 18))
+            menu[MENU_PHOTO] != null
+                ? Image.network(menu[MENU_PHOTO],
+                    width: 80, height: 80, fit: BoxFit.cover)
+                : Image.asset('assets/group.png'),
+            Text(
+                (menu[MENU_NAME].toString().length > 20)
+                    ? '${menu[MENU_NAME].toString().substring(0, 16)}...'
+                    : menu[MENU_NAME],
+                style: const TextStyle(fontSize: 14))
           ],
         ));
   }
