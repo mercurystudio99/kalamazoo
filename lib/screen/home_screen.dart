@@ -139,6 +139,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Image.network(
                     element[RESTAURANT_IMAGE] ??
                         'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
+                    height: 100,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
                   ),
                 ),
                 Padding(
