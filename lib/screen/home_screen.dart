@@ -355,7 +355,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      NavigationRouter.switchToSearch(context);
+                      NavigationRouter.switchToNotification(context);
                     },
                     child: const badges.Badge(
                       badgeContent: Text(
