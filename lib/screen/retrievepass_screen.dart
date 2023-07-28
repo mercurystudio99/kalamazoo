@@ -52,8 +52,13 @@ class _RetrievePassScreenState extends State<RetrievePassScreen> {
                 'assets/background.svg',
                 width: MediaQuery.of(context).size.width,
               ),
-              if (_focusEmail.hasFocus == false)
-                Container(
+            ],
+          ),
+          if (_focusEmail.hasFocus == false)
+            Positioned(
+                left: 0,
+                bottom: MediaQuery.of(context).size.height * 0.2,
+                child: Container(
                   width: MediaQuery.of(context).size.height * 0.2,
                   height: MediaQuery.of(context).size.height * 0.4,
                   decoration: BoxDecoration(
@@ -71,9 +76,7 @@ class _RetrievePassScreenState extends State<RetrievePassScreen> {
                         bottomRight:
                             Radius.circular(MediaQuery.of(context).size.width)),
                   ),
-                ),
-            ],
-          ),
+                )),
           ListView(
             children: <Widget>[
               Align(

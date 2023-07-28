@@ -85,28 +85,32 @@ class _LoginScreenState extends State<LoginScreen> {
                 'assets/background.svg',
                 width: MediaQuery.of(context).size.width,
               ),
-              if (_focusEmail.hasFocus == false && _focusPass.hasFocus == false)
-                Container(
-                  width: MediaQuery.of(context).size.height * 0.2,
-                  height: MediaQuery.of(context).size.height * 0.4,
-                  decoration: BoxDecoration(
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                        color: CustomColor.primaryColor.withOpacity(0.15),
-                        blurRadius: 30.0,
-                      ),
-                    ],
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.zero,
-                        topRight:
-                            Radius.circular(MediaQuery.of(context).size.width),
-                        bottomLeft: Radius.zero,
-                        bottomRight:
-                            Radius.circular(MediaQuery.of(context).size.width)),
-                  ),
-                ),
             ],
           ),
+          if (_focusEmail.hasFocus == false && _focusPass.hasFocus == false)
+            Positioned(
+              left: 0,
+              bottom: MediaQuery.of(context).size.height * 0.2,
+              child: Container(
+                width: MediaQuery.of(context).size.height * 0.2,
+                height: MediaQuery.of(context).size.height * 0.4,
+                decoration: BoxDecoration(
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: CustomColor.primaryColor.withOpacity(0.15),
+                      blurRadius: 30.0,
+                    ),
+                  ],
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.zero,
+                      topRight:
+                          Radius.circular(MediaQuery.of(context).size.width),
+                      bottomLeft: Radius.zero,
+                      bottomRight:
+                          Radius.circular(MediaQuery.of(context).size.width)),
+                ),
+              ),
+            ),
           ListView(
             children: <Widget>[
               const SizedBox(

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:kalamazoo/utils/globals.dart' as globals;
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/color.dart';
@@ -100,9 +101,11 @@ class _HomeScreenState extends State<HomeScreen> {
         bestOffers = param;
       });
     });
-    AppModel().getFavourites(onSuccess: (List<Map<String, dynamic>> param) {
-      favourites = param;
-    });
+    if (globals.userFavourites.isNotEmpty) {
+      AppModel().getFavourites(onSuccess: (List<Map<String, dynamic>> param) {
+        favourites = param;
+      });
+    }
     AppModel().getProfile(onSuccess: (Map<String, dynamic> param) {
       profile = param;
     });

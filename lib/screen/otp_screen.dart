@@ -62,11 +62,16 @@ class _OTPScreenState extends State<OTPScreen> {
                 'assets/background.svg',
                 width: MediaQuery.of(context).size.width,
               ),
-              if (_focusOne.hasFocus == false &&
-                  _focusTwo.hasFocus == false &&
-                  _focusThree.hasFocus == false &&
-                  _focusFour.hasFocus == false)
-                Container(
+            ],
+          ),
+          if (_focusOne.hasFocus == false &&
+              _focusTwo.hasFocus == false &&
+              _focusThree.hasFocus == false &&
+              _focusFour.hasFocus == false)
+            Positioned(
+                left: 0,
+                bottom: MediaQuery.of(context).size.height * 0.2,
+                child: Container(
                   width: MediaQuery.of(context).size.height * 0.2,
                   height: MediaQuery.of(context).size.height * 0.4,
                   decoration: BoxDecoration(
@@ -84,9 +89,7 @@ class _OTPScreenState extends State<OTPScreen> {
                         bottomRight:
                             Radius.circular(MediaQuery.of(context).size.width)),
                   ),
-                ),
-            ],
-          ),
+                )),
           ListView(
             children: <Widget>[
               Align(

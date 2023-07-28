@@ -33,17 +33,18 @@ class AppModel extends Model {
     // callback functions
     required VoidCallback onSuccess,
     required Function(String) onError,
-  }) {
-    final user = <String, dynamic>{
+  }) async {
+    final docRef = _firestore.collection(C_USERS).doc();
+    await docRef.set({
+      USER_ID: docRef.id,
       USER_FULLNAME: name,
       USER_EMAIL: email,
-      USER_PASS: password
-    };
-    _firestore.collection(C_USERS).add(user).then((DocumentReference doc) {
-      globals.userEmail = email;
-      globals.userID = doc.id;
-      onSuccess();
+      USER_PASS: password,
+      USER_FAVOURITIES: [],
     });
+    globals.userEmail = email;
+    globals.userID = docRef.id;
+    onSuccess();
   }
 
   // user sign in method
@@ -121,8 +122,8 @@ class AppModel extends Model {
     required VoidCallback onError,
   }) async {
     myauth.setConfig(
-        appEmail: "kalamazoo@gmail.com",
-        appName: 'Kalamazoo',
+        appEmail: "thebestlocaleats@gmail.com",
+        appName: 'Thebestlocaleats',
         userEmail: email,
         otpLength: 4,
         otpType: OTPType.digitsOnly);

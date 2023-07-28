@@ -89,10 +89,15 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 'assets/background.svg',
                 width: MediaQuery.of(context).size.width,
               ),
-              if (_focusUser.hasFocus == false &&
-                  _focusEmail.hasFocus == false &&
-                  _focusPass.hasFocus == false)
-                Container(
+            ],
+          ),
+          if (_focusUser.hasFocus == false &&
+              _focusEmail.hasFocus == false &&
+              _focusPass.hasFocus == false)
+            Positioned(
+                left: 0,
+                bottom: MediaQuery.of(context).size.height * 0.2,
+                child: Container(
                   width: MediaQuery.of(context).size.height * 0.2,
                   height: MediaQuery.of(context).size.height * 0.4,
                   decoration: BoxDecoration(
@@ -110,9 +115,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         bottomRight:
                             Radius.circular(MediaQuery.of(context).size.width)),
                   ),
-                ),
-            ],
-          ),
+                )),
           ListView(
             children: <Widget>[
               Align(
