@@ -222,62 +222,77 @@ class _ListBuilderState extends State<ListBuilder> {
     return ListView.builder(
         itemCount: widget.list.length,
         itemBuilder: (_, int index) {
-          return Container(
-            margin: const EdgeInsets.symmetric(
-                horizontal: Util.mainPadding, vertical: 8),
-            padding: const EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  color: CustomColor.primaryColor.withOpacity(0.2),
-                  blurRadius: 8.0,
+          return InkWell(
+              onTap: () {
+                AppModel().setRestaurant(
+                    restaurant: widget.list[index],
+                    onSuccess: () => NavigationRouter.switchToAbout(context));
+              },
+              child: Container(
+                margin: const EdgeInsets.symmetric(
+                    horizontal: Util.mainPadding, vertical: 8),
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: CustomColor.primaryColor.withOpacity(0.2),
+                      blurRadius: 8.0,
+                    ),
+                  ],
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(15),
                 ),
-              ],
-              border: Border.all(color: Colors.white),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            alignment: Alignment.center,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.25,
-                    child: Image.asset(
-                      'assets/group.png',
-                      fit: BoxFit.cover,
-                    )),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 14),
-                  child: _ArticleDescription(
-                    title: widget.list[index][RESTAURANT_BUSINESSNAME],
-                    subtitle: 'Coffee',
-                    author: '50% OFF',
-                    publishDate: 'UPTO',
-                    readDuration: '100',
-                  ),
+                alignment: Alignment.center,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.25,
+                      child: ClipRRect(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(15)),
+                          child: (widget.list[index][RESTAURANT_IMAGE] != null)
+                              ? Image.network(
+                                  widget.list[index][RESTAURANT_IMAGE],
+                                  height: 100,
+                                  fit: BoxFit.cover)
+                              : Image.asset(
+                                  'assets/group.png',
+                                  fit: BoxFit.cover,
+                                )),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14),
+                      child: _ArticleDescription(
+                        title: widget.list[index][RESTAURANT_BUSINESSNAME],
+                        subtitle: 'Coffee',
+                        author: '50% OFF',
+                        publishDate: 'UPTO',
+                        readDuration: '100',
+                      ),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        AppModel().setFavourite(
+                            restaurantID: widget.list[index][RESTAURANT_ID],
+                            onSuccess: () {
+                              setState(() {});
+                            });
+                      },
+                      icon: Icon(
+                        globals.userFavourites
+                                .contains(widget.list[index][RESTAURANT_ID])
+                            ? Icons.bookmark
+                            : Icons.bookmark_outline,
+                        color: CustomColor.activeColor,
+                      ),
+                    ),
+                  ],
                 ),
-                const Spacer(),
-                IconButton(
-                  onPressed: () {
-                    AppModel().setFavourite(
-                        restaurantID: widget.list[index][RESTAURANT_ID],
-                        onSuccess: () {
-                          setState(() {});
-                        });
-                  },
-                  icon: Icon(
-                    globals.userFavourites
-                            .contains(widget.list[index][RESTAURANT_ID])
-                        ? Icons.bookmark
-                        : Icons.bookmark_outline,
-                    color: CustomColor.activeColor,
-                  ),
-                ),
-              ],
-            ),
-          );
+              ));
         });
   }
 }
@@ -342,7 +357,7 @@ class _ArticleDescription extends StatelessWidget {
               child: Row(
                 children: const [
                   Text(
-                    '5.3',
+                    '4.8',
                     style: TextStyle(color: Colors.white, fontSize: 12),
                   ),
                   Icon(

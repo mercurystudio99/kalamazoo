@@ -64,14 +64,12 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
     if (image != null) {
       var imageFile = File(image!.path);
       //Upload to Firebase
-      UploadTask uploadTask = _storage
-          .ref()
-          .child('avatar/${globals.userEmail}')
-          .putFile(imageFile);
+      UploadTask uploadTask =
+          _storage.ref().child('avatar/${globals.userID}').putFile(imageFile);
       await uploadTask.whenComplete(() async {
         var url = await _storage
             .ref()
-            .child('avatar/${globals.userEmail}')
+            .child('avatar/${globals.userID}')
             .getDownloadURL();
         AppModel().saveProfile(
             imageUrl: url.toString(),

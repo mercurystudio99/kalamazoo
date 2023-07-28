@@ -75,6 +75,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onItemTapped(int index) {
+    if (index == 1) {
+      if (globals.userFavourites.isNotEmpty) {
+        AppModel().getFavourites(onSuccess: (List<Map<String, dynamic>> param) {
+          favourites = param;
+        });
+      }
+    }
     setState(() {
       _selectedIndex = index;
     });
@@ -126,154 +133,172 @@ class _HomeScreenState extends State<HomeScreen> {
       Widget widget = SizedBox(
         width: MediaQuery.of(context).size.width * 0.4,
         child: Stack(children: [
-          Card(
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            shadowColor: CustomColor.primaryColor.withOpacity(0.2),
-            elevation: 8,
-            margin: const EdgeInsets.all(4.0),
-            child: Column(
-              children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                  ),
-                  child: Image.network(
-                    element[RESTAURANT_IMAGE] ??
-                        'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
-                    height: 100,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+          InkWell(
+              onTap: () {
+                AppModel().setRestaurant(
+                    restaurant: element,
+                    onSuccess: () => NavigationRouter.switchToAbout(context));
+              },
+              child: Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                shadowColor: CustomColor.primaryColor.withOpacity(0.2),
+                elevation: 8,
+                margin: const EdgeInsets.all(4.0),
+                child: Column(
+                  children: [
+                    ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                      ),
+                      child: Image.network(
+                        element[RESTAURANT_IMAGE] ??
+                            'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
+                        height: 100,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            element[RESTAURANT_BUSINESSNAME].length < 15
-                                ? element[RESTAURANT_BUSINESSNAME]
-                                : element[RESTAURANT_BUSINESSNAME]
-                                        .substring(0, 12) +
-                                    '...',
-                            style: const TextStyle(
-                                fontSize: 14.0, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            element[RESTAURANT_URL].length < 18
-                                ? element[RESTAURANT_URL]
-                                : element[RESTAURANT_URL].substring(0, 15) +
-                                    '...',
-                            style: const TextStyle(
-                                fontSize: 10.0,
-                                color: CustomColor.textDetailColor),
-                          ),
-                        ],
-                      ),
-                      if (element[RESTAURANT_RATING] != null)
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 4),
-                          decoration: BoxDecoration(
-                            color: CustomColor.activeColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                element[RESTAURANT_RATING],
+                                element[RESTAURANT_BUSINESSNAME].length < 15
+                                    ? element[RESTAURANT_BUSINESSNAME]
+                                    : element[RESTAURANT_BUSINESSNAME]
+                                            .substring(0, 12) +
+                                        '...',
                                 style: const TextStyle(
-                                    color: Colors.white, fontSize: 12),
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.bold),
                               ),
-                              const Icon(
-                                Icons.star,
-                                color: Colors.white,
-                                size: 12,
-                              )
+                              Text(
+                                element[RESTAURANT_URL].length < 18
+                                    ? element[RESTAURANT_URL]
+                                    : element[RESTAURANT_URL].substring(0, 15) +
+                                        '...',
+                                style: const TextStyle(
+                                    fontSize: 10.0,
+                                    color: CustomColor.textDetailColor),
+                              ),
                             ],
                           ),
-                        ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          if (element[RESTAURANT_DISCOUNT] != null)
-                            Text(
-                              '${element[RESTAURANT_DISCOUNT]}% OFF',
-                              style: const TextStyle(
-                                  fontSize: 14.0,
-                                  color: CustomColor.activeColor,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          if (element[RESTAURANT_MINCOST] != null)
-                            Text(
-                              'UPTO \$${element[RESTAURANT_MINCOST]}',
-                              style: const TextStyle(
-                                  fontSize: 10.0,
-                                  color: CustomColor.textDetailColor),
+                          if (element[RESTAURANT_RATING] != null)
+                            Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4),
+                              decoration: BoxDecoration(
+                                color: CustomColor.activeColor,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    element[RESTAURANT_RATING],
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 12),
+                                  ),
+                                  const Icon(
+                                    Icons.star,
+                                    color: Colors.white,
+                                    size: 12,
+                                  )
+                                ],
+                              ),
                             ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Row(
-                          children: const [
-                            Icon(
-                              Icons.location_on,
-                              color: CustomColor.activeColor,
-                              size: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (element[RESTAURANT_DISCOUNT] != null)
+                                Text(
+                                  '${element[RESTAURANT_DISCOUNT]}% OFF',
+                                  style: const TextStyle(
+                                      fontSize: 14.0,
+                                      color: CustomColor.activeColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              if (element[RESTAURANT_MINCOST] != null)
+                                Text(
+                                  'UPTO \$${element[RESTAURANT_MINCOST]}',
+                                  style: const TextStyle(
+                                      fontSize: 10.0,
+                                      color: CustomColor.textDetailColor),
+                                ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: Row(
+                              children: const [
+                                Icon(
+                                  Icons.location_on,
+                                  color: CustomColor.activeColor,
+                                  size: 10,
+                                ),
+                                Text(
+                                  '1.2km',
+                                  style: TextStyle(
+                                      fontSize: 10.0,
+                                      color: CustomColor.textDetailColor),
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Icon(
+                                  Icons.access_time,
+                                  size: 10,
+                                  color: CustomColor.textDetailColor,
+                                ),
+                                Text(
+                                  '10min',
+                                  style: TextStyle(
+                                      fontSize: 10.0,
+                                      color: CustomColor.textDetailColor),
+                                ),
+                              ],
                             ),
-                            Text(
-                              '1.2km',
-                              style: TextStyle(
-                                  fontSize: 10.0,
-                                  color: CustomColor.textDetailColor),
-                            ),
-                            SizedBox(
-                              width: 4,
-                            ),
-                            Icon(
-                              Icons.access_time,
-                              size: 10,
-                              color: CustomColor.textDetailColor,
-                            ),
-                            Text(
-                              '10min',
-                              style: TextStyle(
-                                  fontSize: 10.0,
-                                  color: CustomColor.textDetailColor),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          const Positioned(
+              )),
+          Positioned(
               right: 10,
               top: 10,
-              child: Icon(
-                Icons.bookmark,
-                color: CustomColor.activeColor,
-              ))
+              child: InkWell(
+                  onTap: () {
+                    AppModel().setFavourite(
+                        restaurantID: element[RESTAURANT_ID],
+                        onSuccess: () {
+                          setState(() {});
+                        });
+                  },
+                  child: Icon(
+                    globals.userFavourites.contains(element[RESTAURANT_ID])
+                        ? Icons.bookmark
+                        : Icons.bookmark_outline,
+                    color: CustomColor.activeColor,
+                  )))
         ]),
       );
       bestOffersView.add(widget);
@@ -511,7 +536,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 IconButton(
                   icon: const Icon(Icons.arrow_back_ios),
                   onPressed: () {
-                    NavigationRouter.back(context);
+                    _onItemTapped(0);
                   },
                 ),
                 const Text(
@@ -644,7 +669,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       icon: const Icon(Icons.arrow_back_ios),
                       onPressed: () {
-                        NavigationRouter.back(context);
+                        _onItemTapped(0);
                       },
                     ),
                     const Text(
@@ -780,13 +805,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'Location',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Text('',
-                            style: TextStyle(
+                        Text(profile[USER_LOCATION] ?? '',
+                            style: const TextStyle(
                                 color: CustomColor.textDetailColor,
                                 fontSize: 12)),
                       ],
@@ -1164,7 +1189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       children: const [
                         Text(
-                          '5.3',
+                          '4.8',
                           style: TextStyle(color: Colors.white, fontSize: 12),
                         ),
                         Icon(
@@ -1195,7 +1220,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           const Icon(
-            Icons.bookmark,
+            Icons.bookmark_border_outlined,
             color: CustomColor.activeColor,
           ),
         ],
@@ -1246,7 +1271,7 @@ class _ListBuilderState extends State<ListBuilder> {
                   ),
                 ],
                 border: Border.all(color: Colors.white),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(15),
               ),
               alignment: Alignment.center,
               child: Row(
@@ -1254,11 +1279,18 @@ class _ListBuilderState extends State<ListBuilder> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.25,
-                      child: Image.asset(
-                        'assets/group.png',
-                        fit: BoxFit.cover,
-                      )),
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    child: ClipRRect(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15)),
+                        child: (restaurant[RESTAURANT_IMAGE] != null)
+                            ? Image.network(restaurant[RESTAURANT_IMAGE],
+                                height: 100, fit: BoxFit.cover)
+                            : Image.asset(
+                                'assets/group.png',
+                                fit: BoxFit.cover,
+                              )),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: _ArticleDescription(

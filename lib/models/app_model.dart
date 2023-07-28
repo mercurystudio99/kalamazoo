@@ -283,6 +283,7 @@ class AppModel extends Model {
     _firestore.collection(C_USERS).doc(globals.userID).update({
       USER_PROFILE_PHOTO: imageUrl,
       USER_FULLNAME: name,
+      USER_LOCATION: location,
       USER_EMAIL: email,
       USER_GENDER: gender,
       USER_BIRTH_YEAR: birthYear,

@@ -12,6 +12,7 @@ class User {
   final String userPhoneNumber;
   final String userEmail;
   final String userPass;
+  final String userLocation;
   final List<dynamic> userFavourites;
   final String userStatus;
   final bool userIsVerified;
@@ -30,6 +31,7 @@ class User {
     required this.userPhoneNumber,
     required this.userEmail,
     required this.userPass,
+    required this.userLocation,
     required this.userFavourites,
     required this.userStatus,
     required this.userIsVerified,
@@ -50,6 +52,7 @@ class User {
       userPhoneNumber: doc[USER_PHONE_NUMBER] ?? '',
       userEmail: doc[USER_EMAIL] ?? '',
       userPass: doc[USER_PASS] ?? '',
+      userLocation: doc[USER_LOCATION] ?? '',
       userFavourites: doc[USER_FAVOURITIES] ?? [],
       userStatus: doc[USER_STATUS],
       userIsVerified: doc[USER_IS_VERIFIED] ?? false,
