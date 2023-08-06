@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
-import 'package:kalamazoo/widget/google_signin_button.dart';
+import 'package:kalamazoo/utils/authentication.dart';
 import 'package:kalamazoo/models/app_model.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -309,10 +309,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8.0),
-                    child: Image.asset('assets/google.png'),
-                  ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 8.0),
+                      child: InkWell(
+                          onTap: () {
+                            Authentication.signInWithGoogle(onSuccess: () {
+                              NavigationRouter.switchToHome(context);
+                            }, onError: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Something Error!')),
+                              );
+                            });
+                          },
+                          child: Image.asset('assets/google.png'))),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 8.0),
@@ -325,7 +335,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ],
               ),
-              const GoogleSignInButton(),
               Align(
                 alignment: Alignment.center,
                 child: RichText(
