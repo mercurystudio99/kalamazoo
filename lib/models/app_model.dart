@@ -103,6 +103,7 @@ class AppModel extends Model {
             if (docSnapshot.data()[USER_FAVOURITIES].isNotEmpty) {
               globals.userFavourites = docSnapshot.data()[USER_FAVOURITIES];
             }
+            globals.userPass = docSnapshot.data()[USER_PASS];
             break;
           }
           onSuccess();

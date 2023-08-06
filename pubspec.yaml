@@ -49,6 +49,7 @@ dependencies:
   scoped_model: ^2.0.0
   intl: ^0.18.1
   email_otp: ^2.0.1
+  google_sign_in: ^5.0.0
 
 dev_dependencies:
   flutter_test:

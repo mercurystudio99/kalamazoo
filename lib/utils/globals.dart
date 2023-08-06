@@ -2,6 +2,7 @@ library globals;
 
 String userID = "";
 String userEmail = "";
+String userPass = "";
 List<dynamic> userFavourites = [];
 
 String restaurantID = "";
