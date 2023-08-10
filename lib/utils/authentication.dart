@@ -82,46 +82,58 @@ class Authentication {
     try {
       final LoginResult loginResult = await FacebookAuth.instance.login();
 
-      debugPrint('${loginResult.status}');
-      // switch (loginResult.status) {
-      //   case LoginStatus.success:
-      //   case LoginStatus.cancelled:
-      //   case LoginStatus.failed:
-      //   default:
-      //   }
+      bool status = false;
+      switch (loginResult.status) {
+        case LoginStatus.success:
+          status = true;
+          break;
+        case LoginStatus.cancelled:
+          status = false;
+          break;
+        case LoginStatus.failed:
+          status = false;
+          break;
+        default:
+          status = false;
+          break;
+      }
 
-      final OAuthCredential facebookAuthCredential =
-          FacebookAuthProvider.credential(loginResult.accessToken!.token);
+      if (status) {
+        final OAuthCredential facebookAuthCredential =
+            FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
-      // Once signed in, return the Firebase UserCredential
-      final UserCredential userCredential =
-          await auth.signInWithCredential(facebookAuthCredential);
-      if (userCredential.user != null) {
-        AppModel().userExist(
-            email: userCredential.user!.email!,
-            onSuccess: () {
-              AppModel().userSignIn(
-                  email: userCredential.user!.email!,
-                  password: globals.userPass,
-                  onSuccess: () {
-                    onSuccess();
-                  },
-                  onError: (String text) {
-                    onError();
-                  });
-            },
-            onError: (String text) {
-              AppModel().userSignUp(
-                  name: userCredential.user!.displayName!,
-                  email: userCredential.user!.email!,
-                  password: '123456789',
-                  onSuccess: () {
-                    onSuccess();
-                  },
-                  onError: (String text) {
-                    onError();
-                  });
-            });
+        // Once signed in, return the Firebase UserCredential
+        final UserCredential userCredential =
+            await auth.signInWithCredential(facebookAuthCredential);
+        if (userCredential.user != null) {
+          AppModel().userExist(
+              email: userCredential.user!.email!,
+              onSuccess: () {
+                AppModel().userSignIn(
+                    email: userCredential.user!.email!,
+                    password: globals.userPass,
+                    onSuccess: () {
+                      onSuccess();
+                    },
+                    onError: (String text) {
+                      onError();
+                    });
+              },
+              onError: (String text) {
+                AppModel().userSignUp(
+                    name: userCredential.user!.displayName!,
+                    email: userCredential.user!.email!,
+                    password: '123456789',
+                    onSuccess: () {
+                      onSuccess();
+                    },
+                    onError: (String text) {
+                      onError();
+                    });
+              });
+        } else {
+          onError();
+        }
       } else {
         onError();
       }

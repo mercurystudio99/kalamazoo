@@ -317,8 +317,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               NavigationRouter.switchToHome(context);
                             }, onError: () {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Something Error!')),
+                                const SnackBar(content: Text('Signin Failed!')),
                               );
                             });
                           },
@@ -332,8 +331,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               NavigationRouter.switchToHome(context);
                             }, onError: () {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Something Error!')),
+                                const SnackBar(content: Text('Signin Failed!')),
                               );
                             });
                           },

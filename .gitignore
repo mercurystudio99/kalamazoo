@@ -5,6 +5,7 @@
 *.pyc
 *.swp
 .DS_Store
+strings.xml
 .atom/
 .buildlog/
 .history
