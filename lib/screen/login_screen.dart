@@ -313,7 +313,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           horizontal: 16.0, vertical: 8.0),
                       child: InkWell(
                           onTap: () {
-                            Authentication.signInWithGoogle(onSuccess: () {
+                            Authentication().signInWithGoogle(onSuccess: () {
                               NavigationRouter.switchToHome(context);
                             }, onError: () {
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -324,10 +324,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                           child: Image.asset('assets/google.png'))),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8.0),
-                    child: Image.asset('assets/facebook.png'),
-                  ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 8.0),
+                      child: InkWell(
+                          onTap: () {
+                            Authentication().signInWithFacebook(onSuccess: () {
+                              NavigationRouter.switchToHome(context);
+                            }, onError: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Something Error!')),
+                              );
+                            });
+                          },
+                          child: Image.asset('assets/facebook.png'))),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16.0, vertical: 8.0),
