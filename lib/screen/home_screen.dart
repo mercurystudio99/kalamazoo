@@ -47,6 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final _advancedDrawerController = AdvancedDrawerController();
   bool _setting = true;
   int _selectedIndex = 0;
+  int _selectedCategory = 0;
   bool isSelectionMode = false;
   int carouselIndicatorCurrent = 0;
   static List<String> categories = [];
@@ -1088,33 +1089,46 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget categoryBox(String title, int index, Color backgroundcolor) {
     List<String> categoryImgs = [
-      "assets/coffeecup.svg",
-      "assets/samosa.svg",
-      "assets/sandwich.svg",
-      "assets/dosa.svg",
-      "assets/desert.svg",
-      "assets/desert.svg",
+      "assets/daily_specials.png",
+      "assets/events.png",
+      "assets/featured.png",
+      "assets/food_trucks.png",
+      "assets/food_trucks.png",
+      "assets/food_trucks.png",
     ];
 
-    return Container(
-        margin: const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 12),
-        width: 65,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.white),
-          borderRadius: BorderRadius.circular(10),
-          color: backgroundcolor,
-        ),
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(categoryImgs[index]),
-            Padding(
-                padding: const EdgeInsets.only(top: 4),
-                child: Text(title,
-                    style: const TextStyle(color: Colors.white, fontSize: 10))),
-          ],
-        ));
+    return InkWell(
+        onTap: () {
+          setState(() {
+            _selectedCategory = index;
+          });
+        },
+        child: Container(
+            margin:
+                const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 12),
+            width: 65,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.white),
+              borderRadius: BorderRadius.circular(10),
+              color: _selectedCategory == index
+                  ? CustomColor.activeColor
+                  : backgroundcolor,
+            ),
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(categoryImgs[index], width: 25, height: 25),
+                Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                        title.length <= 10
+                            ? title
+                            : '${title.substring(0, 8)}..',
+                        style: const TextStyle(
+                            color: Colors.white, fontSize: 10))),
+              ],
+            )));
   }
 
   Widget brandBox(String title, int index) {

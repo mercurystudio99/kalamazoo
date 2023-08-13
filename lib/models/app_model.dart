@@ -208,20 +208,20 @@ class AppModel extends Model {
     // callback functions
     required Function(List<Map<String, dynamic>>) onSuccess,
   }) {
-    categories.forEach((key, value) {
-      if (value) {
-        _firestore.collection(key).limit(2).get().then(
-          (querySnapshot) {
-            List<Map<String, dynamic>> result = [];
-            for (var snapshot in querySnapshot.docs) {
-              result.add(snapshot.data());
-            }
-            onSuccess(result);
-          },
-          onError: (e) => debugPrint("Error completing: $e"),
-        );
-      }
-    });
+    // categories.forEach((key, value) {
+    // if (value) {
+    _firestore.collection(C_RESTAURANTS).limit(2).get().then(
+      (querySnapshot) {
+        List<Map<String, dynamic>> result = [];
+        for (var snapshot in querySnapshot.docs) {
+          result.add(snapshot.data());
+        }
+        onSuccess(result);
+      },
+      onError: (e) => debugPrint("Error completing: $e"),
+    );
+    // }
+    // });
   }
 
   // favourite set method

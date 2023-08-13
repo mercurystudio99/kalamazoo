@@ -93,6 +93,10 @@ flutter:
     - assets/google.png
     - assets/group.png
     - assets/item_background.png
+    - assets/daily_specials.png
+    - assets/events.png
+    - assets/featured.png
+    - assets/food_trucks.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
