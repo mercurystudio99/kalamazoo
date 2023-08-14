@@ -42,6 +42,10 @@ class Util {
   static const String profileTitle = "Profile";
   static const String profileUploadImg = "Upload Image";
   static const String profileContact = "Contact";
+  // Subscription Screen
+  static const String subscriptionTitle = "Subscription Plan";
+  static const String subscriptionDescription =
+      "Subscribe your plan and push special offers to the people";
   // Button Text
   static const String buttonGetStarted = "Get Started";
   static const String buttonLogin = "Login";
@@ -49,4 +53,5 @@ class Util {
   static const String buttonSubmit = "Submit";
   static const String buttonOTP = "Get OTP";
   static const String buttonSave = "Save";
+  static const String buttonSubscription = "Activate Plan";
 }

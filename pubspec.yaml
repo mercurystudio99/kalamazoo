@@ -93,6 +93,7 @@ flutter:
     - assets/google.png
     - assets/group.png
     - assets/item_background.png
+    - assets/crown.png
     - assets/daily_specials.png
     - assets/events.png
     - assets/featured.png

@@ -1023,6 +1023,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   title: const Text('Notification'),
                   trailing: const Icon(Icons.arrow_forward_ios),
                 ),
+                ListTile(
+                  onTap: () {
+                    NavigationRouter.switchToSubscription(context);
+                  },
+                  leading: const Icon(Icons.subscriptions_outlined),
+                  title: const Text('Subscription'),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                ),
                 // ListTile(
                 //   onTap: () {},
                 //   leading: const Icon(Icons.settings_outlined),

@@ -33,6 +33,10 @@ class NavigationRouter {
     Navigator.pushNamed(context, "/NotificationScreen");
   }
 
+  static void switchToSubscription(BuildContext context) {
+    Navigator.pushNamed(context, "/SubscriptionScreen");
+  }
+
   static void switchToSearch(BuildContext context) {
     Navigator.pushNamed(context, "/SearchScreen");
   }

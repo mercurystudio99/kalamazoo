@@ -6,6 +6,7 @@ import 'firebase_options.dart';
 import 'package:kalamazoo/utils/color.dart';
 import 'package:kalamazoo/screen/home_screen.dart';
 import 'package:kalamazoo/screen/notification_screen.dart';
+import 'package:kalamazoo/screen/subscription_screen.dart';
 import 'package:kalamazoo/screen/search_screen.dart';
 import 'package:kalamazoo/screen/profileedit_screen.dart';
 import 'package:kalamazoo/screen/about_screen.dart';
@@ -27,6 +28,7 @@ var routes = <String, WidgetBuilder>{
   "/LoginScreen": (BuildContext context) => const LoginScreen(),
   "/HomeScreen": (BuildContext context) => const HomeScreen(),
   "/NotificationScreen": (BuildContext context) => const NotificationScreen(),
+  "/SubscriptionScreen": (BuildContext context) => const SubscriptionScreen(),
   "/SearchScreen": (BuildContext context) => const SearchScreen(),
   "/ProfileEditScreen": (BuildContext context) => const ProfileEditScreen(),
   "/AboutScreen": (BuildContext context) => const AboutScreen(),
