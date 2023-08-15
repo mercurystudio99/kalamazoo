@@ -165,17 +165,29 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     ),
                     alignment: Alignment.center,
                     child: ListTile(
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 10),
                       leading: Image.asset('assets/crown.png'),
                       title: const Text(
                         '1 x Push Notification',
-                        style: TextStyle(color: CustomColor.primaryColor),
-                      ),
-                      trailing: const Text(
-                        '\$100           ',
                         style: TextStyle(
-                            color: CustomColor.primaryColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20),
+                            color: CustomColor.primaryColor, fontSize: 15),
+                      ),
+                      trailing: RichText(
+                        text: const TextSpan(children: [
+                          TextSpan(
+                            text: '\$100.00',
+                            style: TextStyle(
+                                color: CustomColor.primaryColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18),
+                          ),
+                          TextSpan(
+                              text: '/each',
+                              style: TextStyle(
+                                  color: CustomColor.primaryColor,
+                                  fontSize: 16)),
+                        ]),
                       ),
                     ))),
             InkWell(
@@ -208,25 +220,28 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     ),
                     alignment: Alignment.center,
                     child: ListTile(
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 10),
                       leading: Image.asset('assets/crown.png'),
                       title: const Text(
-                        '2 x Push Notification',
-                        style: TextStyle(color: CustomColor.primaryColor),
+                        '4 x Push Notification',
+                        style: TextStyle(
+                            color: CustomColor.primaryColor, fontSize: 15),
                       ),
                       trailing: RichText(
                         text: const TextSpan(children: [
                           TextSpan(
-                            text: '\$250',
+                            text: '\$250.00',
                             style: TextStyle(
                                 color: CustomColor.primaryColor,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20),
+                                fontSize: 18),
                           ),
                           TextSpan(
                               text: '/month',
                               style: TextStyle(
                                   color: CustomColor.primaryColor,
-                                  fontSize: 18)),
+                                  fontSize: 16)),
                         ]),
                       ),
                     ))),
@@ -260,25 +275,28 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     ),
                     alignment: Alignment.center,
                     child: ListTile(
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 10),
                       leading: Image.asset('assets/crown.png'),
                       title: const Text(
-                        '3 x Push Notification',
-                        style: TextStyle(color: CustomColor.primaryColor),
+                        '10 x Push Notification',
+                        style: TextStyle(
+                            color: CustomColor.primaryColor, fontSize: 15),
                       ),
                       trailing: RichText(
                         text: const TextSpan(children: [
                           TextSpan(
-                            text: '\$500',
+                            text: '\$500.00',
                             style: TextStyle(
                                 color: CustomColor.primaryColor,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20),
+                                fontSize: 18),
                           ),
                           TextSpan(
                               text: '/month',
                               style: TextStyle(
                                   color: CustomColor.primaryColor,
-                                  fontSize: 18)),
+                                  fontSize: 16)),
                         ]),
                       ),
                     ))),
@@ -312,25 +330,23 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     ),
                     alignment: Alignment.center,
                     child: ListTile(
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 10),
                       leading: Image.asset('assets/crown.png'),
                       title: const Text(
-                        'Unlimited',
-                        style: TextStyle(color: CustomColor.primaryColor),
+                        'Unlimited Plan -\n1 Push Notification/day',
+                        style: TextStyle(
+                            color: CustomColor.primaryColor, fontSize: 15),
                       ),
                       trailing: RichText(
                         text: const TextSpan(children: [
                           TextSpan(
-                            text: '\$1000',
+                            text: '\$1000.00   ',
                             style: TextStyle(
                                 color: CustomColor.primaryColor,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 20),
+                                fontSize: 18),
                           ),
-                          TextSpan(
-                              text: '/month',
-                              style: TextStyle(
-                                  color: CustomColor.primaryColor,
-                                  fontSize: 18)),
                         ]),
                       ),
                     ))),
