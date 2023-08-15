@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:kalamazoo/utils/globals.dart' as global;
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/color.dart';
@@ -16,8 +16,13 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3),
-        () => NavigationRouter.switchToStart(context));
+    if (global.userEmail.isNotEmpty) {
+      Timer(const Duration(seconds: 3),
+          () => NavigationRouter.switchToHome(context));
+    } else {
+      Timer(const Duration(seconds: 3),
+          () => NavigationRouter.switchToStart(context));
+    }
   }
 
   @override

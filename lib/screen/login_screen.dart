@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/gestures.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,6 +7,7 @@ import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
 import 'package:kalamazoo/utils/authentication.dart';
+import 'package:kalamazoo/utils/globals.dart' as global;
 import 'package:kalamazoo/models/app_model.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,6 +18,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _emailController = TextEditingController();
@@ -25,6 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode _focusPass = FocusNode();
 
   bool _obscureText = true;
+  bool _isChecked = false;
 
   @override
   void initState() {
@@ -43,6 +47,11 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _obscureText = !_obscureText;
     });
+  }
+
+  Future<void> _setCredential() async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setString('credential', global.userEmail).then((bool success) {});
   }
 
   String? _validatePassword(String value) {
@@ -251,6 +260,40 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: Util.mainPadding * 0.5),
+                      child: Row(children: [
+                        Checkbox(
+                          checkColor: Colors.white,
+                          fillColor: MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.disabled)) {
+                              return Colors.black.withOpacity(.32);
+                            }
+                            return Colors.black;
+                          }),
+                          value: _isChecked,
+                          onChanged: (bool? value) {
+                            setState(() {
+                              _isChecked = value!;
+                            });
+                          },
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Keep me logged in',
+                              style: GoogleFonts.poppins(
+                                  color: CustomColor.textHeadColor,
+                                  fontSize: Util.descriptionSize),
+                            )
+                          ],
+                        )
+                      ]),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
                           vertical: 20.0, horizontal: Util.mainPadding),
                       child: SizedBox(
                           height: 50, //height of button
@@ -281,7 +324,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     email: _emailController.text.trim(),
                                     password: _passController.text.trim(),
                                     onSuccess: () {
-                                      // Go to Home
+                                      if (_isChecked) _setCredential();
                                       NavigationRouter.switchToHome(context);
                                     },
                                     onError: (String text) {

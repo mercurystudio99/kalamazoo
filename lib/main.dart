@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 
 import 'package:kalamazoo/utils/color.dart';
+import 'package:kalamazoo/utils/globals.dart' as global;
 import 'package:kalamazoo/screen/home_screen.dart';
 import 'package:kalamazoo/screen/notification_screen.dart';
 import 'package:kalamazoo/screen/subscription_screen.dart';
@@ -41,6 +43,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? isLogged = prefs.getString('credential');
+  isLogged ??= '';
+  global.userEmail = isLogged;
   runApp(MyApp());
 }
 

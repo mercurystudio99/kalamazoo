@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:badges/badges.dart' as badges;
@@ -44,6 +45,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final _advancedDrawerController = AdvancedDrawerController();
   bool _setting = true;
   int _selectedIndex = 0;
@@ -86,6 +88,11 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  Future<void> _setCredential() async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.setString('credential', '').then((bool success) {});
   }
 
   void _handleMenuButtonPressed() {
@@ -1049,6 +1056,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 // ),
                 ListTile(
                   onTap: () {
+                    _setCredential();
                     NavigationRouter.switchToLogin(context);
                   },
                   leading: const Icon(Icons.logout_outlined),
