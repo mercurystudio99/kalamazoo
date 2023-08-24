@@ -10,6 +10,7 @@ import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/color.dart';
 import 'package:kalamazoo/utils/constants.dart';
 import 'package:kalamazoo/models/app_model.dart';
+import 'package:kalamazoo/widget/accordion.dart';
 
 final List<String> imgList = [
   'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
@@ -311,217 +312,353 @@ class _HomeScreenState extends State<HomeScreen> {
       );
       bestOffersView.add(widget);
     }
+
+    // 3 screens
     final List<Widget> widgetOptions = <Widget>[
+      // Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
+      //   Container(
+      //     color: CustomColor.primaryColor,
+      //     padding: const EdgeInsets.only(top: 10.0),
+      //     child: Column(children: [
+      //       Padding(
+      //         padding: const EdgeInsets.only(
+      //             left: Util.mainPadding * 0.5, right: Util.mainPadding),
+      //         child: Row(
+      //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //           crossAxisAlignment: CrossAxisAlignment.center,
+      //           children: [
+      //             IconButton(
+      //               onPressed: _handleMenuButtonPressed,
+      //               icon: ValueListenableBuilder<AdvancedDrawerValue>(
+      //                 valueListenable: _advancedDrawerController,
+      //                 builder: (_, value, __) {
+      //                   return AnimatedSwitcher(
+      //                     duration: const Duration(milliseconds: 250),
+      //                     child: Image.asset(
+      //                       'assets/menu.png',
+      //                       key: ValueKey<bool>(value.visible),
+      //                     ),
+      //                   );
+      //                 },
+      //               ),
+      //             ),
+      //             Column(
+      //               mainAxisAlignment: MainAxisAlignment.start,
+      //               children: [
+      //                 const Text(
+      //                   'Location',
+      //                   style: TextStyle(color: CustomColor.textDetailColor),
+      //                 ),
+      //                 Row(
+      //                   mainAxisAlignment: MainAxisAlignment.center,
+      //                   children: const [
+      //                     Icon(
+      //                       Icons.location_on,
+      //                       color: Colors.red,
+      //                     ),
+      //                     Text(
+      //                       'Kalamazoo, Michigon',
+      //                       style: TextStyle(color: Colors.white),
+      //                     ),
+      //                   ],
+      //                 )
+      //               ],
+      //             ),
+      //             GestureDetector(
+      //               onTap: () {
+      //                 NavigationRouter.switchToNotification(context);
+      //               },
+      //               child: const badges.Badge(
+      //                 badgeContent: Text(
+      //                   '1',
+      //                   style: TextStyle(color: Colors.white),
+      //                 ),
+      //                 child: Icon(
+      //                   Icons.notifications_outlined,
+      //                   size: 32,
+      //                   color: Colors.white,
+      //                 ),
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //       Padding(
+      //         padding: const EdgeInsets.symmetric(
+      //             horizontal: Util.mainPadding, vertical: 12.0),
+      //         child: TextFormField(
+      //           decoration: const InputDecoration(
+      //             border: OutlineInputBorder(),
+      //             hintText: 'Search Restaurant or Food...',
+      //             prefixIconConstraints: BoxConstraints(
+      //               minWidth: 50,
+      //               minHeight: 2,
+      //             ),
+      //             prefixIcon: Icon(Icons.search_outlined, size: 24),
+      //           ),
+      //           onTap: () {
+      //             NavigationRouter.switchToSearch(context);
+      //           },
+      //         ),
+      //       ),
+      //       Padding(
+      //         padding: const EdgeInsets.symmetric(horizontal: Util.mainPadding),
+      //         child: Row(
+      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //             children: [
+      //               const Text(
+      //                 Util.categories,
+      //                 style: TextStyle(color: Colors.white),
+      //               ),
+      //               GestureDetector(
+      //                 onTap: () {},
+      //                 child: const Text(
+      //                   Util.seeAll,
+      //                   style: TextStyle(color: Colors.white),
+      //                 ),
+      //               ),
+      //             ]),
+      //       ),
+      //       SizedBox(
+      //           height: 70,
+      //           child: SingleChildScrollView(
+      //               scrollDirection: Axis.horizontal,
+      //               child: Row(
+      //                 children: categories.map((category) {
+      //                   return categoryBox(
+      //                       category,
+      //                       categories.indexOf(category),
+      //                       CustomColor.primaryColor);
+      //                 }).toList(),
+      //               ))),
+      //     ]),
+      //   ),
+      //   Expanded(
+      //     child: ListView(
+      //       children: [
+      //         CarouselSlider(
+      //           items: imageSliders,
+      //           options: CarouselOptions(
+      //               aspectRatio: 2.0,
+      //               enlargeCenterPage: true,
+      //               enableInfiniteScroll: false,
+      //               initialPage: 0,
+      //               autoPlay: true,
+      //               pageViewKey:
+      //                   const PageStorageKey<String>('carousel_slider'),
+      //               onPageChanged: (index, reason) {
+      //                 setState(() {
+      //                   carouselIndicatorCurrent = index;
+      //                 });
+      //               }),
+      //         ),
+      //         Row(
+      //           mainAxisAlignment: MainAxisAlignment.center,
+      //           children: imgList.asMap().entries.map((entry) {
+      //             return Container(
+      //               width: (carouselIndicatorCurrent == entry.key ? 34 : 16),
+      //               height: 5.0,
+      //               margin: const EdgeInsets.symmetric(
+      //                   vertical: 8.0, horizontal: 4.0),
+      //               decoration: BoxDecoration(
+      //                   borderRadius:
+      //                       const BorderRadius.all(Radius.circular(10)),
+      //                   color: (carouselIndicatorCurrent == entry.key
+      //                       ? CustomColor.primaryColor
+      //                       : CustomColor.textDetailColor.withOpacity(0.5))),
+      //             );
+      //           }).toList(),
+      //         ),
+      //         Padding(
+      //           padding: const EdgeInsets.symmetric(
+      //               horizontal: Util.mainPadding, vertical: 4.0),
+      //           child: Row(
+      //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //               children: [
+      //                 const Text(
+      //                   Util.homeTopBrands,
+      //                   style: TextStyle(
+      //                       fontWeight: FontWeight.bold, fontSize: 18),
+      //                 ),
+      //                 GestureDetector(
+      //                   onTap: () {},
+      //                   child: const Text(
+      //                     Util.seeAll,
+      //                     style: TextStyle(color: CustomColor.activeColor),
+      //                   ),
+      //                 ),
+      //               ]),
+      //         ),
+      //         SizedBox(
+      //             height: 130,
+      //             child: SingleChildScrollView(
+      //                 scrollDirection: Axis.horizontal,
+      //                 child: Row(
+      //                   children: categories.map((category) {
+      //                     return brandBox(
+      //                         category, categories.indexOf(category));
+      //                   }).toList(),
+      //                 ))),
+      //         Padding(
+      //           padding:
+      //               const EdgeInsets.symmetric(horizontal: Util.mainPadding),
+      //           child: Row(
+      //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //               children: [
+      //                 const Text(
+      //                   Util.homeBestOffers,
+      //                   style: TextStyle(
+      //                       fontWeight: FontWeight.bold, fontSize: 18),
+      //                 ),
+      //                 GestureDetector(
+      //                   onTap: () {},
+      //                   child: const Text(
+      //                     Util.seeAll,
+      //                     style: TextStyle(color: CustomColor.activeColor),
+      //                   ),
+      //                 ),
+      //               ]),
+      //         ),
+      //         Padding(
+      //           padding: const EdgeInsets.symmetric(
+      //               horizontal: Util.mainPadding, vertical: 10),
+      //           child: Row(
+      //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //               children: bestOffersView),
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ]),
       Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-        Container(
-          color: CustomColor.primaryColor,
-          padding: const EdgeInsets.only(top: 10.0),
-          child: Column(children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: Util.mainPadding * 0.5, right: Util.mainPadding),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: _handleMenuButtonPressed,
-                    icon: ValueListenableBuilder<AdvancedDrawerValue>(
-                      valueListenable: _advancedDrawerController,
-                      builder: (_, value, __) {
-                        return AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 250),
-                          child: Image.asset(
-                            'assets/menu.png',
-                            key: ValueKey<bool>(value.visible),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Location',
-                        style: TextStyle(color: CustomColor.textDetailColor),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(
-                            Icons.location_on,
-                            color: Colors.red,
-                          ),
-                          Text(
-                            'Kalamazoo, Michigon',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      NavigationRouter.switchToNotification(context);
-                    },
-                    child: const badges.Badge(
-                      badgeContent: Text(
-                        '1',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      child: Icon(
-                        Icons.notifications_outlined,
-                        size: 32,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: Util.mainPadding, vertical: 12.0),
-              child: TextFormField(
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Search Restaurant or Food...',
-                  prefixIconConstraints: BoxConstraints(
-                    minWidth: 50,
-                    minHeight: 2,
-                  ),
-                  prefixIcon: Icon(Icons.search_outlined, size: 24),
-                ),
-                onTap: () {
-                  NavigationRouter.switchToSearch(context);
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: Util.mainPadding),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      Util.categories,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: const Text(
-                        Util.seeAll,
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ]),
-            ),
-            SizedBox(
-                height: 70,
-                child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: categories.map((category) {
-                        return categoryBox(
-                            category,
-                            categories.indexOf(category),
-                            CustomColor.primaryColor);
-                      }).toList(),
-                    ))),
-          ]),
-        ),
         Expanded(
           child: ListView(
             children: [
-              CarouselSlider(
-                items: imageSliders,
-                options: CarouselOptions(
-                    aspectRatio: 2.0,
-                    enlargeCenterPage: true,
-                    enableInfiniteScroll: false,
-                    initialPage: 0,
-                    autoPlay: true,
-                    pageViewKey:
-                        const PageStorageKey<String>('carousel_slider'),
-                    onPageChanged: (index, reason) {
-                      setState(() {
-                        carouselIndicatorCurrent = index;
-                      });
-                    }),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: Util.mainPadding * 0.5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: _handleMenuButtonPressed,
+                      icon: ValueListenableBuilder<AdvancedDrawerValue>(
+                        valueListenable: _advancedDrawerController,
+                        builder: (_, value, __) {
+                          return AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 250),
+                            child: Image.asset(
+                              'assets/menu.png',
+                              key: ValueKey<bool>(value.visible),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    const Spacer(),
+                    const Icon(
+                      Icons.location_on,
+                      color: Colors.red,
+                    ),
+                    const Text(
+                      'Kalamazoo, Michigan, USA',
+                      style: TextStyle(color: CustomColor.textDetailColor),
+                    ),
+                    const Spacer(),
+                    const Icon(
+                      Icons.sort,
+                      color: Colors.black,
+                    ),
+                    const Text(
+                      'Sort',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    const Spacer(),
+                    const Icon(
+                      Icons.diamond,
+                      color: Colors.black,
+                    ),
+                    const Text(
+                      'Offer',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ],
+                ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: imgList.asMap().entries.map((entry) {
-                  return Container(
-                    width: (carouselIndicatorCurrent == entry.key ? 34 : 16),
-                    height: 5.0,
-                    margin: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 4.0),
-                    decoration: BoxDecoration(
+              Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: Util.mainPadding, vertical: 10),
+                  child: Stack(children: [
+                    Container(
+                      height: 50,
+                      decoration: BoxDecoration(
                         borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        color: (carouselIndicatorCurrent == entry.key
-                            ? CustomColor.primaryColor
-                            : CustomColor.textDetailColor.withOpacity(0.5))),
-                  );
-                }).toList(),
-              ),
+                            const BorderRadius.all(Radius.circular(14)),
+                        boxShadow: [
+                          BoxShadow(
+                              color: CustomColor.primaryColor.withOpacity(0.2),
+                              blurRadius: 5,
+                              spreadRadius: 1),
+                        ],
+                      ),
+                    ),
+                    TextFormField(
+                      decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.all(4),
+                          border: const OutlineInputBorder(),
+                          hintText: 'Search Restaurant or Food...',
+                          hintStyle: const TextStyle(
+                              color: CustomColor.textDetailColor),
+                          prefixIconConstraints: const BoxConstraints(
+                            minWidth: 50,
+                            minHeight: 2,
+                          ),
+                          prefixIcon:
+                              const Icon(Icons.search_outlined, size: 24),
+                          suffixIcon: IconButton(
+                              onPressed: () {},
+                              icon: Image.asset('assets/filter.png'))),
+                      onTap: () {
+                        NavigationRouter.switchToSearch(context);
+                      },
+                    ),
+                  ])),
+              const SizedBox(height: 10),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: Util.mainPadding, vertical: 4.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        Util.homeTopBrands,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: Util.mainPadding, vertical: 5),
+                  child: Container(
+                      decoration: const BoxDecoration(
+                        color: CustomColor.activeColor,
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
                       ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: const Text(
-                          Util.seeAll,
-                          style: TextStyle(color: CustomColor.activeColor),
-                        ),
-                      ),
-                    ]),
-              ),
-              SizedBox(
-                  height: 130,
-                  child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: categories.map((category) {
-                          return brandBox(
-                              category, categories.indexOf(category));
-                        }).toList(),
-                      ))),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: Util.mainPadding),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        Util.homeBestOffers,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: const Text(
-                          Util.seeAll,
-                          style: TextStyle(color: CustomColor.activeColor),
-                        ),
-                      ),
-                    ]),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
+                      child: Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [
+                                Text(
+                                  'FEATURED',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                                Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: Colors.white,
+                                )
+                              ])))),
+              const Padding(
+                padding: EdgeInsets.symmetric(
                     horizontal: Util.mainPadding, vertical: 10),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: bestOffersView),
+                child: Accordion(
+                  contents: <String>[
+                    'Breweries',
+                    'Food Trucks',
+                    'Restaurants',
+                    'Wineries'
+                  ],
+                ),
               ),
             ],
           ),
