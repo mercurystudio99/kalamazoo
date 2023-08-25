@@ -4,6 +4,7 @@ String userID = "";
 String userEmail = "";
 String userPass = "";
 List<dynamic> userFavourites = [];
+List<dynamic> ownerAmenities = [];
 String userSubscription = "";
 
 String restaurantID = "";

@@ -170,7 +170,7 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 80),
+              const SizedBox(height: 50),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: Util.mainPadding),
                 child: Text(

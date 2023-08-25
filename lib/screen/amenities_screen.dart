@@ -23,7 +23,10 @@ class _AmenitiesScreenState extends State<AmenitiesScreen> {
       onSuccess: (List<Map<String, dynamic>> param) {
         amenities = param;
         for (var element in amenities) {
-          _isChecked[element[AMENITY_ID]] = false;
+          _isChecked[element[AMENITY_ID]] =
+              (global.ownerAmenities.contains(element[AMENITY_ID]))
+                  ? true
+                  : false;
         }
         setState(() {});
       },
@@ -67,7 +70,7 @@ class _AmenitiesScreenState extends State<AmenitiesScreen> {
                 decoration: BoxDecoration(
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: CustomColor.primaryColor.withOpacity(0.15),
+                      color: CustomColor.primaryColor.withOpacity(0.1),
                       blurRadius: 30.0,
                     ),
                   ],
@@ -89,7 +92,7 @@ class _AmenitiesScreenState extends State<AmenitiesScreen> {
                 decoration: BoxDecoration(
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: CustomColor.primaryColor.withOpacity(0.15),
+                      color: CustomColor.primaryColor.withOpacity(0.1),
                       blurRadius: 30.0,
                     ),
                   ],
@@ -131,7 +134,9 @@ class _AmenitiesScreenState extends State<AmenitiesScreen> {
                 ],
               ),
             ),
-            _listing()
+            const SizedBox(height: 10),
+            _listing(),
+            const SizedBox(height: 10),
           ]),
         ],
       ),
@@ -144,31 +149,56 @@ class _AmenitiesScreenState extends State<AmenitiesScreen> {
       return SizedBox(
           width: size.width / 2,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
             child: Row(children: [
-              Checkbox(
-                checkColor: Colors.white,
-                fillColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                  if (states.contains(MaterialState.disabled)) {
-                    return CustomColor.primaryColor;
-                  }
-                  return CustomColor.primaryColor;
-                }),
-                value: _isChecked[item[AMENITY_ID]],
-                onChanged: (bool? value) {
-                  setState(() {
-                    _isChecked[item[AMENITY_ID]] = value!;
-                  });
-                },
+              Container(
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(5)),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey.shade400,
+                        blurRadius: 5,
+                        spreadRadius: 1),
+                  ],
+                ),
+                child: ColoredBox(
+                    color: Colors.white,
+                    child: Transform.scale(
+                      scale: 1.3,
+                      child: Checkbox(
+                        side: const BorderSide(color: Colors.white),
+                        checkColor: Colors.white,
+                        fillColor: MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
+                          if (states.contains(MaterialState.disabled)) {
+                            return CustomColor.primaryColor;
+                          }
+                          return CustomColor.primaryColor;
+                        }),
+                        value: _isChecked[item[AMENITY_ID]],
+                        onChanged: (bool? value) {
+                          if (value == true) {
+                            global.ownerAmenities.add(item[AMENITY_ID]);
+                          } else {
+                            global.ownerAmenities.remove(item[AMENITY_ID]);
+                          }
+                          setState(() {
+                            _isChecked[item[AMENITY_ID]] = value!;
+                          });
+                        },
+                      ),
+                    )),
               ),
+              const SizedBox(width: 5),
               Image.asset(
                 'assets/amenities/icon (${item[AMENITY_LOGO]}).png',
               ),
               const SizedBox(width: 5),
-              Text(item[AMENITY_NAME].toString().length < 16
+              Text(item[AMENITY_NAME].toString().length < 18
                   ? item[AMENITY_NAME]
-                  : '${item[AMENITY_NAME].toString().substring(0, 14)}..')
+                  : '${item[AMENITY_NAME].toString().substring(0, 16)}..')
             ]),
           ));
     }).toList();
