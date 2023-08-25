@@ -811,18 +811,38 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                           elevation: 0,
                           child: Column(children: [
                             ListTile(
-                              title: const Text(
-                                'Amenities',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                ),
-                              ),
-                              trailing: IconButton(
-                                icon: const Icon(Icons.keyboard_arrow_right,
-                                    color: Colors.black54),
-                                onPressed: () {},
-                              ),
-                              contentPadding: const EdgeInsets.only(left: 15),
+                              title: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Image.asset(
+                                      'assets/amenities/amenities.png',
+                                      scale: 0.8,
+                                      color: Colors.black,
+                                    ),
+                                    const SizedBox(width: 10),
+                                    const Text(
+                                      'Amenities',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    InkWell(
+                                      onTap: () {},
+                                      child: const Text(
+                                        'Seen All',
+                                        style: TextStyle(
+                                            color: CustomColor.activeColor),
+                                      ),
+                                    ),
+                                    InkWell(
+                                        onTap: () {},
+                                        child: const Icon(
+                                            Icons.keyboard_arrow_right,
+                                            color: CustomColor.activeColor)),
+                                  ]),
+                              contentPadding:
+                                  const EdgeInsets.only(left: 15, right: 15),
                             ),
                           ]),
                         )
@@ -913,6 +933,7 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                   ],
                 ),
               ),
+              const SizedBox(height: 15),
               Align(
                 alignment: Alignment.center,
                 child: RichText(
@@ -936,6 +957,7 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                   ]),
                 ),
               ),
+              const SizedBox(height: 15),
               Padding(
                 padding: const EdgeInsets.symmetric(
                     vertical: 10.0, horizontal: Util.mainPadding),
@@ -1013,6 +1035,17 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                       ),
                     )),
               ),
+              const SizedBox(height: 15),
+              const Center(
+                  child: Text(
+                '\'Do You Need Help? Contact Us!\'',
+                style: TextStyle(color: CustomColor.textDetailColor),
+              )),
+              const Center(
+                  child: Text(
+                'contactus@bestlocaleats.net',
+                style: TextStyle(color: CustomColor.primaryColor, fontSize: 16),
+              )),
               const SizedBox(
                 height: Util.mainPadding,
               )
