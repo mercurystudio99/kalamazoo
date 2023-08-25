@@ -404,7 +404,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontSize: Util.descriptionSize),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            NavigationRouter.switchToRegistration2(context);
+                            NavigationRouter.switchToSignup(context);
                           }),
                   ]),
                 ),

@@ -9,6 +9,10 @@ class NavigationRouter {
     Navigator.pushNamed(context, "/LoginScreen");
   }
 
+  static void switchToSignup(BuildContext context) {
+    Navigator.pushNamed(context, "/SignupScreen");
+  }
+
   static void switchToRegistration(BuildContext context) {
     Navigator.pushNamed(context, "/RegistrationScreen");
   }
