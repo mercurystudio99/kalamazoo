@@ -21,6 +21,7 @@ import 'package:kalamazoo/screen/resetpass_screen.dart';
 import 'package:kalamazoo/screen/retrievepass_screen.dart';
 import 'package:kalamazoo/screen/registration_screen.dart';
 import 'package:kalamazoo/screen/registration2_screen.dart';
+import 'package:kalamazoo/screen/amenities_screen.dart';
 import 'package:kalamazoo/screen/splash_screen.dart';
 
 var routes = <String, WidgetBuilder>{
@@ -29,6 +30,7 @@ var routes = <String, WidgetBuilder>{
   "/RetrievePassScreen": (BuildContext context) => const RetrievePassScreen(),
   "/RegistrationScreen": (BuildContext context) => const RegistrationScreen(),
   "/Registration2Screen": (BuildContext context) => const Registration2Screen(),
+  "/AmenitiesScreen": (BuildContext context) => const AmenitiesScreen(),
   "/LoginScreen": (BuildContext context) => const LoginScreen(),
   "/HomeScreen": (BuildContext context) => const HomeScreen(),
   "/NotificationScreen": (BuildContext context) => const NotificationScreen(),

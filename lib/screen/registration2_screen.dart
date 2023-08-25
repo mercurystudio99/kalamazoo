@@ -828,7 +828,10 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                     ),
                                     const Spacer(),
                                     InkWell(
-                                      onTap: () {},
+                                      onTap: () {
+                                        NavigationRouter.switchToAmenities(
+                                            context);
+                                      },
                                       child: const Text(
                                         'Seen All',
                                         style: TextStyle(
@@ -836,7 +839,10 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                       ),
                                     ),
                                     InkWell(
-                                        onTap: () {},
+                                        onTap: () {
+                                          NavigationRouter.switchToAmenities(
+                                              context);
+                                        },
                                         child: const Icon(
                                             Icons.keyboard_arrow_right,
                                             color: CustomColor.activeColor)),

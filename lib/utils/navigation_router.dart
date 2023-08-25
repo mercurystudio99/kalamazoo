@@ -17,6 +17,10 @@ class NavigationRouter {
     Navigator.pushNamed(context, "/Registration2Screen");
   }
 
+  static void switchToAmenities(BuildContext context) {
+    Navigator.pushNamed(context, "/AmenitiesScreen");
+  }
+
   static void switchToOTP(BuildContext context) {
     Navigator.pushNamed(context, "/OTPScreen");
   }
