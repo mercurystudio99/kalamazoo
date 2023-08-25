@@ -13,6 +13,10 @@ class NavigationRouter {
     Navigator.pushNamed(context, "/RegistrationScreen");
   }
 
+  static void switchToRegistration2(BuildContext context) {
+    Navigator.pushNamed(context, "/Registration2Screen");
+  }
+
   static void switchToOTP(BuildContext context) {
     Navigator.pushNamed(context, "/OTPScreen");
   }
