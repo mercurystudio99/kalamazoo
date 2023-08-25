@@ -224,6 +224,25 @@ class AppModel extends Model {
     // });
   }
 
+  void getAmenities({
+    required Function(List<Map<String, dynamic>>) onSuccess,
+    required VoidCallback onEmpty,
+  }) async {
+    final snapshots = await _firestore
+        .collection(C_AMENITIES)
+        // .orderBy(AMENITY_NAME, descending: false)
+        .get();
+    if (snapshots.docs.isEmpty) {
+      onEmpty();
+    } else {
+      List<Map<String, dynamic>> list = [];
+      for (var element in snapshots.docs) {
+        list.add(element.data());
+      }
+      onSuccess(list);
+    }
+  }
+
   // favourite set method
   void setFavourite({
     required String restaurantID,
