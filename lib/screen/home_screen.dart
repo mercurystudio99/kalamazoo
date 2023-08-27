@@ -52,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   int _selectedCategory = 0;
   bool isSelectionMode = false;
+  bool _showDaysHours = false;
   int carouselIndicatorCurrent = 0;
   static List<String> categories = [];
   static List<Map<String, dynamic>> bestOffers = [];
@@ -798,8 +799,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+          ListView(
             children: [
               const SizedBox(
                 height: 20,
@@ -891,158 +891,631 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 10.0, horizontal: Util.mainPadding),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      margin: const EdgeInsets.only(right: 10),
-                      decoration: const BoxDecoration(
-                          color: Colors.white, shape: BoxShape.circle),
-                      alignment: const Alignment(0, 0),
-                      child: const Icon(Icons.email_outlined,
-                          color: CustomColor.textDetailColor),
-                    ),
-                    const SizedBox(
-                      width: 10.0,
-                    ),
-                    Column(
+              if (profile['user_type'] != null)
+                Expanded(
+                    child: Column(children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: Util.mainPadding),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Text(
-                          'Email Address',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          margin: const EdgeInsets.only(right: 10),
+                          decoration: const BoxDecoration(
+                              color: Colors.white, shape: BoxShape.circle),
+                          alignment: const Alignment(0, 0),
+                          child: const Icon(Icons.email_outlined,
+                              color: CustomColor.textDetailColor),
                         ),
-                        Text(
-                          profile[USER_EMAIL] ?? '',
-                          style: const TextStyle(
-                              color: CustomColor.textDetailColor, fontSize: 12),
+                        const SizedBox(
+                          width: 10.0,
                         ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Email Address',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              profile[USER_EMAIL] ?? '',
+                              style: const TextStyle(
+                                  color: CustomColor.textDetailColor,
+                                  fontSize: 12),
+                            ),
+                          ],
+                        )
                       ],
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 10.0, horizontal: Util.mainPadding),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      margin: const EdgeInsets.only(right: 10),
-                      decoration: const BoxDecoration(
-                          color: Colors.white, shape: BoxShape.circle),
-                      alignment: const Alignment(0, 0),
-                      child: const Icon(Icons.location_on_outlined,
-                          color: CustomColor.textDetailColor),
                     ),
-                    const SizedBox(
-                      width: 10.0,
-                    ),
-                    Column(
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: Util.mainPadding),
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const Text(
-                          'Location',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          margin: const EdgeInsets.only(right: 10),
+                          decoration: const BoxDecoration(
+                              color: Colors.white, shape: BoxShape.circle),
+                          alignment: const Alignment(0, 0),
+                          child: const Icon(Icons.location_on_outlined,
+                              color: CustomColor.textDetailColor),
                         ),
-                        Text(profile[USER_LOCATION] ?? '',
-                            style: const TextStyle(
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Location',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(profile[USER_LOCATION] ?? '',
+                                style: const TextStyle(
+                                    color: CustomColor.textDetailColor,
+                                    fontSize: 12)),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: Util.mainPadding),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          margin: const EdgeInsets.only(right: 10),
+                          decoration: const BoxDecoration(
+                              color: Colors.white, shape: BoxShape.circle),
+                          alignment: const Alignment(0, 0),
+                          child: const Icon(Icons.person_outline,
+                              color: CustomColor.textDetailColor),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Gender',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(profile[USER_GENDER] ?? '',
+                                style: const TextStyle(
+                                    color: CustomColor.textDetailColor,
+                                    fontSize: 12)),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: Util.mainPadding),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          margin: const EdgeInsets.only(right: 10),
+                          decoration: const BoxDecoration(
+                              color: Colors.white, shape: BoxShape.circle),
+                          alignment: const Alignment(0, 0),
+                          child: const Icon(
+                            Icons.calendar_month,
+                            color: CustomColor.textDetailColor,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Birth Date',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                                (profile[USER_BIRTH_DAY] == null ||
+                                        profile[USER_BIRTH_MONTH] == null ||
+                                        profile[USER_BIRTH_YEAR] == null)
+                                    ? ''
+                                    : '${profile[USER_BIRTH_DAY]} ${profile[USER_BIRTH_MONTH]} ${profile[USER_BIRTH_YEAR]}',
+                                style: const TextStyle(
+                                    color: CustomColor.textDetailColor,
+                                    fontSize: 12)),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ])),
+              if (profile['user_type'] == null)
+                Expanded(
+                    child: Column(children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: Util.mainPadding),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          margin: const EdgeInsets.only(right: 10),
+                          decoration: const BoxDecoration(
+                              color: Colors.white, shape: BoxShape.circle),
+                          alignment: const Alignment(0, 0),
+                          child: const Icon(Icons.cases_outlined,
+                              color: CustomColor.textDetailColor),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Business Name',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              '',
+                              style: const TextStyle(
+                                  color: CustomColor.textDetailColor,
+                                  fontSize: 12),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: Util.mainPadding),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          margin: const EdgeInsets.only(right: 10),
+                          decoration: const BoxDecoration(
+                              color: Colors.white, shape: BoxShape.circle),
+                          alignment: const Alignment(0, 0),
+                          child: const Icon(Icons.phone_outlined,
+                              color: CustomColor.textDetailColor),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Phone Number',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(profile[USER_PHONE_NUMBER] ?? '',
+                                style: const TextStyle(
+                                    color: CustomColor.textDetailColor,
+                                    fontSize: 12)),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: Util.mainPadding),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          margin: const EdgeInsets.only(right: 10),
+                          decoration: const BoxDecoration(
+                              color: Colors.white, shape: BoxShape.circle),
+                          alignment: const Alignment(0, 0),
+                          child: const Icon(Icons.location_on_outlined,
+                              color: CustomColor.textDetailColor),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Full Address',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(profile[USER_LOCATION] ?? '',
+                                style: const TextStyle(
+                                    color: CustomColor.textDetailColor,
+                                    fontSize: 12)),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: Util.mainPadding),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          margin: const EdgeInsets.only(right: 10),
+                          decoration: const BoxDecoration(
+                              color: Colors.white, shape: BoxShape.circle),
+                          alignment: const Alignment(0, 0),
+                          child: const Icon(
+                            Icons.email_outlined,
+                            color: CustomColor.textDetailColor,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Email Address',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(profile[USER_EMAIL] ?? '',
+                                style: const TextStyle(
+                                    color: CustomColor.textDetailColor,
+                                    fontSize: 12)),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 8, horizontal: Util.mainPadding),
+                    child: Stack(children: [
+                      Container(
+                        margin: const EdgeInsets.all(0),
+                        child: Column(children: [
+                          Row(children: [
+                            Container(
+                              padding: const EdgeInsets.all(8),
+                              margin: const EdgeInsets.only(right: 10),
+                              decoration: const BoxDecoration(
+                                  color: Colors.white, shape: BoxShape.circle),
+                              alignment: const Alignment(0, 0),
+                              child: const Icon(
+                                Icons.access_time,
                                 color: CustomColor.textDetailColor,
-                                fontSize: 12)),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 10.0, horizontal: Util.mainPadding),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      margin: const EdgeInsets.only(right: 10),
-                      decoration: const BoxDecoration(
-                          color: Colors.white, shape: BoxShape.circle),
-                      alignment: const Alignment(0, 0),
-                      child: const Icon(Icons.person_outline,
-                          color: CustomColor.textDetailColor),
-                    ),
-                    const SizedBox(
-                      width: 10.0,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Gender',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(profile[USER_GENDER] ?? '',
-                            style: const TextStyle(
-                                color: CustomColor.textDetailColor,
-                                fontSize: 12)),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 10.0, horizontal: Util.mainPadding),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      margin: const EdgeInsets.only(right: 10),
-                      decoration: const BoxDecoration(
-                          color: Colors.white, shape: BoxShape.circle),
-                      alignment: const Alignment(0, 0),
-                      child: const Icon(
-                        Icons.calendar_month,
-                        color: CustomColor.textDetailColor,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10.0,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Birth Date',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                            (profile[USER_BIRTH_DAY] == null ||
-                                    profile[USER_BIRTH_MONTH] == null ||
-                                    profile[USER_BIRTH_YEAR] == null)
-                                ? ''
-                                : '${profile[USER_BIRTH_DAY]} ${profile[USER_BIRTH_MONTH]} ${profile[USER_BIRTH_YEAR]}',
-                            style: const TextStyle(
-                                color: CustomColor.textDetailColor,
-                                fontSize: 12)),
-                      ],
-                    )
-                  ],
-                ),
-              ),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10.0,
+                            ),
+                            const Text(
+                              'Business Day/Hours',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const Spacer(),
+                            IconButton(
+                              icon: Icon(
+                                _showDaysHours
+                                    ? Icons.keyboard_arrow_down
+                                    : Icons.keyboard_arrow_right,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _showDaysHours = !_showDaysHours;
+                                });
+                              },
+                            ),
+                          ]),
+                          // Show or hide the content based on the state
+                          _showDaysHours
+                              ? Container(
+                                  padding: const EdgeInsets.only(left: 20),
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 40),
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  const Text('Tuesday',
+                                                      style: TextStyle(
+                                                          color: CustomColor
+                                                              .textDetailColor,
+                                                          fontSize: 12)),
+                                                  const Spacer(),
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 20),
+                                                    child: Text('Closed',
+                                                        style: TextStyle(
+                                                            color: CustomColor
+                                                                .activeColor,
+                                                            fontSize: 12)),
+                                                  ),
+                                                  InkWell(
+                                                      onTap: () {},
+                                                      child: const Icon(
+                                                        Icons.edit_outlined,
+                                                        size: 22,
+                                                      )),
+                                                ])),
+                                        Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 40),
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  const Text('Wednesday',
+                                                      style: TextStyle(
+                                                          color: CustomColor
+                                                              .textDetailColor,
+                                                          fontSize: 12)),
+                                                  const Spacer(),
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 20),
+                                                    child: Text(
+                                                        '8:00 AM - 9:00 PM',
+                                                        style: TextStyle(
+                                                            color: CustomColor
+                                                                .textDetailColor,
+                                                            fontSize: 12)),
+                                                  ),
+                                                  InkWell(
+                                                      onTap: () {},
+                                                      child: const Icon(
+                                                        Icons.edit_outlined,
+                                                        size: 22,
+                                                      )),
+                                                ])),
+                                        Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 40),
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  const Text('Thursday',
+                                                      style: TextStyle(
+                                                          color: CustomColor
+                                                              .textDetailColor,
+                                                          fontSize: 12)),
+                                                  const Spacer(),
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 20),
+                                                    child: Text(
+                                                        '8:00 AM - 9:00 PM',
+                                                        style: TextStyle(
+                                                            color: CustomColor
+                                                                .textDetailColor,
+                                                            fontSize: 12)),
+                                                  ),
+                                                  InkWell(
+                                                      onTap: () {},
+                                                      child: const Icon(
+                                                        Icons.edit_outlined,
+                                                        size: 22,
+                                                      )),
+                                                ])),
+                                        Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 40),
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  const Text('Friday',
+                                                      style: TextStyle(
+                                                          color: CustomColor
+                                                              .textDetailColor,
+                                                          fontSize: 12)),
+                                                  const Spacer(),
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 20),
+                                                    child: Text(
+                                                        '8:00 AM - 9:00 PM',
+                                                        style: TextStyle(
+                                                            color: CustomColor
+                                                                .textDetailColor,
+                                                            fontSize: 12)),
+                                                  ),
+                                                  InkWell(
+                                                      onTap: () {},
+                                                      child: const Icon(
+                                                        Icons.edit_outlined,
+                                                        size: 22,
+                                                      )),
+                                                ])),
+                                        Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 40),
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  const Text('Saturday',
+                                                      style: TextStyle(
+                                                          color: CustomColor
+                                                              .textDetailColor,
+                                                          fontSize: 12)),
+                                                  const Spacer(),
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 20),
+                                                    child: Text(
+                                                        '8:00 AM - 9:00 PM',
+                                                        style: TextStyle(
+                                                            color: CustomColor
+                                                                .textDetailColor,
+                                                            fontSize: 12)),
+                                                  ),
+                                                  InkWell(
+                                                      onTap: () {},
+                                                      child: const Icon(
+                                                        Icons.edit_outlined,
+                                                        size: 22,
+                                                      )),
+                                                ])),
+                                        Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 40),
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  const Text('Sunday',
+                                                      style: TextStyle(
+                                                          color: CustomColor
+                                                              .textDetailColor,
+                                                          fontSize: 12)),
+                                                  const Spacer(),
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 20),
+                                                    child: Text(
+                                                        '8:00 AM - 9:00 PM',
+                                                        style: TextStyle(
+                                                            color: CustomColor
+                                                                .textDetailColor,
+                                                            fontSize: 12)),
+                                                  ),
+                                                  InkWell(
+                                                      onTap: () {},
+                                                      child: const Icon(
+                                                        Icons.edit_outlined,
+                                                        size: 22,
+                                                      )),
+                                                ])),
+                                        Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 40),
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  const Text('Monday',
+                                                      style: TextStyle(
+                                                          color: CustomColor
+                                                              .textDetailColor,
+                                                          fontSize: 12)),
+                                                  const Spacer(),
+                                                  const Padding(
+                                                    padding: EdgeInsets.only(
+                                                        right: 20),
+                                                    child: Text('Closed',
+                                                        style: TextStyle(
+                                                            color: CustomColor
+                                                                .activeColor,
+                                                            fontSize: 12)),
+                                                  ),
+                                                  InkWell(
+                                                      onTap: () {},
+                                                      child: const Icon(
+                                                        Icons.edit_outlined,
+                                                        size: 22,
+                                                      )),
+                                                ])),
+                                      ]),
+                                )
+                              : Container(),
+                        ]),
+                      )
+                    ]),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: Util.mainPadding),
+                      child: Center(
+                          child: SizedBox(
+                              height: 35, //height of button
+                              width: MediaQuery.of(context).size.width *
+                                  0.5, //width of button
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 0, //elevation of button
+                                    shape: RoundedRectangleBorder(
+                                        //to set border radius to button
+                                        borderRadius: BorderRadius.circular(5)),
+                                    padding: const EdgeInsets.all(
+                                        5) //content padding inside button
+                                    ),
+                                onPressed: () {},
+                                child: const Text(
+                                  'UPLOAD MENU',
+                                  style: TextStyle(
+                                      color: CustomColor.buttonTextColor,
+                                      fontSize: 14.0),
+                                ),
+                              )))),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: Util.mainPadding),
+                      child: Center(
+                          child: SizedBox(
+                              height: 35, //height of button
+                              width: MediaQuery.of(context).size.width *
+                                  0.5, //width of button
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 0, //elevation of button
+                                    shape: RoundedRectangleBorder(
+                                        //to set border radius to button
+                                        borderRadius: BorderRadius.circular(5)),
+                                    padding: const EdgeInsets.all(
+                                        5) //content padding inside button
+                                    ),
+                                onPressed: () {},
+                                child: const Text(
+                                  'PROMOTE YOUR BUSINESS',
+                                  style: TextStyle(
+                                      color: CustomColor.buttonTextColor,
+                                      fontSize: 14.0),
+                                ),
+                              )))),
+                  const SizedBox(height: 30)
+                ]))
             ],
           ),
         ],
