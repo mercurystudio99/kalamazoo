@@ -21,6 +21,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   bool isSelectionMode = false;
   String dropdownValue = list.first;
+  final _searchController = TextEditingController();
 
   static final List<Map<String, dynamic>> searchResults = [];
   static List<Map<String, dynamic>> restaurants = [];
@@ -162,6 +163,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       elevation: 8,
                       shadowColor: CustomColor.primaryColor.withOpacity(0.2),
                       child: TextFormField(
+                        controller: _searchController,
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                           hintText: 'Search Restaurant or Food...',
@@ -178,9 +180,10 @@ class _SearchScreenState extends State<SearchScreen> {
                   Expanded(
                     child: ListBuilder(
                       isSelectionMode: isSelectionMode,
-                      list: (searchResults.isNotEmpty)
-                          ? searchResults
-                          : restaurants,
+                      list:
+                          (_searchController.text.trim().toString().isNotEmpty)
+                              ? searchResults
+                              : restaurants,
                       onSelectionChange: (bool x) {
                         setState(() {
                           isSelectionMode = x;

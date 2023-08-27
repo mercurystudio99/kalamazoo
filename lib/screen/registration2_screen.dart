@@ -1002,34 +1002,6 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Processing Data')),
                           );
-                          // sign up
-                          AppModel().userExist(
-                              email: _emailController.text.trim(),
-                              onSuccess: () {
-                                // Show error message
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text(
-                                          'The account already exists for that email.')),
-                                );
-                              },
-                              onError: (String text) {
-                                AppModel().userSignUp(
-                                    name: _usernameController.text.trim(),
-                                    email: _emailController.text.trim(),
-                                    password: _passController.text.trim(),
-                                    onSuccess: () {
-                                      // Go to Home
-                                      NavigationRouter.switchToHome(context);
-                                    },
-                                    onError: (String text) {
-                                      // Show error message
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(content: Text(text)),
-                                      );
-                                    });
-                              });
                         }
                       },
                       child: const Text(
