@@ -9,7 +9,7 @@ import 'package:kalamazoo/utils/constants.dart';
 import 'package:kalamazoo/models/app_model.dart';
 import 'package:kalamazoo/widget/processing.dart';
 
-const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
+const List<String> list = <String>['Kalamazoo, Michigan, USA'];
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -38,7 +38,10 @@ class _SearchScreenState extends State<SearchScreen> {
     }
 
     for (var restaurant in restaurants) {
-      if (restaurant[RESTAURANT_BUSINESSNAME].contains(text)) {
+      if (restaurant[RESTAURANT_BUSINESSNAME]
+          .toString()
+          .toLowerCase()
+          .contains(text.toLowerCase())) {
         searchResults.add(restaurant);
       }
     }
@@ -180,10 +183,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   Expanded(
                     child: ListBuilder(
                       isSelectionMode: isSelectionMode,
-                      list:
-                          (_searchController.text.trim().toString().isNotEmpty)
-                              ? searchResults
-                              : restaurants,
+                      list: searchResults,
                       onSelectionChange: (bool x) {
                         setState(() {
                           isSelectionMode = x;
