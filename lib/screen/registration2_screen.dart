@@ -34,7 +34,13 @@ class _Registration2ScreenState extends State<Registration2Screen> {
   bool _isCheckedPolicy = false;
   bool _checkConfirmPolicy = false;
   bool _showDaysHours = false;
-  final List<bool> _isCheckedBusiness = <bool>[false, false, false, false];
+  final List<bool> _isCheckedBusiness = <bool>[
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
   bool _checkConfirmBusiness = false;
 
   @override
@@ -760,6 +766,36 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                           style: TextStyle(fontSize: 16),
                         ),
                         const SizedBox(width: Util.mainPadding * 1.5)
+                      ]),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: Util.mainPadding * 0.5),
+                      child: Row(children: [
+                        Checkbox(
+                          checkColor: Colors.white,
+                          fillColor: MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.disabled)) {
+                              return (_checkConfirmBusiness
+                                  ? CustomColor.activeColor
+                                  : CustomColor.primaryColor);
+                            }
+                            return (_checkConfirmBusiness
+                                ? CustomColor.activeColor
+                                : CustomColor.primaryColor);
+                          }),
+                          value: _isCheckedBusiness[4],
+                          onChanged: (bool? value) {
+                            setState(() {
+                              _isCheckedBusiness[4] = value!;
+                            });
+                          },
+                        ),
+                        const Text(
+                          'Catering',
+                          style: TextStyle(fontSize: 16),
+                        ),
                       ]),
                     ),
                     Padding(

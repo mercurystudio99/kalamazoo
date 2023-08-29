@@ -665,82 +665,94 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ]),
+      // Column(
+      //   mainAxisAlignment: MainAxisAlignment.start,
+      //   crossAxisAlignment: CrossAxisAlignment.start,
+      //   children: <Widget>[
+      //     const SizedBox(
+      //       height: 20,
+      //     ),
+      //     Padding(
+      //       padding:
+      //           const EdgeInsets.symmetric(horizontal: Util.mainPadding * 0.5),
+      //       child: Row(
+      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //         crossAxisAlignment: CrossAxisAlignment.center,
+      //         children: [
+      //           IconButton(
+      //             icon: const Icon(Icons.arrow_back_ios),
+      //             onPressed: () {
+      //               _onItemTapped(0);
+      //             },
+      //           ),
+      //           const Text(
+      //             Util.favorite,
+      //             style: TextStyle(
+      //               color: CustomColor.primaryColor,
+      //               fontSize: 22.0,
+      //             ),
+      //           ),
+      //           const SizedBox(
+      //             width: Util.mainPadding,
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //     Padding(
+      //       padding: const EdgeInsets.only(
+      //           left: Util.mainPadding, right: Util.mainPadding, bottom: 20),
+      //       child: Material(
+      //         borderRadius: const BorderRadius.all(Radius.circular(14)),
+      //         elevation: 8,
+      //         shadowColor: CustomColor.primaryColor.withOpacity(0.2),
+      //         child: TextFormField(
+      //           controller: _searchFavoriteController,
+      //           decoration: const InputDecoration(
+      //             border: OutlineInputBorder(),
+      //             hintText: 'Search Restaurant or Food...',
+      //             prefixIconConstraints: BoxConstraints(
+      //               minWidth: 50,
+      //               minHeight: 2,
+      //             ),
+      //             prefixIcon: Icon(Icons.search_outlined, size: 24),
+      //           ),
+      //           autovalidateMode: AutovalidateMode.always,
+      //           validator: (value) {
+      //             if (value!.contains('\n')) {}
+      //             return null;
+      //           },
+      //           onChanged: _onSearchFavorite,
+      //         ),
+      //       ),
+      //     ),
+      //     Expanded(
+      //       child: ListBuilder(
+      //         isSelectionMode: isSelectionMode,
+      //         list: (_searchFavorites.isNotEmpty ||
+      //                 _searchFavoriteController.text.isNotEmpty)
+      //             ? _searchFavorites
+      //             : favourites,
+      //         onSelectionChange: (bool x) {
+      //           setState(() {
+      //             isSelectionMode = x;
+      //           });
+      //         },
+      //       ),
+      //     ),
+      //   ],
+      // ),
       Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: Util.mainPadding * 0.5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_back_ios),
-                  onPressed: () {
-                    _onItemTapped(0);
-                  },
-                ),
-                const Text(
-                  Util.favorite,
-                  style: TextStyle(
-                    color: CustomColor.primaryColor,
-                    fontSize: 22.0,
-                  ),
-                ),
-                const SizedBox(
-                  width: Util.mainPadding,
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-                left: Util.mainPadding, right: Util.mainPadding, bottom: 20),
-            child: Material(
-              borderRadius: const BorderRadius.all(Radius.circular(14)),
-              elevation: 8,
-              shadowColor: CustomColor.primaryColor.withOpacity(0.2),
-              child: TextFormField(
-                controller: _searchFavoriteController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Search Restaurant or Food...',
-                  prefixIconConstraints: BoxConstraints(
-                    minWidth: 50,
-                    minHeight: 2,
-                  ),
-                  prefixIcon: Icon(Icons.search_outlined, size: 24),
-                ),
-                autovalidateMode: AutovalidateMode.always,
-                validator: (value) {
-                  if (value!.contains('\n')) {}
-                  return null;
-                },
-                onChanged: _onSearchFavorite,
-              ),
-            ),
-          ),
-          Expanded(
-            child: ListBuilder(
-              isSelectionMode: isSelectionMode,
-              list: (_searchFavorites.isNotEmpty ||
-                      _searchFavoriteController.text.isNotEmpty)
-                  ? _searchFavorites
-                  : favourites,
-              onSelectionChange: (bool x) {
-                setState(() {
-                  isSelectionMode = x;
-                });
-              },
-            ),
-          ),
-        ],
-      ),
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            SizedBox(height: 50),
+          ]),
+      Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [
+            SizedBox(height: 50),
+          ]),
       Stack(
         fit: StackFit.expand,
         children: <Widget>[
@@ -1194,6 +1206,58 @@ class _HomeScreenState extends State<HomeScreen> {
                                 style: const TextStyle(
                                     color: CustomColor.textDetailColor,
                                     fontSize: 12)),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10.0, horizontal: Util.mainPadding),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          margin: const EdgeInsets.only(right: 10),
+                          decoration: const BoxDecoration(
+                              color: Colors.white, shape: BoxShape.circle),
+                          alignment: const Alignment(0, 0),
+                          child: const Icon(
+                            Icons.dinner_dining,
+                            color: CustomColor.textDetailColor,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10.0,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Service Category',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Row(children: const [
+                              SizedBox(
+                                  width: 100,
+                                  child: Text(
+                                    'Brewery',
+                                    style: TextStyle(
+                                        color: CustomColor.textDetailColor,
+                                        fontSize: 12),
+                                  )),
+                              SizedBox(
+                                  width: 100,
+                                  child: Text(
+                                    'Food Truck',
+                                    style: TextStyle(
+                                        color: CustomColor.textDetailColor,
+                                        fontSize: 12),
+                                  )),
+                            ]),
                           ],
                         )
                       ],
@@ -1682,28 +1746,29 @@ class _HomeScreenState extends State<HomeScreen> {
           child: widgetOptions.elementAt(_selectedIndex),
         ),
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: CustomColor.primaryColor,
           iconSize: 40,
           elevation: 0,
           unselectedIconTheme: const IconThemeData(
             color: Colors.white,
           ),
           unselectedItemColor: Colors.white,
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              label: 'Home',
-            ),
+                icon: Icon(Icons.home_outlined),
+                label: 'Home',
+                backgroundColor: CustomColor.primaryColor),
             BottomNavigationBarItem(
-              icon: Icon(Icons.bookmark_border_outlined),
-              label: 'Favorite',
-            ),
+                icon: Icon(Icons.search),
+                label: 'Browse',
+                backgroundColor: CustomColor.primaryColor),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
-              label: 'Profile',
-            ),
+                icon: Icon(Icons.castle),
+                label: 'Rewards',
+                backgroundColor: CustomColor.primaryColor),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.person_outline),
+                label: 'Account',
+                backgroundColor: CustomColor.primaryColor),
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: CustomColor.activeColor,
