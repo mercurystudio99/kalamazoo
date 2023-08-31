@@ -1752,21 +1752,29 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Colors.white,
           ),
           unselectedItemColor: Colors.white,
-          items: const <BottomNavigationBarItem>[
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
+                icon: SvgPicture.asset((_selectedIndex == 0)
+                    ? 'assets/footer/home-red.svg'
+                    : 'assets/footer/home-white.svg'),
                 label: 'Home',
                 backgroundColor: CustomColor.primaryColor),
             BottomNavigationBarItem(
-                icon: Icon(Icons.search),
+                icon: SvgPicture.asset((_selectedIndex == 1)
+                    ? 'assets/footer/browse-red.svg'
+                    : 'assets/footer/browse-white.svg'),
                 label: 'Browse',
                 backgroundColor: CustomColor.primaryColor),
             BottomNavigationBarItem(
-                icon: Icon(Icons.castle),
+                icon: SvgPicture.asset((_selectedIndex == 2)
+                    ? 'assets/footer/rewards-red.svg'
+                    : 'assets/footer/rewards-white.svg'),
                 label: 'Rewards',
                 backgroundColor: CustomColor.primaryColor),
             BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline),
+                icon: SvgPicture.asset((_selectedIndex == 3)
+                    ? 'assets/footer/account-red.svg'
+                    : 'assets/footer/account-white.svg'),
                 label: 'Account',
                 backgroundColor: CustomColor.primaryColor),
           ],
