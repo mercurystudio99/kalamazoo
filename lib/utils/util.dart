@@ -11,7 +11,7 @@ class Util {
   static const String edit = "Edit";
   static const String fullMenu = "Full Menu";
   // Splash Screen
-  static const String splashCaption = "Welcome to Local Restaurant >>>";
+  static const String splashCaption = "Welcome to Best Local Eats";
   static const String startTitle = "Local Restaurant";
   static const String startSubTitle = "Discover Places\nNear You";
   static const String startContent =

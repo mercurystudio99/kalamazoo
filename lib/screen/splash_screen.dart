@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:kalamazoo/utils/globals.dart' as global;
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/util.dart';
@@ -40,12 +41,12 @@ class _SplashScreenState extends State<SplashScreen> {
           Container(
             color: CustomColor.primaryColor,
             padding: const EdgeInsets.only(bottom: 50),
-            child: const Align(
+            child: Align(
               alignment: Alignment.bottomCenter,
               child: Text(
                 Util.splashCaption,
-                style: TextStyle(
-                    color: CustomColor.buttonTextColor, fontSize: 20.0),
+                style: GoogleFonts.denkOne(
+                    color: CustomColor.buttonTextColor, fontSize: 23),
               ),
             ),
           ),
