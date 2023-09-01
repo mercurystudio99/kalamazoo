@@ -804,7 +804,7 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                             child: SizedBox(
                                 height: 35, //height of button
                                 width: MediaQuery.of(context).size.width *
-                                    0.5, //width of button
+                                    0.55, //width of button
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       elevation: 0, //elevation of button
@@ -816,11 +816,13 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                           5) //content padding inside button
                                       ),
                                   onPressed: () {},
-                                  child: const Text(
+                                  child: Text(
                                     'UPLOAD MENU',
                                     style: TextStyle(
                                         color: CustomColor.buttonTextColor,
-                                        fontSize: 14.0),
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.035),
                                   ),
                                 )))),
                     Padding(
@@ -896,7 +898,7 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                             child: SizedBox(
                                 height: 35, //height of button
                                 width: MediaQuery.of(context).size.width *
-                                    0.5, //width of button
+                                    0.55, //width of button
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       elevation: 0, //elevation of button
@@ -909,11 +911,13 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                               5) //content padding inside button
                                       ),
                                   onPressed: () {},
-                                  child: const Text(
+                                  child: Text(
                                     'PROMOTE YOUR BUSINESS',
                                     style: TextStyle(
                                         color: CustomColor.buttonTextColor,
-                                        fontSize: 14.0),
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.035),
                                   ),
                                 )))),
                     Padding(
