@@ -168,48 +168,134 @@ class _ListBuilderState extends State<ListBuilder> {
           final Map<String, dynamic> menu = widget.list[index].data();
           return Padding(
               padding: const EdgeInsets.symmetric(horizontal: Util.mainPadding),
-              child: Card(
-                  color: (widget.isSelectionMode
-                      ? CustomColor.primaryColor
-                      : Colors.white),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  shadowColor: CustomColor.primaryColor.withOpacity(0.2),
-                  elevation: 8,
-                  margin: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: ListTile(
-                    onTap: () {
-                      AppModel().setMenuID(
-                          id: menu[MENU_ID],
-                          onSuccess: () {
-                            NavigationRouter.switchToItem(context);
-                          });
-                    },
-                    contentPadding: const EdgeInsets.all(8),
-                    leading: menu[MENU_PHOTO] != null
-                        ? Image.network(menu[MENU_PHOTO],
-                            width: 80, height: 80, fit: BoxFit.cover)
-                        : Image.asset('assets/group.png'),
-                    title: Text(
-                      menu[MENU_NAME],
-                      style: TextStyle(
+              child: SizedBox(
+                  height: 160,
+                  child: InkWell(
+                      onTap: () {
+                        AppModel().setMenuID(
+                            id: menu[MENU_ID],
+                            onSuccess: () {
+                              NavigationRouter.switchToItem(context);
+                            });
+                      },
+                      child: Card(
                           color: (widget.isSelectionMode
-                              ? Colors.white
-                              : CustomColor.primaryColor),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18.0),
-                    ),
-                    subtitle: Text(
-                      '\$${menu[MENU_PRICE]}',
-                      style: TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          fontSize: 12.0,
-                          color: (widget.isSelectionMode
-                              ? Colors.white
-                              : Colors.black),
-                          fontWeight: FontWeight.bold),
-                    ),
-                  )));
+                              ? CustomColor.primaryColor
+                              : Colors.white),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          shadowColor:
+                              CustomColor.primaryColor.withOpacity(0.2),
+                          elevation: 8,
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Row(children: [
+                                ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(15)),
+                                  child: menu[MENU_PHOTO] != null
+                                      ? Image.network(menu[MENU_PHOTO],
+                                          width: 120,
+                                          height: 120,
+                                          fit: BoxFit.cover)
+                                      : Image.asset('assets/group.png',
+                                          width: 120,
+                                          height: 120,
+                                          fit: BoxFit.cover),
+                                ),
+                                const SizedBox(width: 20),
+                                Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        (menu[MENU_NAME].toString().length < 18)
+                                            ? menu[MENU_NAME]
+                                            : '${menu[MENU_NAME].toString().substring(0, 15)}..',
+                                        style: TextStyle(
+                                            color: (widget.isSelectionMode
+                                                ? Colors.white
+                                                : CustomColor.primaryColor),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18.0),
+                                      ),
+                                      if (menu[MENU_DESCRIPTION] != null)
+                                        SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                Util.mainPadding * 2 -
+                                                170,
+                                            child: Text(
+                                              (menu[MENU_DESCRIPTION]
+                                                          .toString()
+                                                          .length <
+                                                      100)
+                                                  ? menu[MENU_DESCRIPTION]
+                                                  : '${menu[MENU_DESCRIPTION].toString().substring(0, 100)}...',
+                                              style: TextStyle(
+                                                  fontSize: 12.0,
+                                                  color: (widget.isSelectionMode
+                                                      ? Colors.white
+                                                      : CustomColor
+                                                          .textHeadColor)),
+                                            )),
+                                      SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width -
+                                              Util.mainPadding * 2 -
+                                              170,
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  '\$${menu[MENU_PRICE]}',
+                                                  style: TextStyle(
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      fontSize: 15.0,
+                                                      color: (widget
+                                                              .isSelectionMode
+                                                          ? Colors.white
+                                                          : Colors.black),
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                Container(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(horizontal: 4),
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        CustomColor.activeColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                  child: Row(
+                                                    children: const [
+                                                      Text(
+                                                        '4.8',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 12),
+                                                      ),
+                                                      Icon(
+                                                        Icons.star,
+                                                        color: Colors.white,
+                                                        size: 12,
+                                                      )
+                                                    ],
+                                                  ),
+                                                )
+                                              ])),
+                                    ])
+                              ]))))));
         });
   }
 }
