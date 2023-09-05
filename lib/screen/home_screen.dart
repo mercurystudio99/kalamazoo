@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:kalamazoo/utils/globals.dart' as globals;
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/util.dart';
@@ -155,11 +156,15 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
 
-    // final position = await _geolocatorPlatform.getCurrentPosition();
-    final position = await Geolocator.getCurrentPosition(
+    Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    // Geocoder.getAddress(position.latitude, position.longitude).then((address) => print(address)));
-    debugPrint("-->>> $position");
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    String output = 'No results found.';
+    if (placemarks.isNotEmpty) {
+      output = placemarks[0].toString();
+    }
+    debugPrint(output);
   }
 
   void initializeSelection() {
@@ -169,6 +174,15 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       AppModel().getData(onSuccess: (List<Map<String, dynamic>> param) {
         bestOffers = param;
+        for (var element in param) {
+          locationFromAddress(element[RESTAURANT_ADDRESS]).then((locations) {
+            var output = 'No results found.';
+            if (locations.isNotEmpty) {
+              output = locations[0].toString();
+            }
+            debugPrint(output);
+          });
+        }
       });
     });
     if (globals.userFavourites.isNotEmpty) {
