@@ -28,7 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode _focusPass = FocusNode();
 
   bool _obscureText = true;
-  bool _isChecked = false;
+  bool _isChecked = true;
 
   @override
   void initState() {
