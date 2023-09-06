@@ -158,12 +158,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
-    String output = 'No results found.';
-    if (placemarks.isNotEmpty) {
-      output = placemarks[0].toString();
-    }
+    // List<Placemark> placemarks =
+    //     await placemarkFromCoordinates(position.latitude, position.longitude);
+    // String output = 'No results found.';
+    // if (placemarks.isNotEmpty) {
+    //   output = placemarks[0].toString();
+    // }
   }
 
   void initializeSelection() {
@@ -960,7 +960,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              if (profile['user_type'] != null)
+              if (profile[USER_ROLE] == Util.customer)
                 Expanded(
                     child: Column(children: [
                   Padding(
@@ -1117,7 +1117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ])),
-              if (profile['user_type'] == null)
+              if (profile[USER_ROLE] == Util.owner)
                 Expanded(
                     child: Column(children: [
                   Padding(
@@ -1765,14 +1765,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   title: const Text('Notification'),
                   trailing: const Icon(Icons.arrow_forward_ios),
                 ),
-                ListTile(
-                  onTap: () {
-                    NavigationRouter.switchToSubscription(context);
-                  },
-                  leading: const Icon(Icons.subscriptions_outlined),
-                  title: const Text('Subscription'),
-                  trailing: const Icon(Icons.arrow_forward_ios),
-                ),
+                if (profile[USER_ROLE] == Util.owner)
+                  ListTile(
+                    onTap: () {
+                      NavigationRouter.switchToSubscription(context);
+                    },
+                    leading: const Icon(Icons.subscriptions_outlined),
+                    title: const Text('Subscription'),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                  ),
                 // ListTile(
                 //   onTap: () {},
                 //   leading: const Icon(Icons.settings_outlined),

@@ -107,7 +107,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   child: InkWell(
                       onTap: () {
                         setState(() {
-                          userType = 'owner';
+                          userType = Util.owner;
                         });
                       },
                       child: Container(
@@ -115,7 +115,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           decoration: BoxDecoration(
                             border: Border.all(
                                 width: 1,
-                                color: (userType == 'owner')
+                                color: (userType == Util.owner)
                                     ? CustomColor.primaryColor
                                     : Colors.white),
                             borderRadius:
@@ -145,8 +145,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                       decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           border: Border.all(
-                                              width:
-                                                  (userType == 'owner') ? 5 : 1,
+                                              width: (userType == Util.owner)
+                                                  ? 5
+                                                  : 1,
                                               color: CustomColor.primaryColor),
                                           color: Colors.white),
                                     )),
@@ -173,7 +174,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   child: InkWell(
                       onTap: () {
                         setState(() {
-                          userType = 'customer';
+                          userType = Util.customer;
                         });
                       },
                       child: Container(
@@ -181,7 +182,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           decoration: BoxDecoration(
                             border: Border.all(
                                 width: 1,
-                                color: (userType == 'customer')
+                                color: (userType == Util.customer)
                                     ? CustomColor.primaryColor
                                     : Colors.white),
                             borderRadius:
@@ -211,7 +212,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                       decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           border: Border.all(
-                                              width: (userType == 'customer')
+                                              width: (userType == Util.customer)
                                                   ? 5
                                                   : 1,
                                               color: CustomColor.primaryColor),
@@ -277,7 +278,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       onPressed: () {
                         if (userType.isEmpty) return;
                         global.userRole = userType;
-                        if (global.userRole == 'customer') {
+                        if (global.userRole == Util.customer) {
                           NavigationRouter.switchToRegistration(context);
                         } else {
                           NavigationRouter.switchToRegistration2(context);

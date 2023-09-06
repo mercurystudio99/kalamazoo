@@ -10,6 +10,8 @@ class Util {
   static const String categories = "Categories";
   static const String edit = "Edit";
   static const String fullMenu = "Full Menu";
+  static const String owner = "owner";
+  static const String customer = "customer";
   // Splash Screen
   static const String splashCaption = "Welcome to Best Local Eats";
   static const String startTitle = "Local Restaurant";

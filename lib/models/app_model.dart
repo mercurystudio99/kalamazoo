@@ -67,6 +67,7 @@ class AppModel extends Model {
             if (docSnapshot.data()[USER_PASS] == password) {
               globals.userEmail = email;
               globals.userID = docSnapshot.id;
+              globals.userRole = docSnapshot.data()[USER_ROLE];
               if (docSnapshot.data()[USER_FAVOURITIES].isNotEmpty) {
                 globals.userFavourites = docSnapshot.data()[USER_FAVOURITIES];
               }
@@ -105,6 +106,7 @@ class AppModel extends Model {
               globals.userFavourites = docSnapshot.data()[USER_FAVOURITIES];
             }
             globals.userPass = docSnapshot.data()[USER_PASS];
+            globals.userRole = docSnapshot.data()[USER_ROLE];
             break;
           }
           onSuccess();
