@@ -8,6 +8,8 @@ import 'package:kalamazoo/utils/globals.dart' as globals;
 import 'package:kalamazoo/utils/constants.dart';
 import 'package:kalamazoo/models/app_model.dart';
 import 'package:kalamazoo/widget/processing.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 const List<String> list = <String>['Kalamazoo, Michigan, USA'];
 
@@ -25,6 +27,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   static final List<Map<String, dynamic>> searchResults = [];
   static List<Map<String, dynamic>> restaurants = [];
+  static List<Map<String, dynamic>> geolocations = [];
 
   @override
   void initState() {
@@ -46,6 +49,23 @@ class _SearchScreenState extends State<SearchScreen> {
       }
     }
     setState(() {});
+  }
+
+  Future<void> _getGeolocation() async {
+    var i = 0;
+    for (var element in restaurants) {
+      List<Location> locations =
+          await locationFromAddress(element[RESTAURANT_ADDRESS]);
+      Map<String, dynamic> item = {};
+      if (locations.isNotEmpty) {
+        item['id'] = element[RESTAURANT_ID];
+        item['latitude'] = locations[0].latitude;
+        item['longitude'] = locations[0].longitude;
+        geolocations.add(item);
+      }
+      i++;
+      if (i > 7) break;
+    }
   }
 
   @override
@@ -155,6 +175,35 @@ class _SearchScreenState extends State<SearchScreen> {
                         ),
                       ],
                     ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20.0, horizontal: Util.mainPadding),
+                    child: SizedBox(
+                        height: 50, //height of button
+                        width:
+                            MediaQuery.of(context).size.width, //width of button
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              elevation: 10, //elevation of button
+                              shape: RoundedRectangleBorder(
+                                  //to set border radius to button
+                                  borderRadius: BorderRadius.circular(10)),
+                              shadowColor: CustomColor.primaryColor,
+                              padding: const EdgeInsets.all(
+                                  5) //content padding inside button
+                              ),
+                          onPressed: () {
+                            _getGeolocation();
+                          },
+                          child: const Text(
+                            'Cal',
+                            style: TextStyle(
+                                color: CustomColor.buttonTextColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0),
+                          ),
+                        )),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
