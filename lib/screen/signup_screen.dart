@@ -276,8 +276,8 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                       onPressed: () {
                         if (userType.isEmpty) return;
-                        global.userType = userType;
-                        if (global.userType == 'customer') {
+                        global.userRole = userType;
+                        if (global.userRole == 'customer') {
                           NavigationRouter.switchToRegistration(context);
                         } else {
                           NavigationRouter.switchToRegistration2(context);

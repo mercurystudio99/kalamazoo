@@ -164,7 +164,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (placemarks.isNotEmpty) {
       output = placemarks[0].toString();
     }
-    debugPrint(output);
   }
 
   void initializeSelection() {
@@ -174,15 +173,6 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       AppModel().getData(onSuccess: (List<Map<String, dynamic>> param) {
         bestOffers = param;
-        for (var element in param) {
-          locationFromAddress(element[RESTAURANT_ADDRESS]).then((locations) {
-            var output = 'No results found.';
-            if (locations.isNotEmpty) {
-              output = locations[0].toString();
-            }
-            debugPrint(output);
-          });
-        }
       });
     });
     if (globals.userFavourites.isNotEmpty) {

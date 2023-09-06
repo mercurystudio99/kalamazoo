@@ -22,6 +22,7 @@ const String USER_EMAIL = "user_email";
 const String USER_PASS = "user_pass";
 const String USER_LOCATION = "user_location";
 const String USER_FAVOURITIES = "user_favourites";
+const String USER_ROLE = "user_role";
 const String USER_STATUS = "user_status";
 const String USER_IS_VERIFIED = "user_is_verified";
 const String USER_REG_DATE = "user_reg_date";

@@ -14,6 +14,7 @@ class User {
   final String userPass;
   final String userLocation;
   final List<dynamic> userFavourites;
+  final String userRole;
   final String userStatus;
   final bool userIsVerified;
   final DateTime userRegDate;
@@ -33,6 +34,7 @@ class User {
     required this.userPass,
     required this.userLocation,
     required this.userFavourites,
+    required this.userRole,
     required this.userStatus,
     required this.userIsVerified,
     required this.userRegDate,
@@ -54,6 +56,7 @@ class User {
       userPass: doc[USER_PASS] ?? '',
       userLocation: doc[USER_LOCATION] ?? '',
       userFavourites: doc[USER_FAVOURITIES] ?? [],
+      userRole: doc[USER_ROLE] ?? '',
       userStatus: doc[USER_STATUS],
       userIsVerified: doc[USER_IS_VERIFIED] ?? false,
       userRegDate: doc[USER_REG_DATE].toDate(), // Firestore Timestamp

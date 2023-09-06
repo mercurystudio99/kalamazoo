@@ -40,6 +40,7 @@ class AppModel extends Model {
       USER_FULLNAME: name,
       USER_EMAIL: email,
       USER_PASS: password,
+      USER_ROLE: globals.userRole,
       USER_FAVOURITIES: [],
     });
     globals.userEmail = email;
