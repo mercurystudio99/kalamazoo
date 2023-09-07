@@ -12,6 +12,8 @@ class Util {
   static const String fullMenu = "Full Menu";
   static const String owner = "owner";
   static const String customer = "customer";
+  static const String featured = "FEATURED";
+
   // Splash Screen
   static const String splashCaption = "Welcome to Best Local Eats";
   static const String startTitle = "Local Restaurant";
@@ -56,4 +58,5 @@ class Util {
   static const String buttonOTP = "Get OTP";
   static const String buttonSave = "Save";
   static const String buttonSubscription = "Activate Plan";
+  static const String buttonMore = "MORE";
 }

@@ -6,6 +6,8 @@ import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:google_fonts/google_fonts.dart';
+
 import 'package:kalamazoo/utils/globals.dart' as globals;
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/util.dart';
@@ -26,15 +28,82 @@ final List<String> imgList = [
 final List<Widget> imageSliders = imgList
     .map((item) => Container(
           margin: const EdgeInsets.all(5.0),
+          decoration: const BoxDecoration(
+            color: Color(0xFFFFF9E5),
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+          ),
           child: ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+              borderRadius: const BorderRadius.all(Radius.circular(30)),
               child: Stack(
                 children: <Widget>[
-                  Image.asset(
-                    'assets/card.png',
-                    fit: BoxFit.cover,
-                    width: 1000.0,
+                  Positioned(
+                    left: 0,
+                    top: 0,
+                    child: Container(
+                      width: 80,
+                      height: 80,
+                      decoration: const BoxDecoration(
+                        color: CustomColor.activeColor,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.zero,
+                            topRight: Radius.zero,
+                            bottomLeft: Radius.zero,
+                            bottomRight: Radius.circular(100)),
+                      ),
+                    ),
                   ),
+                  Padding(
+                      padding: const EdgeInsets.all(5),
+                      child: Row(children: [
+                        const SizedBox(width: 30),
+                        Image.asset('assets/burger.png'),
+                        const SizedBox(width: 10),
+                        Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(Util.featured,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Util.titleSize)),
+                              RichText(
+                                text: TextSpan(children: [
+                                  TextSpan(
+                                    text:
+                                        'Lorem ipsum dolor sit\n amet, consectetur adip\niscing elit. Mauris eu\n nunc a enim rutrum',
+                                    style: GoogleFonts.poppins(
+                                        color: CustomColor.textDetailColor,
+                                        fontSize: Util.descriptionSize),
+                                  )
+                                ]),
+                              ),
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  child: SizedBox(
+                                      height: 35, //height of button
+                                      width: 100, //width of button
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            elevation: 0, //elevation of button
+                                            shape: RoundedRectangleBorder(
+                                                //to set border radius to button
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                            padding: const EdgeInsets.all(
+                                                5) //content padding inside button
+                                            ),
+                                        onPressed: () {},
+                                        child: const Text(
+                                          Util.buttonMore,
+                                          style: TextStyle(
+                                              color:
+                                                  CustomColor.buttonTextColor,
+                                              fontSize: 15),
+                                        ),
+                                      ))),
+                            ])
+                      ]))
                 ],
               )),
         ))
@@ -1148,14 +1217,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
+                          children: const [
+                            Text(
                               'Business Name',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             Text(
                               '',
-                              style: const TextStyle(
+                              style: TextStyle(
                                   color: CustomColor.textDetailColor,
                                   fontSize: 12),
                             ),
