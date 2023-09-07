@@ -7,12 +7,14 @@ class Util {
   static const String favorite = "Favorite";
   static const String about = "About";
   static const String seeAll = "See All";
+  static const String showAll = "Show All";
   static const String categories = "Categories";
   static const String edit = "Edit";
   static const String fullMenu = "Full Menu";
   static const String owner = "owner";
   static const String customer = "customer";
-  static const String featured = "FEATURED";
+  static const String featured = "Featured";
+  static const String dailySpecial = "Daily Special";
 
   // Splash Screen
   static const String splashCaption = "Welcome to Best Local Eats";
@@ -58,5 +60,5 @@ class Util {
   static const String buttonOTP = "Get OTP";
   static const String buttonSave = "Save";
   static const String buttonSubscription = "Activate Plan";
-  static const String buttonMore = "MORE";
+  static const String buttonMore = "More";
 }

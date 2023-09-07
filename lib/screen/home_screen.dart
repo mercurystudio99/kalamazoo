@@ -16,98 +16,20 @@ import 'package:kalamazoo/utils/constants.dart';
 import 'package:kalamazoo/models/app_model.dart';
 import 'package:kalamazoo/widget/accordion.dart';
 
-final List<String> imgList = [
-  'https://images.unsplash.com/photo-1520342868574-5fa3804e551c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ff92caffcdd63681a35134a6770ed3b&auto=format&fit=crop&w=1951&q=80',
-  'https://images.unsplash.com/photo-1522205408450-add114ad53fe?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=368f45b0888aeb0b7b08e3a1084d3ede&auto=format&fit=crop&w=1950&q=80',
-  'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
-  'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=89719a0d55dd05e2deae4120227e6efc&auto=format&fit=crop&w=1953&q=80',
-  'https://images.unsplash.com/photo-1508704019882-f9cf40e475b4?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8c6e5e3aba713b17aa1fe71ab4f0ae5b&auto=format&fit=crop&w=1352&q=80',
-  'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
+final List<Map<String, dynamic>> imgList = [
+  {
+    "title": Util.featured,
+    "image": "assets/burger.png",
+    "bio": "Lorem ipsum dolor sit\n amet, consectetur adip\niscing elit.",
+    "eventCaption": Util.buttonMore
+  },
+  {
+    "title": Util.dailySpecial,
+    "image": "assets/plate.png",
+    "bio": "Lorem ipsum dolor sit\n amet, consectetur adip\niscing elit.",
+    "eventCaption": Util.showAll
+  }
 ];
-
-final List<Widget> imageSliders = imgList
-    .map((item) => Container(
-          margin: const EdgeInsets.all(5.0),
-          decoration: const BoxDecoration(
-            color: Color(0xFFFFF9E5),
-            borderRadius: BorderRadius.all(Radius.circular(30)),
-          ),
-          child: ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(30)),
-              child: Stack(
-                children: <Widget>[
-                  Positioned(
-                    left: 0,
-                    top: 0,
-                    child: Container(
-                      width: 80,
-                      height: 80,
-                      decoration: const BoxDecoration(
-                        color: CustomColor.activeColor,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.zero,
-                            topRight: Radius.zero,
-                            bottomLeft: Radius.zero,
-                            bottomRight: Radius.circular(100)),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: Row(children: [
-                        const SizedBox(width: 30),
-                        Image.asset('assets/burger.png'),
-                        const SizedBox(width: 10),
-                        Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(Util.featured,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Util.titleSize)),
-                              RichText(
-                                text: TextSpan(children: [
-                                  TextSpan(
-                                    text:
-                                        'Lorem ipsum dolor sit\n amet, consectetur adip\niscing elit. Mauris eu\n nunc a enim rutrum',
-                                    style: GoogleFonts.poppins(
-                                        color: CustomColor.textDetailColor,
-                                        fontSize: Util.descriptionSize),
-                                  )
-                                ]),
-                              ),
-                              Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8),
-                                  child: SizedBox(
-                                      height: 35, //height of button
-                                      width: 100, //width of button
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                            elevation: 0, //elevation of button
-                                            shape: RoundedRectangleBorder(
-                                                //to set border radius to button
-                                                borderRadius:
-                                                    BorderRadius.circular(5)),
-                                            padding: const EdgeInsets.all(
-                                                5) //content padding inside button
-                                            ),
-                                        onPressed: () {},
-                                        child: const Text(
-                                          Util.buttonMore,
-                                          style: TextStyle(
-                                              color:
-                                                  CustomColor.buttonTextColor,
-                                              fontSize: 15),
-                                        ),
-                                      ))),
-                            ])
-                      ]))
-                ],
-              )),
-        ))
-    .toList();
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -448,6 +370,100 @@ class _HomeScreenState extends State<HomeScreen> {
       );
       bestOffersView.add(widget);
     }
+
+    final List<Widget> imageSliders = imgList
+        .map((item) => Container(
+              margin: const EdgeInsets.all(5.0),
+              decoration: const BoxDecoration(
+                color: Color(0xFFFFF9E5),
+                borderRadius: BorderRadius.all(Radius.circular(30)),
+              ),
+              child: ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(30)),
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned(
+                        left: 0,
+                        top: 0,
+                        child: Container(
+                          width: 80,
+                          height: 80,
+                          decoration: const BoxDecoration(
+                            color: CustomColor.activeColor,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.zero,
+                                topRight: Radius.zero,
+                                bottomLeft: Radius.zero,
+                                bottomRight: Radius.circular(100)),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: Row(children: [
+                            const SizedBox(width: 30),
+                            Image.asset(item["image"]),
+                            const SizedBox(width: 10),
+                            Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(item["title"].toString().toUpperCase(),
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Util.titleSize)),
+                                  RichText(
+                                    text: TextSpan(children: [
+                                      TextSpan(
+                                        text: item["bio"],
+                                        style: GoogleFonts.poppins(
+                                            color: CustomColor.textDetailColor,
+                                            fontSize: Util.descriptionSize),
+                                      )
+                                    ]),
+                                  ),
+                                  Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8),
+                                      child: SizedBox(
+                                          height: 35, //height of button
+                                          width: 100, //width of button
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                                elevation:
+                                                    0, //elevation of button
+                                                shape: RoundedRectangleBorder(
+                                                    //to set border radius to button
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5)),
+                                                padding: const EdgeInsets.all(
+                                                    5) //content padding inside button
+                                                ),
+                                            onPressed: () {
+                                              if (item["title"].toString() ==
+                                                  Util.dailySpecial) {
+                                                NavigationRouter
+                                                    .switchToDailySpecial(
+                                                        context);
+                                              }
+                                            },
+                                            child: Text(
+                                              item["eventCaption"]
+                                                  .toString()
+                                                  .toUpperCase(),
+                                              style: const TextStyle(
+                                                  color: CustomColor
+                                                      .buttonTextColor,
+                                                  fontSize: 15),
+                                            ),
+                                          ))),
+                                ])
+                          ]))
+                    ],
+                  )),
+            ))
+        .toList();
 
     // 4 screens
     final List<Widget> widgetOptions = <Widget>[

@@ -72,4 +72,8 @@ class NavigationRouter {
   static void switchToStart(BuildContext context) {
     Navigator.pushNamed(context, "/StartScreen");
   }
+
+  static void switchToDailySpecial(BuildContext context) {
+    Navigator.pushNamed(context, "/DailySpecialScreen");
+  }
 }
