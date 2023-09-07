@@ -76,4 +76,8 @@ class NavigationRouter {
   static void switchToDailySpecial(BuildContext context) {
     Navigator.pushNamed(context, "/DailySpecialScreen");
   }
+
+  static void switchToWebview(BuildContext context) {
+    Navigator.pushNamed(context, "/WebviewScreen");
+  }
 }

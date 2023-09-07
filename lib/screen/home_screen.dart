@@ -442,6 +442,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                             onPressed: () {
                                               if (item["title"].toString() ==
+                                                  Util.featured) {
+                                                NavigationRouter
+                                                    .switchToWebview(context);
+                                              }
+                                              if (item["title"].toString() ==
                                                   Util.dailySpecial) {
                                                 NavigationRouter
                                                     .switchToDailySpecial(
