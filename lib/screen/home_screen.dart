@@ -53,13 +53,14 @@ class _HomeScreenState extends State<HomeScreen> {
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
   bool _setting = true;
   int _selectedIndex = 0;
-  int _selectedCategory = 0;
+  String _selectedTopMenu = '';
   bool isSelectionMode = false;
   bool _showDaysHours = false;
   int carouselIndicatorCurrent = 0;
   static List<String> categories = [];
   static List<Map<String, dynamic>> bestOffers = [];
   static List<Map<String, dynamic>> favourites = [];
+  static List<Map<String, dynamic>> topMenuList = [];
   static Map<String, dynamic> profile = {};
 
   final _searchFavoriteController = TextEditingController();
@@ -180,6 +181,14 @@ class _HomeScreenState extends State<HomeScreen> {
         favourites = param;
       });
     }
+    AppModel().getTopMenu(
+      onSuccess: (List<Map<String, dynamic>> param) {
+        topMenuList = param;
+        setState(() {});
+        debugPrint("$topMenuList");
+      },
+      onEmpty: () {},
+    );
     AppModel().getProfile(onSuccess: (Map<String, dynamic> param) {
       profile = param;
     });
@@ -371,357 +380,354 @@ class _HomeScreenState extends State<HomeScreen> {
       bestOffersView.add(widget);
     }
 
-    // 3 screens
+    // 4 screens
     final List<Widget> widgetOptions = <Widget>[
-      // Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
-      //   Container(
-      //     color: CustomColor.primaryColor,
-      //     padding: const EdgeInsets.only(top: 10.0),
-      //     child: Column(children: [
-      //       Padding(
-      //         padding: const EdgeInsets.only(
-      //             left: Util.mainPadding * 0.5, right: Util.mainPadding),
-      //         child: Row(
-      //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //           crossAxisAlignment: CrossAxisAlignment.center,
-      //           children: [
-      //             IconButton(
-      //               onPressed: _handleMenuButtonPressed,
-      //               icon: ValueListenableBuilder<AdvancedDrawerValue>(
-      //                 valueListenable: _advancedDrawerController,
-      //                 builder: (_, value, __) {
-      //                   return AnimatedSwitcher(
-      //                     duration: const Duration(milliseconds: 250),
-      //                     child: Image.asset(
-      //                       'assets/menu.png',
-      //                       key: ValueKey<bool>(value.visible),
-      //                     ),
-      //                   );
-      //                 },
-      //               ),
-      //             ),
-      //             Column(
-      //               mainAxisAlignment: MainAxisAlignment.start,
-      //               children: [
-      //                 const Text(
-      //                   'Location',
-      //                   style: TextStyle(color: CustomColor.textDetailColor),
-      //                 ),
-      //                 Row(
-      //                   mainAxisAlignment: MainAxisAlignment.center,
-      //                   children: const [
-      //                     Icon(
-      //                       Icons.location_on,
-      //                       color: Colors.red,
-      //                     ),
-      //                     Text(
-      //                       'Kalamazoo, Michigon',
-      //                       style: TextStyle(color: Colors.white),
-      //                     ),
-      //                   ],
-      //                 )
-      //               ],
-      //             ),
-      //             GestureDetector(
-      //               onTap: () {
-      //                 NavigationRouter.switchToNotification(context);
-      //               },
-      //               child: const badges.Badge(
-      //                 badgeContent: Text(
-      //                   '1',
-      //                   style: TextStyle(color: Colors.white),
-      //                 ),
-      //                 child: Icon(
-      //                   Icons.notifications_outlined,
-      //                   size: 32,
-      //                   color: Colors.white,
-      //                 ),
-      //               ),
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //       Padding(
-      //         padding: const EdgeInsets.symmetric(
-      //             horizontal: Util.mainPadding, vertical: 12.0),
-      //         child: TextFormField(
-      //           decoration: const InputDecoration(
-      //             border: OutlineInputBorder(),
-      //             hintText: 'Search Restaurant or Food...',
-      //             prefixIconConstraints: BoxConstraints(
-      //               minWidth: 50,
-      //               minHeight: 2,
-      //             ),
-      //             prefixIcon: Icon(Icons.search_outlined, size: 24),
-      //           ),
-      //           onTap: () {
-      //             NavigationRouter.switchToSearch(context);
-      //           },
-      //         ),
-      //       ),
-      //       Padding(
-      //         padding: const EdgeInsets.symmetric(horizontal: Util.mainPadding),
-      //         child: Row(
-      //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //             children: [
-      //               const Text(
-      //                 Util.categories,
-      //                 style: TextStyle(color: Colors.white),
-      //               ),
-      //               GestureDetector(
-      //                 onTap: () {},
-      //                 child: const Text(
-      //                   Util.seeAll,
-      //                   style: TextStyle(color: Colors.white),
-      //                 ),
-      //               ),
-      //             ]),
-      //       ),
-      //       SizedBox(
-      //           height: 70,
-      //           child: SingleChildScrollView(
-      //               scrollDirection: Axis.horizontal,
-      //               child: Row(
-      //                 children: categories.map((category) {
-      //                   return categoryBox(
-      //                       category,
-      //                       categories.indexOf(category),
-      //                       CustomColor.primaryColor);
-      //                 }).toList(),
-      //               ))),
-      //     ]),
-      //   ),
-      //   Expanded(
-      //     child: ListView(
-      //       children: [
-      //         CarouselSlider(
-      //           items: imageSliders,
-      //           options: CarouselOptions(
-      //               aspectRatio: 2.0,
-      //               enlargeCenterPage: true,
-      //               enableInfiniteScroll: false,
-      //               initialPage: 0,
-      //               autoPlay: true,
-      //               pageViewKey:
-      //                   const PageStorageKey<String>('carousel_slider'),
-      //               onPageChanged: (index, reason) {
-      //                 setState(() {
-      //                   carouselIndicatorCurrent = index;
-      //                 });
-      //               }),
-      //         ),
-      //         Row(
-      //           mainAxisAlignment: MainAxisAlignment.center,
-      //           children: imgList.asMap().entries.map((entry) {
-      //             return Container(
-      //               width: (carouselIndicatorCurrent == entry.key ? 34 : 16),
-      //               height: 5.0,
-      //               margin: const EdgeInsets.symmetric(
-      //                   vertical: 8.0, horizontal: 4.0),
-      //               decoration: BoxDecoration(
-      //                   borderRadius:
-      //                       const BorderRadius.all(Radius.circular(10)),
-      //                   color: (carouselIndicatorCurrent == entry.key
-      //                       ? CustomColor.primaryColor
-      //                       : CustomColor.textDetailColor.withOpacity(0.5))),
-      //             );
-      //           }).toList(),
-      //         ),
-      //         Padding(
-      //           padding: const EdgeInsets.symmetric(
-      //               horizontal: Util.mainPadding, vertical: 4.0),
-      //           child: Row(
-      //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //               children: [
-      //                 const Text(
-      //                   Util.homeTopBrands,
-      //                   style: TextStyle(
-      //                       fontWeight: FontWeight.bold, fontSize: 18),
-      //                 ),
-      //                 GestureDetector(
-      //                   onTap: () {},
-      //                   child: const Text(
-      //                     Util.seeAll,
-      //                     style: TextStyle(color: CustomColor.activeColor),
-      //                   ),
-      //                 ),
-      //               ]),
-      //         ),
-      //         SizedBox(
-      //             height: 130,
-      //             child: SingleChildScrollView(
-      //                 scrollDirection: Axis.horizontal,
-      //                 child: Row(
-      //                   children: categories.map((category) {
-      //                     return brandBox(
-      //                         category, categories.indexOf(category));
-      //                   }).toList(),
-      //                 ))),
-      //         Padding(
-      //           padding:
-      //               const EdgeInsets.symmetric(horizontal: Util.mainPadding),
-      //           child: Row(
-      //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //               children: [
-      //                 const Text(
-      //                   Util.homeBestOffers,
-      //                   style: TextStyle(
-      //                       fontWeight: FontWeight.bold, fontSize: 18),
-      //                 ),
-      //                 GestureDetector(
-      //                   onTap: () {},
-      //                   child: const Text(
-      //                     Util.seeAll,
-      //                     style: TextStyle(color: CustomColor.activeColor),
-      //                   ),
-      //                 ),
-      //               ]),
-      //         ),
-      //         Padding(
-      //           padding: const EdgeInsets.symmetric(
-      //               horizontal: Util.mainPadding, vertical: 10),
-      //           child: Row(
-      //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //               children: bestOffersView),
-      //         ),
-      //       ],
-      //     ),
-      //   ),
-      // ]),
       Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
+        Container(
+          color: CustomColor.primaryColor,
+          padding: const EdgeInsets.only(top: 10.0),
+          child: Column(children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: Util.mainPadding * 0.5, right: Util.mainPadding),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: _handleMenuButtonPressed,
+                    icon: ValueListenableBuilder<AdvancedDrawerValue>(
+                      valueListenable: _advancedDrawerController,
+                      builder: (_, value, __) {
+                        return AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 250),
+                          child: Image.asset(
+                            'assets/menu.png',
+                            key: ValueKey<bool>(value.visible),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Location',
+                        style: TextStyle(color: CustomColor.textDetailColor),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(
+                            Icons.location_on,
+                            color: Colors.red,
+                          ),
+                          Text(
+                            'Kalamazoo, Michigon',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      NavigationRouter.switchToNotification(context);
+                    },
+                    child: const badges.Badge(
+                      badgeContent: Text(
+                        '1',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      child: Icon(
+                        Icons.notifications_outlined,
+                        size: 32,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Util.mainPadding, vertical: 12.0),
+              child: TextFormField(
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Search Restaurant or Food...',
+                  prefixIconConstraints: BoxConstraints(
+                    minWidth: 50,
+                    minHeight: 2,
+                  ),
+                  prefixIcon: Icon(Icons.search_outlined, size: 24),
+                ),
+                onTap: () {
+                  NavigationRouter.switchToSearch(context);
+                },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Util.mainPadding),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      Util.categories,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: const Text(
+                        Util.seeAll,
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ]),
+            ),
+            SizedBox(
+                height: 70,
+                child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: topMenuList.map((topmenu) {
+                        return categoryBox(topmenu, CustomColor.primaryColor);
+                      }).toList(),
+                    ))),
+          ]),
+        ),
         Expanded(
           child: ListView(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: Util.mainPadding * 0.5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    IconButton(
-                      onPressed: _handleMenuButtonPressed,
-                      icon: ValueListenableBuilder<AdvancedDrawerValue>(
-                        valueListenable: _advancedDrawerController,
-                        builder: (_, value, __) {
-                          return AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 250),
-                            child: Image.asset(
-                              'assets/menu.png',
-                              key: ValueKey<bool>(value.visible),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    const Spacer(),
-                    const Icon(
-                      Icons.location_on,
-                      color: Colors.red,
-                    ),
-                    const Text(
-                      'Kalamazoo, Michigan, USA',
-                      style: TextStyle(color: CustomColor.textDetailColor),
-                    ),
-                    const Spacer(),
-                    const Icon(
-                      Icons.sort,
-                      color: Colors.black,
-                    ),
-                    const Text(
-                      'Sort',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    const Spacer(),
-                    const Icon(
-                      Icons.diamond,
-                      color: Colors.black,
-                    ),
-                    const Text(
-                      'Offer',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ],
-                ),
+              CarouselSlider(
+                items: imageSliders,
+                options: CarouselOptions(
+                    aspectRatio: 2.0,
+                    enlargeCenterPage: true,
+                    enableInfiniteScroll: false,
+                    initialPage: 0,
+                    autoPlay: true,
+                    pageViewKey:
+                        const PageStorageKey<String>('carousel_slider'),
+                    onPageChanged: (index, reason) {
+                      setState(() {
+                        carouselIndicatorCurrent = index;
+                      });
+                    }),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: imgList.asMap().entries.map((entry) {
+                  return Container(
+                    width: (carouselIndicatorCurrent == entry.key ? 34 : 16),
+                    height: 5.0,
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 4.0),
+                    decoration: BoxDecoration(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        color: (carouselIndicatorCurrent == entry.key
+                            ? CustomColor.primaryColor
+                            : CustomColor.textDetailColor.withOpacity(0.5))),
+                  );
+                }).toList(),
               ),
               Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: Util.mainPadding, vertical: 10),
-                  child: Stack(children: [
-                    Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(14)),
-                        boxShadow: [
-                          BoxShadow(
-                              color: CustomColor.primaryColor.withOpacity(0.2),
-                              blurRadius: 5,
-                              spreadRadius: 1),
-                        ],
+                padding: const EdgeInsets.symmetric(
+                    horizontal: Util.mainPadding, vertical: 4.0),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        Util.homeTopBrands,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
                       ),
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.all(4),
-                          border: const OutlineInputBorder(),
-                          hintText: 'Search Restaurant or Food...',
-                          hintStyle: const TextStyle(
-                              color: CustomColor.textDetailColor),
-                          prefixIconConstraints: const BoxConstraints(
-                            minWidth: 50,
-                            minHeight: 2,
-                          ),
-                          prefixIcon:
-                              const Icon(Icons.search_outlined, size: 24),
-                          suffixIcon: IconButton(
-                              onPressed: () {},
-                              icon: Image.asset('assets/filter.png'))),
-                      onTap: () {
-                        NavigationRouter.switchToSearch(context);
-                      },
-                    ),
-                  ])),
-              const SizedBox(height: 10),
+                      GestureDetector(
+                        onTap: () {},
+                        child: const Text(
+                          Util.seeAll,
+                          style: TextStyle(color: CustomColor.activeColor),
+                        ),
+                      ),
+                    ]),
+              ),
+              SizedBox(
+                  height: 130,
+                  child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: categories.map((category) {
+                          return brandBox(
+                              category, categories.indexOf(category));
+                        }).toList(),
+                      ))),
               Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: Util.mainPadding, vertical: 5),
-                  child: Container(
-                      decoration: const BoxDecoration(
-                        color: CustomColor.activeColor,
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: Util.mainPadding),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        Util.homeBestOffers,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
                       ),
-                      child: Padding(
-                          padding: const EdgeInsets.fromLTRB(15, 10, 12, 10),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Text(
-                                  'FEATURED',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20),
-                                ),
-                                Icon(
-                                  Icons.keyboard_arrow_down,
-                                  color: Colors.white,
-                                )
-                              ])))),
-              const Padding(
-                padding: EdgeInsets.symmetric(
+                      GestureDetector(
+                        onTap: () {},
+                        child: const Text(
+                          Util.seeAll,
+                          style: TextStyle(color: CustomColor.activeColor),
+                        ),
+                      ),
+                    ]),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
                     horizontal: Util.mainPadding, vertical: 10),
-                child: Accordion(
-                  contents: <String>[
-                    'Breweries',
-                    'Food Trucks',
-                    'Restaurants',
-                    'Wineries'
-                  ],
-                ),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: bestOffersView),
               ),
             ],
           ),
         ),
       ]),
+      // Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
+      //   Expanded(
+      //     child: ListView(
+      //       children: [
+      //         Padding(
+      //           padding: const EdgeInsets.symmetric(
+      //               horizontal: Util.mainPadding * 0.5),
+      //           child: Row(
+      //             mainAxisAlignment: MainAxisAlignment.start,
+      //             crossAxisAlignment: CrossAxisAlignment.center,
+      //             children: [
+      //               IconButton(
+      //                 onPressed: _handleMenuButtonPressed,
+      //                 icon: ValueListenableBuilder<AdvancedDrawerValue>(
+      //                   valueListenable: _advancedDrawerController,
+      //                   builder: (_, value, __) {
+      //                     return AnimatedSwitcher(
+      //                       duration: const Duration(milliseconds: 250),
+      //                       child: Image.asset(
+      //                         'assets/menu.png',
+      //                         key: ValueKey<bool>(value.visible),
+      //                       ),
+      //                     );
+      //                   },
+      //                 ),
+      //               ),
+      //               const Spacer(),
+      //               const Icon(
+      //                 Icons.location_on,
+      //                 color: Colors.red,
+      //               ),
+      //               const Text(
+      //                 'Kalamazoo, Michigan, USA',
+      //                 style: TextStyle(color: CustomColor.textDetailColor),
+      //               ),
+      //               const Spacer(),
+      //               const Icon(
+      //                 Icons.sort,
+      //                 color: Colors.black,
+      //               ),
+      //               const Text(
+      //                 'Sort',
+      //                 style: TextStyle(color: Colors.black),
+      //               ),
+      //               const Spacer(),
+      //               const Icon(
+      //                 Icons.diamond,
+      //                 color: Colors.black,
+      //               ),
+      //               const Text(
+      //                 'Offer',
+      //                 style: TextStyle(color: Colors.black),
+      //               ),
+      //             ],
+      //           ),
+      //         ),
+      //         Padding(
+      //             padding: const EdgeInsets.symmetric(
+      //                 horizontal: Util.mainPadding, vertical: 10),
+      //             child: Stack(children: [
+      //               Container(
+      //                 height: 50,
+      //                 decoration: BoxDecoration(
+      //                   borderRadius:
+      //                       const BorderRadius.all(Radius.circular(14)),
+      //                   boxShadow: [
+      //                     BoxShadow(
+      //                         color: CustomColor.primaryColor.withOpacity(0.2),
+      //                         blurRadius: 5,
+      //                         spreadRadius: 1),
+      //                   ],
+      //                 ),
+      //               ),
+      //               TextFormField(
+      //                 decoration: InputDecoration(
+      //                     contentPadding: const EdgeInsets.all(4),
+      //                     border: const OutlineInputBorder(),
+      //                     hintText: 'Search Restaurant or Food...',
+      //                     hintStyle: const TextStyle(
+      //                         color: CustomColor.textDetailColor),
+      //                     prefixIconConstraints: const BoxConstraints(
+      //                       minWidth: 50,
+      //                       minHeight: 2,
+      //                     ),
+      //                     prefixIcon:
+      //                         const Icon(Icons.search_outlined, size: 24),
+      //                     suffixIcon: IconButton(
+      //                         onPressed: () {},
+      //                         icon: Image.asset('assets/filter.png'))),
+      //                 onTap: () {
+      //                   NavigationRouter.switchToSearch(context);
+      //                 },
+      //               ),
+      //             ])),
+      //         const SizedBox(height: 10),
+      //         Padding(
+      //             padding: const EdgeInsets.symmetric(
+      //                 horizontal: Util.mainPadding, vertical: 5),
+      //             child: Container(
+      //                 decoration: const BoxDecoration(
+      //                   color: CustomColor.activeColor,
+      //                   borderRadius: BorderRadius.all(Radius.circular(8)),
+      //                 ),
+      //                 child: Padding(
+      //                     padding: const EdgeInsets.fromLTRB(15, 10, 12, 10),
+      //                     child: Row(
+      //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                         children: const [
+      //                           Text(
+      //                             'FEATURED',
+      //                             style: TextStyle(
+      //                                 color: Colors.white, fontSize: 20),
+      //                           ),
+      //                           Icon(
+      //                             Icons.keyboard_arrow_down,
+      //                             color: Colors.white,
+      //                           )
+      //                         ])))),
+      //         const Padding(
+      //           padding: EdgeInsets.symmetric(
+      //               horizontal: Util.mainPadding, vertical: 10),
+      //           child: Accordion(
+      //             contents: <String>[
+      //               'Breweries',
+      //               'Food Trucks',
+      //               'Restaurants',
+      //               'Wineries'
+      //             ],
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ]),
       // Column(
       //   mainAxisAlignment: MainAxisAlignment.start,
       //   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1848,20 +1854,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget categoryBox(String title, int index, Color backgroundcolor) {
-    List<String> categoryImgs = [
-      "assets/daily_specials.png",
-      "assets/events.png",
-      "assets/featured.png",
-      "assets/food_trucks.png",
-      "assets/food_trucks.png",
-      "assets/food_trucks.png",
-    ];
-
+  Widget categoryBox(Map<String, dynamic> item, Color backgroundcolor) {
     return InkWell(
         onTap: () {
           setState(() {
-            _selectedCategory = index;
+            _selectedTopMenu = item[TOPMENU_ID];
           });
         },
         child: Container(
@@ -1871,7 +1868,7 @@ class _HomeScreenState extends State<HomeScreen> {
             decoration: BoxDecoration(
               border: Border.all(color: Colors.white),
               borderRadius: BorderRadius.circular(10),
-              color: _selectedCategory == index
+              color: _selectedTopMenu == item[TOPMENU_ID]
                   ? CustomColor.activeColor
                   : backgroundcolor,
             ),
@@ -1879,13 +1876,14 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(categoryImgs[index], width: 25, height: 25),
+                Image.asset("assets/topmenu/${item[TOPMENU_IMAGE]}.png",
+                    width: 25, height: 25),
                 Padding(
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(
-                        title.length <= 10
-                            ? title
-                            : '${title.substring(0, 8)}..',
+                        item[TOPMENU_NAME].toString().length <= 10
+                            ? item[TOPMENU_NAME].toString()
+                            : '${item[TOPMENU_NAME].toString().substring(0, 8)}..',
                         style: const TextStyle(
                             color: Colors.white, fontSize: 10))),
               ],
