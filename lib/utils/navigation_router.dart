@@ -80,4 +80,8 @@ class NavigationRouter {
   static void switchToWebview(BuildContext context) {
     Navigator.pushNamed(context, "/WebviewScreen");
   }
+
+  static void switchToEvent(BuildContext context) {
+    Navigator.pushNamed(context, "/EventScreen");
+  }
 }

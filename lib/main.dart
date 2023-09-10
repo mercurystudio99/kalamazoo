@@ -25,6 +25,7 @@ import 'package:kalamazoo/screen/registration2_screen.dart';
 import 'package:kalamazoo/screen/amenities_screen.dart';
 import 'package:kalamazoo/screen/dailyspecial_screen.dart';
 import 'package:kalamazoo/screen/webview_screen.dart';
+import 'package:kalamazoo/screen/event_screen.dart';
 import 'package:kalamazoo/screen/splash_screen.dart';
 
 var routes = <String, WidgetBuilder>{
@@ -47,6 +48,7 @@ var routes = <String, WidgetBuilder>{
   "/StartScreen": (BuildContext context) => const StartScreen(),
   "/DailySpecialScreen": (BuildContext context) => const DailySpecialScreen(),
   "/WebviewScreen": (BuildContext context) => const WebviewScreen(),
+  "/EventScreen": (BuildContext context) => const EventScreen(),
 };
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

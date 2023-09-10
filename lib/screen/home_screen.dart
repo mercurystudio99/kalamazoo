@@ -411,7 +411,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Text(item["title"].toString().toUpperCase(),
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          fontSize: Util.titleSize)),
+                                          fontSize: 20)),
                                   RichText(
                                     text: TextSpan(children: [
                                       TextSpan(
@@ -1870,6 +1870,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: const Text('Subscription'),
                     trailing: const Icon(Icons.arrow_forward_ios),
                   ),
+                ListTile(
+                  onTap: () {
+                    NavigationRouter.switchToEvent(context);
+                  },
+                  leading: const Icon(Icons.calendar_month),
+                  title: const Text('Event'),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                ),
                 // ListTile(
                 //   onTap: () {},
                 //   leading: const Icon(Icons.settings_outlined),

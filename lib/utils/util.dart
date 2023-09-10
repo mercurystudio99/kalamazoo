@@ -15,6 +15,7 @@ class Util {
   static const String customer = "customer";
   static const String featured = "Featured";
   static const String dailySpecial = "Daily Special";
+  static const String event = "Special Event";
 
   // Splash Screen
   static const String splashCaption = "Welcome to Best Local Eats";
