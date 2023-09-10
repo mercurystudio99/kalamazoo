@@ -84,4 +84,8 @@ class NavigationRouter {
   static void switchToEvent(BuildContext context) {
     Navigator.pushNamed(context, "/EventScreen");
   }
+
+  static void switchToTerms(BuildContext context) {
+    Navigator.pushNamed(context, "/TermsScreen");
+  }
 }

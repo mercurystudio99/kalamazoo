@@ -1896,6 +1896,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 // ),
                 ListTile(
                   onTap: () {
+                    NavigationRouter.switchToTerms(context);
+                  },
+                  leading: const Icon(Icons.shield_sharp),
+                  title: const Text('Terms And Condition'),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                ),
+                ListTile(
+                  onTap: () {
                     _setCredential();
                     NavigationRouter.switchToLogin(context);
                   },
