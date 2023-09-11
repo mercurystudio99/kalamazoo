@@ -370,13 +370,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           horizontal: 16.0, vertical: 8.0),
                       child: InkWell(
                           onTap: () {
-                            Authentication().signInWithFacebook(onSuccess: () {
-                              NavigationRouter.switchToHome(context);
-                            }, onError: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Signin Failed!')),
-                              );
-                            });
+                            // Authentication().signInWithFacebook(onSuccess: () {
+                            //   NavigationRouter.switchToHome(context);
+                            // }, onError: () {
+                            //   ScaffoldMessenger.of(context).showSnackBar(
+                            //     const SnackBar(content: Text('Signin Failed!')),
+                            //   );
+                            // });
                           },
                           child: Image.asset('assets/facebook.png'))),
                   Padding(
