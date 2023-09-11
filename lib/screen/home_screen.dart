@@ -1858,7 +1858,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     NavigationRouter.switchToNotification(context);
                   },
                   leading: const Icon(Icons.notifications_outlined),
-                  title: const Text('Notification'),
+                  title: const Text(Util.notification),
                   trailing: const Icon(Icons.arrow_forward_ios),
                 ),
                 if (profile[USER_ROLE] == Util.owner)
@@ -1867,7 +1867,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       NavigationRouter.switchToSubscription(context);
                     },
                     leading: const Icon(Icons.subscriptions_outlined),
-                    title: const Text('Subscription'),
+                    title: const Text(Util.subscriptionTitle),
                     trailing: const Icon(Icons.arrow_forward_ios),
                   ),
                 ListTile(
@@ -1875,7 +1875,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     NavigationRouter.switchToEvent(context);
                   },
                   leading: const Icon(Icons.calendar_month),
-                  title: const Text('Event'),
+                  title: const Text(Util.event),
                   trailing: const Icon(Icons.arrow_forward_ios),
                 ),
                 // ListTile(
@@ -1899,7 +1899,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     NavigationRouter.switchToTerms(context);
                   },
                   leading: const Icon(Icons.shield_sharp),
-                  title: const Text('Terms And Condition'),
+                  title: const Text(Util.termsTitle),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                ),
+                ListTile(
+                  onTap: () {
+                    NavigationRouter.switchToPolicy(context);
+                  },
+                  leading: const Icon(Icons.policy),
+                  title: const Text(Util.policyTitle),
                   trailing: const Icon(Icons.arrow_forward_ios),
                 ),
                 ListTile(

@@ -5,14 +5,14 @@ import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/color.dart';
 
-class TermsScreen extends StatefulWidget {
-  const TermsScreen({super.key});
+class PolicyScreen extends StatefulWidget {
+  const PolicyScreen({super.key});
 
   @override
-  State<TermsScreen> createState() => _TermsScreenState();
+  State<PolicyScreen> createState() => _PolicyScreenState();
 }
 
-class _TermsScreenState extends State<TermsScreen> {
+class _PolicyScreenState extends State<PolicyScreen> {
   @override
   Widget build(BuildContext context) {
     List<Widget> list = [
@@ -30,7 +30,7 @@ class _TermsScreenState extends State<TermsScreen> {
               },
             ),
             const Text(
-              Util.termsTitle,
+              Util.policyTitle,
               style: TextStyle(
                 color: CustomColor.primaryColor,
                 fontSize: 22.0,
@@ -43,7 +43,7 @@ class _TermsScreenState extends State<TermsScreen> {
         ),
       ),
     ];
-    for (var element in Util.termsList) {
+    for (var element in Util.policyList) {
       list.add(Padding(
         padding: const EdgeInsets.symmetric(
             horizontal: Util.mainPadding, vertical: 5),

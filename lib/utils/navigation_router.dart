@@ -88,4 +88,8 @@ class NavigationRouter {
   static void switchToTerms(BuildContext context) {
     Navigator.pushNamed(context, "/TermsScreen");
   }
+
+  static void switchToPolicy(BuildContext context) {
+    Navigator.pushNamed(context, "/PolicyScreen");
+  }
 }
