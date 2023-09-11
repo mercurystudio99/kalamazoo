@@ -1,4 +1,7 @@
 import 'package:kalamazoo/utils/color.dart';
+import 'package:kalamazoo/utils/constants.dart';
+import 'package:kalamazoo/utils/navigation_router.dart';
+import 'package:kalamazoo/utils/globals.dart' as globals;
 import 'package:flutter/material.dart';
 
 class Accordion extends StatefulWidget {
@@ -35,6 +38,7 @@ class _AccordionState extends State<Accordion> {
             onPressed: () {},
           ),
           contentPadding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
+          onTap: () => NavigationRouter.switchToMain(context),
         ),
         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -70,7 +74,10 @@ class _AccordionState extends State<Accordion> {
                       Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           child: InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                globals.restaurantType = C_BREWERIES;
+                                NavigationRouter.switchToList(context);
+                              },
                               child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -98,7 +105,10 @@ class _AccordionState extends State<Accordion> {
                       Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           child: InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                globals.restaurantType = C_RESTAURANTS;
+                                NavigationRouter.switchToList(context);
+                              },
                               child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -112,7 +122,10 @@ class _AccordionState extends State<Accordion> {
                       Padding(
                           padding: const EdgeInsets.symmetric(vertical: 5),
                           child: InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                globals.restaurantType = C_WINERIES;
+                                NavigationRouter.switchToList(context);
+                              },
                               child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -141,6 +154,7 @@ class _AccordionState extends State<Accordion> {
             onPressed: () {},
           ),
           contentPadding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
+          onTap: () => NavigationRouter.switchToEvent(context),
         ),
         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),

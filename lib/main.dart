@@ -28,6 +28,8 @@ import 'package:kalamazoo/screen/webview_screen.dart';
 import 'package:kalamazoo/screen/event_screen.dart';
 import 'package:kalamazoo/screen/terms_screen.dart';
 import 'package:kalamazoo/screen/policy_screen.dart';
+import 'package:kalamazoo/screen/list_screen.dart';
+import 'package:kalamazoo/screen/main_screen.dart';
 import 'package:kalamazoo/screen/splash_screen.dart';
 
 var routes = <String, WidgetBuilder>{
@@ -53,6 +55,8 @@ var routes = <String, WidgetBuilder>{
   "/EventScreen": (BuildContext context) => const EventScreen(),
   "/TermsScreen": (BuildContext context) => const TermsScreen(),
   "/PolicyScreen": (BuildContext context) => const PolicyScreen(),
+  "/ListScreen": (BuildContext context) => const ListScreen(),
+  "/MainScreen": (BuildContext context) => const MainScreen(),
 };
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

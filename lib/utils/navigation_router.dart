@@ -92,4 +92,12 @@ class NavigationRouter {
   static void switchToPolicy(BuildContext context) {
     Navigator.pushNamed(context, "/PolicyScreen");
   }
+
+  static void switchToList(BuildContext context) {
+    Navigator.pushNamed(context, "/ListScreen");
+  }
+
+  static void switchToMain(BuildContext context) {
+    Navigator.pushNamed(context, "/MainScreen");
+  }
 }
