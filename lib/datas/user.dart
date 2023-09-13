@@ -5,6 +5,7 @@ class User {
   final String userId;
   final String userProfilePhoto;
   final String userFullname;
+  final String userBusinessname;
   final String userGender;
   final int userBirthDay;
   final int userBirthMonth;
@@ -14,6 +15,7 @@ class User {
   final String userPass;
   final String userLocation;
   final List<dynamic> userFavourites;
+  final List<dynamic> userAmenities;
   final String userRole;
   final String userStatus;
   final bool userIsVerified;
@@ -25,6 +27,7 @@ class User {
     required this.userId,
     required this.userProfilePhoto,
     required this.userFullname,
+    required this.userBusinessname,
     required this.userGender,
     required this.userBirthDay,
     required this.userBirthMonth,
@@ -34,6 +37,7 @@ class User {
     required this.userPass,
     required this.userLocation,
     required this.userFavourites,
+    required this.userAmenities,
     required this.userRole,
     required this.userStatus,
     required this.userIsVerified,
@@ -47,6 +51,7 @@ class User {
       userId: doc[USER_ID],
       userProfilePhoto: doc[USER_PROFILE_PHOTO],
       userFullname: doc[USER_FULLNAME] ?? '',
+      userBusinessname: doc[USER_BUSINESSNAME] ?? '',
       userGender: doc[USER_GENDER],
       userBirthDay: doc[USER_BIRTH_DAY],
       userBirthMonth: doc[USER_BIRTH_MONTH],
@@ -56,6 +61,7 @@ class User {
       userPass: doc[USER_PASS] ?? '',
       userLocation: doc[USER_LOCATION] ?? '',
       userFavourites: doc[USER_FAVOURITIES] ?? [],
+      userAmenities: doc[USER_AMENITIES] ?? [],
       userRole: doc[USER_ROLE] ?? '',
       userStatus: doc[USER_STATUS],
       userIsVerified: doc[USER_IS_VERIFIED] ?? false,

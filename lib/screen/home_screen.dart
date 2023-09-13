@@ -716,14 +716,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
+                          children: [
+                            const Text(
                               'Business Name',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              '',
-                              style: TextStyle(
+                              profile[USER_BUSINESSNAME] ?? '',
+                              style: const TextStyle(
                                   color: CustomColor.textDetailColor,
                                   fontSize: 12),
                             ),

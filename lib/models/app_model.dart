@@ -48,6 +48,35 @@ class AppModel extends Model {
     onSuccess();
   }
 
+  void ownerSignUp({
+    required String name,
+    required String email,
+    required String password,
+    required String businessname,
+    required String address,
+    required String phone,
+    // callback functions
+    required VoidCallback onSuccess,
+    required Function(String) onError,
+  }) async {
+    final docRef = _firestore.collection(C_USERS).doc();
+    await docRef.set({
+      USER_ID: docRef.id,
+      USER_FULLNAME: name,
+      USER_EMAIL: email,
+      USER_PASS: password,
+      USER_BUSINESSNAME: businessname,
+      USER_LOCATION: address,
+      USER_PHONE_NUMBER: phone,
+      USER_ROLE: globals.userRole,
+      USER_FAVOURITIES: [],
+      USER_AMENITIES: globals.ownerAmenities
+    });
+    globals.userEmail = email;
+    globals.userID = docRef.id;
+    onSuccess();
+  }
+
   // user sign in method
   void userSignIn({
     required String email,
