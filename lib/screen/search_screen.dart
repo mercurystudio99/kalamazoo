@@ -52,7 +52,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future<void> _getGeolocation() async {
     var count = 5;
-    var offset = 71; // +7
+    var offset = 0; // +7
     var i = 0;
     for (var element in restaurants) {
       i++;

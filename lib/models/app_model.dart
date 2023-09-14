@@ -350,7 +350,7 @@ class AppModel extends Model {
 
   // restaurant get method
   Future<QuerySnapshot<Map<String, dynamic>>> getAllRestaurant() async {
-    return await _firestore.collection(C_RESTAURANTS).get();
+    return await _firestore.collection(C_WINERIES).get();
   }
 
   // restaurant get method
@@ -397,7 +397,7 @@ class AppModel extends Model {
     required VoidCallback onSuccess,
     required VoidCallback onError,
   }) {
-    _firestore.collection(C_RESTAURANTS).doc(id).update({
+    _firestore.collection(C_WINERIES).doc(id).update({
       RESTAURANT_GEOLOCATION: geolocation,
     }).then((value) => onSuccess(),
         onError: (e) => debugPrint("Error updating document $e"));

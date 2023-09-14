@@ -5,6 +5,8 @@
 const String C_APPINFO = "AppInfo";
 const String C_USERS = "Users";
 const String C_RESTAURANTS = "Restaurants";
+const String C_WINERIES = "Wineries";
+const String C_BREWERIES = "Breweries";
 const String C_AMENITIES = "Amenities";
 const String C_C_MENU = "Menu";
 
