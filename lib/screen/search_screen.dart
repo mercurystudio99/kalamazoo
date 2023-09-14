@@ -27,7 +27,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   static final List<Map<String, dynamic>> searchResults = [];
   static List<Map<String, dynamic>> restaurants = [];
-  static List<Map<String, dynamic>> geolocations = [];
 
   @override
   void initState() {
@@ -52,19 +51,25 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Future<void> _getGeolocation() async {
+    var count = 5;
+    var offset = 68; // +7
     var i = 0;
     for (var element in restaurants) {
+      i++;
+      if (i < offset) continue;
+      if (element[RESTAURANT_ADDRESS] == null) continue;
       List<Location> locations =
           await locationFromAddress(element[RESTAURANT_ADDRESS]);
-      Map<String, dynamic> item = {};
       if (locations.isNotEmpty) {
-        item['id'] = element[RESTAURANT_ID];
-        item['latitude'] = locations[0].latitude;
-        item['longitude'] = locations[0].longitude;
-        geolocations.add(item);
+        debugPrint(element[RESTAURANT_ID]);
+        AppModel().updateRestaurantLocation(
+          id: element[RESTAURANT_ID],
+          geolocation: [locations[0].latitude, locations[0].longitude],
+          onSuccess: () {},
+          onError: () {},
+        );
       }
-      i++;
-      if (i > 7) break;
+      if (i > offset + count) break;
     }
   }
 

@@ -389,4 +389,17 @@ class AppModel extends Model {
         .doc(globals.menuID)
         .get();
   }
+
+  void updateRestaurantLocation({
+    required String id,
+    required List<dynamic> geolocation,
+    // callback functions
+    required VoidCallback onSuccess,
+    required VoidCallback onError,
+  }) {
+    _firestore.collection(C_RESTAURANTS).doc(id).update({
+      RESTAURANT_GEOLOCATION: geolocation,
+    }).then((value) => onSuccess(),
+        onError: (e) => debugPrint("Error updating document $e"));
+  }
 }

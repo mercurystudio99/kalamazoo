@@ -42,6 +42,7 @@ const String RESTAURANT_HOURS = "hours";
 const String RESTAURANT_AMENITIES = "amenities";
 const String RESTAURANT_DISCOUNT = "discount";
 const String RESTAURANT_MINCOST = "mincost";
+const String RESTAURANT_GEOLOCATION = "geolocation";
 
 const String MENU_ID = "id";
 const String MENU_NAME = "name";

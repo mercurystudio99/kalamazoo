@@ -158,12 +158,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    List<Placemark> placemarks =
-        await placemarkFromCoordinates(position.latitude, position.longitude);
-    String output = 'No results found.';
-    if (placemarks.isNotEmpty) {
-      output = placemarks[0].toString();
-    }
+    // List<Placemark> placemarks =
+    //     await placemarkFromCoordinates(position.latitude, position.longitude);
+    // String output = 'No results found.';
+    // if (placemarks.isNotEmpty) {
+    //   output = placemarks[0].toString();
+    // }
     // debugPrint(output);
   }
 
