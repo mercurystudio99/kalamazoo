@@ -34,9 +34,12 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final _searchController = TextEditingController();
+
   static List<Map<String, dynamic>> topMenuList = [];
   static List<Map<String, dynamic>> bestOffers = [];
   static List<Map<String, dynamic>> list = [];
+  static List<Map<String, dynamic>> searchResults = [];
   static List<String> categories = [];
 
   String _selectedTopMenu = '';
@@ -48,7 +51,25 @@ class _MainScreenState extends State<MainScreen> {
         onSuccess: (List<Map<String, dynamic>> param) {
           list.clear();
           list = param;
+          setState(() {});
         });
+  }
+
+  _onSearch(String text) async {
+    searchResults.clear();
+    if (text.isEmpty) {
+      return;
+    }
+
+    for (var restaurant in list) {
+      if (restaurant[RESTAURANT_BUSINESSNAME]
+          .toString()
+          .toLowerCase()
+          .contains(text.toLowerCase())) {
+        searchResults.add(restaurant);
+      }
+    }
+    setState(() {});
   }
 
   @override
@@ -438,7 +459,9 @@ class _MainScreenState extends State<MainScreen> {
                   padding: const EdgeInsets.symmetric(
                       horizontal: Util.mainPadding, vertical: 12.0),
                   child: TextFormField(
+                    controller: _searchController,
                     decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.symmetric(vertical: 10),
                       border: OutlineInputBorder(),
                       hintText: 'Search Restaurant or Food...',
                       prefixIconConstraints: BoxConstraints(
@@ -447,9 +470,7 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                       prefixIcon: Icon(Icons.search_outlined, size: 24),
                     ),
-                    onTap: () {
-                      NavigationRouter.switchToSearch(context);
-                    },
+                    onChanged: _onSearch,
                   ),
                 ),
                 Padding(
@@ -588,7 +609,9 @@ class _MainScreenState extends State<MainScreen> {
               Expanded(
                 child: ListBuilder(
                   isSelectionMode: false,
-                  list: list,
+                  list: _searchController.text.trim().isEmpty
+                      ? list
+                      : searchResults,
                   onSelectionChange: (bool x) {},
                 ),
               ),
@@ -775,7 +798,10 @@ class _ListBuilderState extends State<ListBuilder> {
               child: SizedBox(
                   height: 160,
                   child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        globals.restaurantID = restaurant[RESTAURANT_ID];
+                        NavigationRouter.switchToAbout(context);
+                      },
                       child: Card(
                           color: (widget.isSelectionMode
                               ? CustomColor.primaryColor
