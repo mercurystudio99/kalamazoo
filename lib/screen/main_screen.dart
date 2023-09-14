@@ -36,10 +36,20 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   static List<Map<String, dynamic>> topMenuList = [];
   static List<Map<String, dynamic>> bestOffers = [];
+  static List<Map<String, dynamic>> list = [];
   static List<String> categories = [];
 
   String _selectedTopMenu = '';
   int carouselIndicatorCurrent = 0;
+
+  void _getList() {
+    AppModel().getListByTopMenu(
+        topMenu: _selectedTopMenu,
+        onSuccess: (List<Map<String, dynamic>> param) {
+          list.clear();
+          list = param;
+        });
+  }
 
   @override
   void initState() {
@@ -473,104 +483,115 @@ class _MainScreenState extends State<MainScreen> {
                         ))),
               ]),
             ),
-            Expanded(
-              child: ListView(
-                children: [
-                  CarouselSlider(
-                    items: imageSliders,
-                    options: CarouselOptions(
-                        aspectRatio: 2.0,
-                        enlargeCenterPage: true,
-                        enableInfiniteScroll: false,
-                        initialPage: 0,
-                        autoPlay: true,
-                        pageViewKey:
-                            const PageStorageKey<String>('carousel_slider'),
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            carouselIndicatorCurrent = index;
-                          });
-                        }),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: imgList.asMap().entries.map((entry) {
-                      return Container(
-                        width:
-                            (carouselIndicatorCurrent == entry.key ? 34 : 16),
-                        height: 5.0,
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 8.0, horizontal: 4.0),
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10)),
-                            color: (carouselIndicatorCurrent == entry.key
-                                ? CustomColor.primaryColor
-                                : CustomColor.textDetailColor
-                                    .withOpacity(0.5))),
-                      );
-                    }).toList(),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Util.mainPadding, vertical: 4.0),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            Util.homeTopBrands,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
-                          ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: const Text(
-                              Util.seeAll,
-                              style: TextStyle(color: CustomColor.activeColor),
+            if (_selectedTopMenu.isEmpty)
+              Expanded(
+                child: ListView(
+                  children: [
+                    CarouselSlider(
+                      items: imageSliders,
+                      options: CarouselOptions(
+                          aspectRatio: 2.0,
+                          enlargeCenterPage: true,
+                          enableInfiniteScroll: false,
+                          initialPage: 0,
+                          autoPlay: true,
+                          pageViewKey:
+                              const PageStorageKey<String>('carousel_slider'),
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              carouselIndicatorCurrent = index;
+                            });
+                          }),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: imgList.asMap().entries.map((entry) {
+                        return Container(
+                          width:
+                              (carouselIndicatorCurrent == entry.key ? 34 : 16),
+                          height: 5.0,
+                          margin: const EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 4.0),
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                              color: (carouselIndicatorCurrent == entry.key
+                                  ? CustomColor.primaryColor
+                                  : CustomColor.textDetailColor
+                                      .withOpacity(0.5))),
+                        );
+                      }).toList(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: Util.mainPadding, vertical: 4.0),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              Util.homeTopBrands,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
                             ),
-                          ),
-                        ]),
-                  ),
-                  SizedBox(
-                      height: 130,
-                      child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: categories.map((category) {
-                              return brandBox(
-                                  category, categories.indexOf(category));
-                            }).toList(),
-                          ))),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Util.mainPadding),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            Util.homeBestOffers,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 18),
-                          ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: const Text(
-                              Util.seeAll,
-                              style: TextStyle(color: CustomColor.activeColor),
+                            GestureDetector(
+                              onTap: () {},
+                              child: const Text(
+                                Util.seeAll,
+                                style:
+                                    TextStyle(color: CustomColor.activeColor),
+                              ),
                             ),
-                          ),
-                        ]),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: Util.mainPadding, vertical: 10),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: bestOffersView),
-                  ),
-                ],
+                          ]),
+                    ),
+                    SizedBox(
+                        height: 130,
+                        child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: categories.map((category) {
+                                return brandBox(
+                                    category, categories.indexOf(category));
+                              }).toList(),
+                            ))),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: Util.mainPadding),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              Util.homeBestOffers,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
+                            ),
+                            GestureDetector(
+                              onTap: () {},
+                              child: const Text(
+                                Util.seeAll,
+                                style:
+                                    TextStyle(color: CustomColor.activeColor),
+                              ),
+                            ),
+                          ]),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: Util.mainPadding, vertical: 10),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: bestOffersView),
+                    ),
+                  ],
+                ),
               ),
-            ),
+            if (_selectedTopMenu.isNotEmpty)
+              Expanded(
+                child: ListBuilder(
+                  isSelectionMode: false,
+                  list: list,
+                  onSelectionChange: (bool x) {},
+                ),
+              ),
           ]),
         ],
       ),
@@ -583,6 +604,7 @@ class _MainScreenState extends State<MainScreen> {
           setState(() {
             _selectedTopMenu = item[TOPMENU_ID];
           });
+          _getList();
         },
         child: Container(
             margin:
@@ -722,5 +744,164 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
     );
+  }
+}
+
+class ListBuilder extends StatefulWidget {
+  const ListBuilder({
+    super.key,
+    required this.list,
+    required this.isSelectionMode,
+    required this.onSelectionChange,
+  });
+
+  final bool isSelectionMode;
+  final List<Map<String, dynamic>> list;
+  final Function(bool)? onSelectionChange;
+
+  @override
+  State<ListBuilder> createState() => _ListBuilderState();
+}
+
+class _ListBuilderState extends State<ListBuilder> {
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+        itemCount: widget.list.length,
+        itemBuilder: (_, int index) {
+          final Map<String, dynamic> restaurant = widget.list[index];
+          return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Util.mainPadding),
+              child: SizedBox(
+                  height: 160,
+                  child: InkWell(
+                      onTap: () {},
+                      child: Card(
+                          color: (widget.isSelectionMode
+                              ? CustomColor.primaryColor
+                              : Colors.white),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          shadowColor:
+                              CustomColor.primaryColor.withOpacity(0.2),
+                          elevation: 8,
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Row(children: [
+                                ClipRRect(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(15)),
+                                  child: restaurant[RESTAURANT_IMAGE] != null
+                                      ? Image.network(
+                                          restaurant[RESTAURANT_IMAGE],
+                                          width: 120,
+                                          height: 120,
+                                          fit: BoxFit.cover)
+                                      : Image.asset('assets/group.png',
+                                          width: 120,
+                                          height: 120,
+                                          fit: BoxFit.cover),
+                                ),
+                                const SizedBox(width: 20),
+                                Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        (restaurant[RESTAURANT_BUSINESSNAME]
+                                                    .toString()
+                                                    .length <
+                                                17)
+                                            ? restaurant[
+                                                RESTAURANT_BUSINESSNAME]
+                                            : '${restaurant[RESTAURANT_BUSINESSNAME].toString().substring(0, 15)}..',
+                                        style: TextStyle(
+                                            color: (widget.isSelectionMode
+                                                ? Colors.white
+                                                : CustomColor.primaryColor),
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18.0),
+                                      ),
+                                      if (restaurant[RESTAURANT_ADDRESS] !=
+                                          null)
+                                        SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                Util.mainPadding * 2 -
+                                                170,
+                                            child: Text(
+                                              (restaurant[RESTAURANT_ADDRESS]
+                                                          .toString()
+                                                          .trim()
+                                                          .length <
+                                                      100)
+                                                  ? restaurant[
+                                                      RESTAURANT_ADDRESS]
+                                                  : '${restaurant[RESTAURANT_ADDRESS].toString().substring(0, 100)}...',
+                                              style: TextStyle(
+                                                  fontSize: 12.0,
+                                                  color: (widget.isSelectionMode
+                                                      ? Colors.white
+                                                      : CustomColor
+                                                          .textHeadColor)),
+                                            )),
+                                      SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width -
+                                              Util.mainPadding * 2 -
+                                              170,
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  restaurant[RESTAURANT_ZIP],
+                                                  style: TextStyle(
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      fontSize: 15.0,
+                                                      color: (widget
+                                                              .isSelectionMode
+                                                          ? Colors.white
+                                                          : Colors.black),
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                Container(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(horizontal: 4),
+                                                  decoration: BoxDecoration(
+                                                    color:
+                                                        CustomColor.activeColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                  child: Row(
+                                                    children: const [
+                                                      Text(
+                                                        '4.8',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 12),
+                                                      ),
+                                                      Icon(
+                                                        Icons.star,
+                                                        color: Colors.white,
+                                                        size: 12,
+                                                      )
+                                                    ],
+                                                  ),
+                                                )
+                                              ])),
+                                    ])
+                              ]))))));
+        });
   }
 }

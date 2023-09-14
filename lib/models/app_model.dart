@@ -414,6 +414,24 @@ class AppModel extends Model {
         .get();
   }
 
+  void getListByTopMenu({
+    required String topMenu,
+    // callback functions
+    required Function(List<Map<String, dynamic>>) onSuccess,
+  }) async {
+    final snapshots = await _firestore
+        .collection(C_RESTAURANTS)
+        .where(RESTAURANT_CATEGORY, isEqualTo: topMenu)
+        .get();
+    if (snapshots.docs.isNotEmpty) {
+      List<Map<String, dynamic>> list = [];
+      for (var element in snapshots.docs) {
+        list.add(element.data());
+      }
+      onSuccess(list);
+    }
+  }
+
   // menu ID set method
   void setMenuID({
     required String id,
