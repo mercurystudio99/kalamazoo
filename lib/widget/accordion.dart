@@ -15,6 +15,7 @@ class Accordion extends StatefulWidget {
 class _AccordionState extends State<Accordion> {
   // Show or hide the content
   bool _showContent = false;
+  bool _showHours = false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +41,38 @@ class _AccordionState extends State<Accordion> {
           contentPadding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
           onTap: () => NavigationRouter.switchToMain(context),
         ),
+        Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Container(height: 1, color: Colors.white54)),
+        ListTile(
+          title: const Text(
+            'Happy Hour',
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
+          ),
+          trailing: IconButton(
+            icon: Icon(
+                _showHours
+                    ? Icons.keyboard_arrow_down
+                    : Icons.keyboard_arrow_right,
+                color: Colors.white),
+            onPressed: () {
+              setState(() {
+                _showHours = !_showHours;
+              });
+            },
+          ),
+          contentPadding: const EdgeInsets.fromLTRB(15, 5, 0, 10),
+        ),
+        _showHours
+            ? Container(
+                padding: const EdgeInsets.fromLTRB(15, 15, 12, 15),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const []),
+              )
+            : Container(),
+
         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Container(height: 1, color: Colors.white54)),
@@ -163,6 +196,21 @@ class _AccordionState extends State<Accordion> {
           leading: Image.asset('assets/kids_menu.png'),
           title: const Text(
             'Kids Menu',
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
+          ),
+          trailing: IconButton(
+            icon: const Icon(Icons.keyboard_arrow_right, color: Colors.white),
+            onPressed: () {},
+          ),
+          contentPadding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
+        ),
+        Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Container(height: 1, color: Colors.white54)),
+        ListTile(
+          title: const Text(
+            'Catering',
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
           ),
