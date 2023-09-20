@@ -87,6 +87,12 @@ class _MainScreenState extends State<MainScreen> {
         mode: Mode.overlay,
         language: "en",
         components: [Component(Component.country, "us")],
+        decoration: const InputDecoration(
+          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 1),
+          focusedBorder: UnderlineInputBorder(
+              borderSide:
+                  BorderSide(width: 1, color: CustomColor.primaryColor)),
+        ),
         apiKey: kGoogleApiKey);
     if (p != null) {
       final placeDetails = await GoogleMapsPlaces(apiKey: kGoogleApiKey)
@@ -459,7 +465,9 @@ class _MainScreenState extends State<MainScreen> {
                                     _onLocation(context);
                                   },
                                   child: Text(
-                                    location,
+                                    location.length < 32
+                                        ? location
+                                        : '${location.substring(0, 32)}..',
                                     style: const TextStyle(color: Colors.white),
                                   ))
                             ],
