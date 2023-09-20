@@ -1,4 +1,8 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_maps_webservice/places.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,6 +14,7 @@ import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
 import 'package:kalamazoo/utils/constants.dart';
 import 'package:kalamazoo/models/app_model.dart';
+import 'package:kalamazoo/key.dart';
 
 final List<Map<String, dynamic>> imgList = [
   {
@@ -36,6 +41,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final _searchController = TextEditingController();
 
+  static String location = 'Kalamazoo, MI, USA';
   static List<Map<String, dynamic>> topMenuList = [];
   static List<Map<String, dynamic>> bestOffers = [];
   static List<Map<String, dynamic>> list = [];
@@ -70,6 +76,26 @@ class _MainScreenState extends State<MainScreen> {
       }
     }
     setState(() {});
+  }
+
+  Future<void> _onLocation(BuildContext context) async {
+    Prediction? p = await PlacesAutocomplete.show(
+        context: context,
+        radius: 100000000,
+        types: [],
+        strictbounds: false,
+        mode: Mode.overlay,
+        language: "en",
+        components: [Component(Component.country, "us")],
+        apiKey: kGoogleApiKey);
+    if (p != null) {
+      final placeDetails = await GoogleMapsPlaces(apiKey: kGoogleApiKey)
+          .getDetailsByPlaceId(p.placeId!);
+      setState(() {
+        location = placeDetails.result.formattedAddress!;
+      });
+    }
+    if (p != null) displayPrediction(p);
   }
 
   @override
@@ -423,15 +449,19 @@ class _MainScreenState extends State<MainScreen> {
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(
+                            children: [
+                              const Icon(
                                 Icons.location_on,
                                 color: Colors.red,
                               ),
-                              Text(
-                                'Kalamazoo, Michigan',
-                                style: TextStyle(color: Colors.white),
-                              ),
+                              TextButton(
+                                  onPressed: () {
+                                    _onLocation(context);
+                                  },
+                                  child: Text(
+                                    location,
+                                    style: const TextStyle(color: Colors.white),
+                                  ))
                             ],
                           )
                         ],
@@ -930,4 +960,16 @@ class _ListBuilderState extends State<ListBuilder> {
                               ]))))));
         });
   }
+}
+
+Future<void> displayPrediction(Prediction p) async {
+  GoogleMapsPlaces places = GoogleMapsPlaces(
+    apiKey: kGoogleApiKey,
+    apiHeaders: await const GoogleApiHeaders().getHeaders(),
+  );
+  PlacesDetailsResponse detail = await places.getDetailsByPlaceId(p.placeId!);
+  final lat = detail.result.geometry!.location.lat;
+  final lng = detail.result.geometry!.location.lng;
+
+  debugPrint("${p.description} - $lat/$lng");
 }
