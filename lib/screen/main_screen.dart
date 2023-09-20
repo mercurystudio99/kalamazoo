@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -41,7 +42,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final _searchController = TextEditingController();
 
-  static String location = 'Kalamazoo, MI, USA';
+  static String location = '';
   static List<Map<String, dynamic>> topMenuList = [];
   static List<Map<String, dynamic>> bestOffers = [];
   static List<Map<String, dynamic>> list = [];
@@ -50,6 +51,12 @@ class _MainScreenState extends State<MainScreen> {
 
   String _selectedTopMenu = '';
   int carouselIndicatorCurrent = 0;
+
+  void _getNear() {
+    AppModel().getData(onSuccess: (List<Map<String, dynamic>> param) {
+      bestOffers = param;
+    });
+  }
 
   void _getList() {
     AppModel().getListByTopMenu(
@@ -101,25 +108,44 @@ class _MainScreenState extends State<MainScreen> {
         location = placeDetails.result.formattedAddress!;
       });
     }
-    if (p != null) displayPrediction(p);
+    if (p != null) getGeoInfo(p);
+  }
+
+  Future<void> getGeoInfo(Prediction p) async {
+    GoogleMapsPlaces places = GoogleMapsPlaces(
+      apiKey: kGoogleApiKey,
+      apiHeaders: await const GoogleApiHeaders().getHeaders(),
+    );
+    PlacesDetailsResponse detail = await places.getDetailsByPlaceId(p.placeId!);
+    final lat = detail.result.geometry!.location.lat;
+    final lng = detail.result.geometry!.location.lng;
+    List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
+    if (placemarks.isNotEmpty) {
+      globals.searchFullAddress = location;
+      globals.searchPriority = globals.searchFullAddress
+              .contains(placemarks[0].postalCode.toString())
+          ? RESTAURANT_ZIP
+          : RESTAURANT_CITY;
+      globals.searchCity = placemarks[0].locality!;
+      globals.searchZip = placemarks[0].postalCode.toString();
+      _selectedTopMenu.isEmpty ? _getNear() : _getList();
+    }
   }
 
   @override
   void initState() {
     super.initState();
+    location = globals.searchFullAddress;
     AppModel().getCategory(onSuccess: (Map<String, dynamic> param) {
       param.forEach((key, value) {
         if (value) categories.add(key);
       });
-      AppModel().getData(onSuccess: (List<Map<String, dynamic>> param) {
-        bestOffers = param;
-      });
     });
+    _getNear();
     AppModel().getTopMenu(
       onSuccess: (List<Map<String, dynamic>> param) {
         topMenuList = param;
         setState(() {});
-        debugPrint("$topMenuList");
       },
       onEmpty: () {},
     );
@@ -968,15 +994,4 @@ class _ListBuilderState extends State<ListBuilder> {
                               ]))))));
         });
   }
-}
-
-Future<void> displayPrediction(Prediction p) async {
-  GoogleMapsPlaces places = GoogleMapsPlaces(
-    apiKey: kGoogleApiKey,
-    apiHeaders: await const GoogleApiHeaders().getHeaders(),
-  );
-  PlacesDetailsResponse detail = await places.getDetailsByPlaceId(p.placeId!);
-  final lat = detail.result.geometry!.location.lat;
-  final lng = detail.result.geometry!.location.lng;
-  debugPrint("${p.description} - $lat/$lng");
 }

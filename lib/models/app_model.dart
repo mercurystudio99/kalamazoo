@@ -25,6 +25,12 @@ class AppModel extends Model {
   // End
   EmailOTP myauth = EmailOTP();
 
+  String getSearchAreaKey() {
+    return (globals.searchPriority == RESTAURANT_ZIP)
+        ? globals.searchZip
+        : globals.searchCity;
+  }
+
   // user sign up method
   void userSignUp({
     required String name,
@@ -258,7 +264,12 @@ class AppModel extends Model {
   }) {
     // categories.forEach((key, value) {
     // if (value) {
-    _firestore.collection(C_RESTAURANTS).limit(2).get().then(
+    _firestore
+        .collection(C_RESTAURANTS)
+        .where(globals.searchPriority, isEqualTo: getSearchAreaKey())
+        .limit(2)
+        .get()
+        .then(
       (querySnapshot) {
         List<Map<String, dynamic>> result = [];
         for (var snapshot in querySnapshot.docs) {
@@ -422,6 +433,7 @@ class AppModel extends Model {
     final snapshots = await _firestore
         .collection(C_RESTAURANTS)
         .where(RESTAURANT_CATEGORY, isEqualTo: topMenu)
+        .where(globals.searchPriority, isEqualTo: getSearchAreaKey())
         .get();
     if (snapshots.docs.isNotEmpty) {
       List<Map<String, dynamic>> list = [];
