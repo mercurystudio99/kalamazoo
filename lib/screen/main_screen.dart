@@ -978,6 +978,5 @@ Future<void> displayPrediction(Prediction p) async {
   PlacesDetailsResponse detail = await places.getDetailsByPlaceId(p.placeId!);
   final lat = detail.result.geometry!.location.lat;
   final lng = detail.result.geometry!.location.lng;
-
   debugPrint("${p.description} - $lat/$lng");
 }
