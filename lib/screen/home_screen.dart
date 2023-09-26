@@ -4,6 +4,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_maps_webservice/places.dart';
 
 import 'package:kalamazoo/utils/globals.dart' as globals;
 import 'package:kalamazoo/utils/navigation_router.dart';
@@ -12,6 +15,7 @@ import 'package:kalamazoo/utils/color.dart';
 import 'package:kalamazoo/utils/constants.dart';
 import 'package:kalamazoo/models/app_model.dart';
 import 'package:kalamazoo/widget/accordion.dart';
+import 'package:kalamazoo/key.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,7 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
   bool _setting = true;
   int _selectedIndex = 0;
-  String _selectedTopMenu = '';
   bool isSelectionMode = false;
   bool _showDaysHours = false;
   static List<Map<String, dynamic>> favourites = [];
@@ -34,11 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
   static Map<String, dynamic> profile = {};
 
   final _searchFavoriteController = TextEditingController();
+  static String location = '';
 
   static final List<Map<String, dynamic>> _searchFavorites = [];
-
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   _onSearchFavorite(String text) async {
     _searchFavorites.clear();
@@ -69,6 +70,52 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _setCredential() async {
     final SharedPreferences prefs = await _prefs;
     prefs.setString('credential', '').then((bool success) {});
+  }
+
+  Future<void> _onLocation(BuildContext context) async {
+    Prediction? p = await PlacesAutocomplete.show(
+        context: context,
+        radius: 100000000,
+        types: [],
+        strictbounds: false,
+        mode: Mode.overlay,
+        language: "en",
+        components: [Component(Component.country, "us")],
+        decoration: const InputDecoration(
+          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 1),
+          focusedBorder: UnderlineInputBorder(
+              borderSide:
+                  BorderSide(width: 1, color: CustomColor.primaryColor)),
+        ),
+        apiKey: kGoogleApiKey);
+    if (p != null) {
+      final placeDetails = await GoogleMapsPlaces(apiKey: kGoogleApiKey)
+          .getDetailsByPlaceId(p.placeId!);
+      setState(() {
+        location = placeDetails.result.formattedAddress!;
+      });
+    }
+    if (p != null) getGeoInfo(p);
+  }
+
+  Future<void> getGeoInfo(Prediction p) async {
+    GoogleMapsPlaces places = GoogleMapsPlaces(
+      apiKey: kGoogleApiKey,
+      apiHeaders: await const GoogleApiHeaders().getHeaders(),
+    );
+    PlacesDetailsResponse detail = await places.getDetailsByPlaceId(p.placeId!);
+    final lat = detail.result.geometry!.location.lat;
+    final lng = detail.result.geometry!.location.lng;
+    List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
+    if (placemarks.isNotEmpty) {
+      globals.searchFullAddress = location;
+      globals.searchPriority = globals.searchFullAddress
+              .contains(placemarks[0].postalCode.toString())
+          ? RESTAURANT_ZIP
+          : RESTAURANT_CITY;
+      globals.searchCity = placemarks[0].locality!;
+      globals.searchZip = placemarks[0].postalCode.toString();
+    }
   }
 
   void _handleMenuButtonPressed() {
@@ -138,6 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void initializeSelection() {
+    location = globals.searchFullAddress;
     if (globals.userFavourites.isNotEmpty) {
       AppModel().getFavourites(onSuccess: (List<Map<String, dynamic>> param) {
         favourites = param;
@@ -189,10 +237,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       Icons.location_on,
                       color: Colors.red,
                     ),
-                    const Text(
-                      'Kalamazoo, Michigan, USA',
-                      style: TextStyle(color: CustomColor.textDetailColor),
-                    ),
+                    TextButton(
+                        onPressed: () {
+                          _onLocation(context);
+                        },
+                        child: Text(
+                          location.length < 20
+                              ? location
+                              : '${location.substring(0, 20)}..',
+                          style: const TextStyle(color: Colors.black),
+                        )),
                     const Spacer(),
                     const Icon(
                       Icons.sort,
@@ -247,7 +301,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           suffixIcon: IconButton(
                               onPressed: () {},
                               icon: Image.asset('assets/filter.png'))),
-                      onTap: () {
+                      onFieldSubmitted: (value) {
+                        globals.searchKeyword = value;
                         NavigationRouter.switchToSearch(context);
                       },
                     ),

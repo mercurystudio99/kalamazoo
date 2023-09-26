@@ -19,3 +19,4 @@ String searchFullAddress = "Kalamazoo, MI, USA";
 String searchCity = "Kalamazoo";
 String searchZip = "";
 String searchPriority = RESTAURANT_CITY;
+String searchKeyword = '';

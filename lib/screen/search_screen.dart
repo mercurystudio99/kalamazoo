@@ -1,6 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:flutter_google_places/flutter_google_places.dart';
+import 'package:google_maps_webservice/places.dart';
+
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
@@ -8,8 +13,7 @@ import 'package:kalamazoo/utils/globals.dart' as globals;
 import 'package:kalamazoo/utils/constants.dart';
 import 'package:kalamazoo/models/app_model.dart';
 import 'package:kalamazoo/widget/processing.dart';
-
-const List<String> list = <String>['Kalamazoo, Michigan, USA'];
+import 'package:kalamazoo/key.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -19,16 +23,63 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  String location = '';
   bool isSelectionMode = false;
-  String dropdownValue = list.first;
   final _searchController = TextEditingController();
 
   static final List<Map<String, dynamic>> searchResults = [];
   static List<Map<String, dynamic>> restaurants = [];
 
+  Future<void> _onLocation(BuildContext context) async {
+    Prediction? p = await PlacesAutocomplete.show(
+        context: context,
+        radius: 100000000,
+        types: [],
+        strictbounds: false,
+        mode: Mode.overlay,
+        language: "en",
+        components: [Component(Component.country, "us")],
+        decoration: const InputDecoration(
+          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 1),
+          focusedBorder: UnderlineInputBorder(
+              borderSide:
+                  BorderSide(width: 1, color: CustomColor.primaryColor)),
+        ),
+        apiKey: kGoogleApiKey);
+    if (p != null) {
+      final placeDetails = await GoogleMapsPlaces(apiKey: kGoogleApiKey)
+          .getDetailsByPlaceId(p.placeId!);
+      setState(() {
+        location = placeDetails.result.formattedAddress!;
+      });
+    }
+    if (p != null) getGeoInfo(p);
+  }
+
+  Future<void> getGeoInfo(Prediction p) async {
+    GoogleMapsPlaces places = GoogleMapsPlaces(
+      apiKey: kGoogleApiKey,
+      apiHeaders: await const GoogleApiHeaders().getHeaders(),
+    );
+    PlacesDetailsResponse detail = await places.getDetailsByPlaceId(p.placeId!);
+    final lat = detail.result.geometry!.location.lat;
+    final lng = detail.result.geometry!.location.lng;
+    List<Placemark> placemarks = await placemarkFromCoordinates(lat, lng);
+    if (placemarks.isNotEmpty) {
+      globals.searchFullAddress = location;
+      globals.searchPriority = globals.searchFullAddress
+              .contains(placemarks[0].postalCode.toString())
+          ? RESTAURANT_ZIP
+          : RESTAURANT_CITY;
+      globals.searchCity = placemarks[0].locality!;
+      globals.searchZip = placemarks[0].postalCode.toString();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    location = globals.searchFullAddress;
   }
 
   _onSearch(String text) async {
@@ -108,36 +159,16 @@ class _SearchScreenState extends State<SearchScreen> {
                               padding:
                                   const EdgeInsets.only(left: 44.0, right: 8),
                               margin: const EdgeInsets.only(top: 15.0),
-                              child: DropdownButton<String>(
-                                underline: const SizedBox(
-                                  width: 1,
-                                ),
-                                value: dropdownValue,
-                                hint: const Text(
-                                  'Kalamazoo, Michigan, USA',
-                                  style: TextStyle(
-                                      color: CustomColor.textDetailColor),
-                                ),
-                                borderRadius: BorderRadius.circular(10.0),
-                                icon: const Icon(
-                                  Icons.keyboard_arrow_down,
-                                  color: Colors.black,
-                                ),
-                                elevation: 16,
-                                onChanged: (String? value) {
-                                  // This is called when the user selects an item.
-                                  setState(() {
-                                    dropdownValue = value!;
-                                  });
-                                },
-                                items: list.map<DropdownMenuItem<String>>(
-                                    (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
+                              child: TextButton(
+                                  onPressed: () {
+                                    _onLocation(context);
+                                  },
+                                  child: Text(
+                                    location.length < 32
+                                        ? location
+                                        : '${location.substring(0, 32)}..',
+                                    style: const TextStyle(color: Colors.black),
+                                  )),
                             ),
                             Container(
                               margin:
