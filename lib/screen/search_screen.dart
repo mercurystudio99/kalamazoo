@@ -25,9 +25,9 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   String location = '';
   bool isSelectionMode = false;
+  bool initSearch = true;
   final _searchController = TextEditingController();
 
-  static final List<Map<String, dynamic>> searchResults = [];
   static List<Map<String, dynamic>> restaurants = [];
 
   Future<void> _onLocation(BuildContext context) async {
@@ -73,6 +73,8 @@ class _SearchScreenState extends State<SearchScreen> {
           : RESTAURANT_CITY;
       globals.searchCity = placemarks[0].locality!;
       globals.searchZip = placemarks[0].postalCode.toString();
+      _searchController.text = '';
+      setState(() {});
     }
   }
 
@@ -82,27 +84,9 @@ class _SearchScreenState extends State<SearchScreen> {
     location = globals.searchFullAddress;
   }
 
-  _onSearch(String text) async {
-    searchResults.clear();
-    if (text.isEmpty) {
-      return;
-    }
-
-    for (var restaurant in restaurants) {
-      if (restaurant[RESTAURANT_BUSINESSNAME]
-          .toString()
-          .toLowerCase()
-          .contains(text.toLowerCase())) {
-        searchResults.add(restaurant);
-      }
-    }
-    setState(() {});
-  }
-
   @override
   void dispose() {
     restaurants.clear();
-    searchResults.clear();
     super.dispose();
   }
 
@@ -110,12 +94,32 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      future: AppModel().getAllRestaurant(),
+      future: AppModel().getListRestaurant(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           restaurants.clear();
-          for (var doc in snapshot.data!.docs) {
-            restaurants.add(doc.data());
+          if (initSearch) {
+            for (var doc in snapshot.data!.docs) {
+              if (doc
+                  .data()[RESTAURANT_BUSINESSNAME]
+                  .toString()
+                  .toLowerCase()
+                  .contains(globals.searchKeyword.trim().toLowerCase())) {
+                restaurants.add(doc.data());
+              }
+            }
+            globals.searchKeyword = '';
+            initSearch = false;
+          } else {
+            for (var doc in snapshot.data!.docs) {
+              if (doc
+                  .data()[RESTAURANT_BUSINESSNAME]
+                  .toString()
+                  .toLowerCase()
+                  .contains(_searchController.text.trim().toLowerCase())) {
+                restaurants.add(doc.data());
+              }
+            }
           }
           return Stack(
             fit: StackFit.expand,
@@ -207,14 +211,16 @@ class _SearchScreenState extends State<SearchScreen> {
                           ),
                           prefixIcon: Icon(Icons.search_outlined, size: 24),
                         ),
-                        onChanged: _onSearch,
+                        onChanged: (value) {
+                          setState(() {});
+                        },
                       ),
                     ),
                   ),
                   Expanded(
                     child: ListBuilder(
                       isSelectionMode: isSelectionMode,
-                      list: searchResults,
+                      list: restaurants,
                       onSelectionChange: (bool x) {
                         setState(() {
                           isSelectionMode = x;

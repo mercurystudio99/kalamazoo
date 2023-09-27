@@ -408,19 +408,17 @@ class AppModel extends Model {
   }
 
   // restaurant get method
-  Future<QuerySnapshot<Map<String, dynamic>>> getAllRestaurant() async {
-    return await _firestore.collection(C_RESTAURANTS).get();
-  }
-
-  // restaurant get method
   Future<QuerySnapshot<Map<String, dynamic>>> getListRestaurant() async {
-    return await _firestore.collection(globals.restaurantType).get();
+    return await _firestore
+        .collection(globals.restaurantType)
+        .where(globals.searchPriority, isEqualTo: getSearchAreaKey())
+        .get();
   }
 
   // restaurant get method
   Future<QuerySnapshot<Map<String, dynamic>>> getRestaurant() async {
     return await _firestore
-        .collection(C_RESTAURANTS)
+        .collection(globals.restaurantType)
         .where(RESTAURANT_ID, isEqualTo: globals.restaurantID)
         .get();
   }
@@ -431,7 +429,7 @@ class AppModel extends Model {
     required Function(List<Map<String, dynamic>>) onSuccess,
   }) async {
     final snapshots = await _firestore
-        .collection(C_RESTAURANTS)
+        .collection(globals.restaurantType)
         .where(RESTAURANT_CATEGORY, isEqualTo: topMenu)
         .where(globals.searchPriority, isEqualTo: getSearchAreaKey())
         .get();
