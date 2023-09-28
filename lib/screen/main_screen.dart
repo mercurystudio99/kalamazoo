@@ -45,6 +45,7 @@ class _MainScreenState extends State<MainScreen> {
   static String location = '';
   static List<Map<String, dynamic>> topMenuList = [];
   static List<Map<String, dynamic>> bestOffers = [];
+  static List<Map<String, dynamic>> topBrands = [];
   static List<Map<String, dynamic>> list = [];
   static List<Map<String, dynamic>> searchResults = [];
   static List<String> categories = [];
@@ -52,10 +53,20 @@ class _MainScreenState extends State<MainScreen> {
   String _selectedTopMenu = '';
   int carouselIndicatorCurrent = 0;
 
-  void _getNear() {
-    AppModel().getData(onSuccess: (List<Map<String, dynamic>> param) {
-      bestOffers = param;
-    });
+  void _getOffer() {
+    AppModel().getOffers(
+        all: false,
+        onSuccess: (List<Map<String, dynamic>> param) {
+          bestOffers = param;
+        });
+  }
+
+  void _getBrand() {
+    AppModel().getBrands(
+        all: false,
+        onSuccess: (List<Map<String, dynamic>> param) {
+          topBrands = param;
+        });
   }
 
   void _getList() {
@@ -128,7 +139,12 @@ class _MainScreenState extends State<MainScreen> {
           : RESTAURANT_CITY;
       globals.searchCity = placemarks[0].locality!;
       globals.searchZip = placemarks[0].postalCode.toString();
-      _selectedTopMenu.isEmpty ? _getNear() : _getList();
+      if (_selectedTopMenu.isEmpty) {
+        _getBrand();
+        _getOffer();
+      } else {
+        _getList();
+      }
     }
   }
 
@@ -141,7 +157,8 @@ class _MainScreenState extends State<MainScreen> {
         if (value) categories.add(key);
       });
     });
-    _getNear();
+    _getBrand();
+    _getOffer();
     AppModel().getTopMenu(
       onSuccess: (List<Map<String, dynamic>> param) {
         topMenuList = param;
@@ -154,6 +171,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void dispose() {
     categories.clear();
+    topBrands.clear();
     bestOffers.clear();
     super.dispose();
   }
@@ -633,9 +651,8 @@ class _MainScreenState extends State<MainScreen> {
                         child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Row(
-                              children: categories.map((category) {
-                                return brandBox(
-                                    category, categories.indexOf(category));
+                              children: topBrands.map((brand) {
+                                return brandBox(brand);
                               }).toList(),
                             ))),
                     Padding(
@@ -722,115 +739,126 @@ class _MainScreenState extends State<MainScreen> {
             )));
   }
 
-  Widget brandBox(String title, int index) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-      padding: const EdgeInsets.all(4),
-      width: 250,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: CustomColor.primaryColor.withOpacity(0.2),
-            blurRadius: 8.0,
+  Widget brandBox(Map<String, dynamic> brand) {
+    return InkWell(
+        onTap: () {
+          AppModel().setRestaurant(
+              restaurant: brand,
+              onSuccess: () => NavigationRouter.switchToAbout(context));
+        },
+        child: Container(
+          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          padding: const EdgeInsets.all(4),
+          width: 250,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: CustomColor.primaryColor.withOpacity(0.2),
+                blurRadius: 8.0,
+              ),
+            ],
+            border: Border.all(color: Colors.white),
+            borderRadius: BorderRadius.circular(10),
           ),
-        ],
-        border: Border.all(color: Colors.white),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      alignment: Alignment.center,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-              width: 100,
-              child: Image.asset(
-                'assets/group.png',
-                fit: BoxFit.cover,
-              )),
-          Column(
+          alignment: Alignment.center,
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const Text('Mc Donald\'S'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SvgPicture.asset('assets/dish.svg'),
-                  const Text(
-                    'Burger',
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      color: CustomColor.textDetailColor,
-                    ),
+            children: [
+              SizedBox(
+                width: 100,
+                child: Image.network(
+                  brand[RESTAURANT_IMAGE] ??
+                      'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(brand[RESTAURANT_BUSINESSNAME].toString().length < 10
+                      ? brand[RESTAURANT_BUSINESSNAME].toString()
+                      : '${brand[RESTAURANT_BUSINESSNAME].toString().substring(0, 10)}..'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SvgPicture.asset('assets/dish.svg'),
+                      const Text(
+                        'Burger',
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          color: CustomColor.textDetailColor,
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      const Icon(
+                        Icons.location_on,
+                        color: CustomColor.activeColor,
+                        size: 12,
+                      ),
+                      const Text(
+                        '1.2km',
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          color: CustomColor.textDetailColor,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  const Icon(
-                    Icons.location_on,
-                    color: CustomColor.activeColor,
-                    size: 12,
-                  ),
-                  const Text(
-                    '1.2km',
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      color: CustomColor.textDetailColor,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        decoration: BoxDecoration(
+                          color: CustomColor.activeColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          children: const [
+                            Text(
+                              '4.8',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 12),
+                            ),
+                            Icon(
+                              Icons.star,
+                              color: Colors.white,
+                              size: 12,
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      const Icon(
+                        Icons.access_time,
+                        size: 12,
+                      ),
+                      const Text(
+                        '10min',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          color: CustomColor.textDetailColor,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    decoration: BoxDecoration(
-                      color: CustomColor.activeColor,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Row(
-                      children: const [
-                        Text(
-                          '4.8',
-                          style: TextStyle(color: Colors.white, fontSize: 12),
-                        ),
-                        Icon(
-                          Icons.star,
-                          color: Colors.white,
-                          size: 12,
-                        )
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 10.0,
-                  ),
-                  const Icon(
-                    Icons.access_time,
-                    size: 12,
-                  ),
-                  const Text(
-                    '10min',
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      color: CustomColor.textDetailColor,
-                    ),
-                  ),
-                ],
+              const Icon(
+                Icons.bookmark_border_outlined,
+                color: CustomColor.activeColor,
               ),
             ],
           ),
-          const Icon(
-            Icons.bookmark_border_outlined,
-            color: CustomColor.activeColor,
-          ),
-        ],
-      ),
-    );
+        ));
   }
 }
 

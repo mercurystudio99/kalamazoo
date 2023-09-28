@@ -258,29 +258,88 @@ class AppModel extends Model {
     onSuccess(categories);
   }
 
-  void getData({
+  void getOffers({
+    required bool all,
     // callback functions
     required Function(List<Map<String, dynamic>>) onSuccess,
   }) {
     // categories.forEach((key, value) {
     // if (value) {
-    _firestore
-        .collection(C_RESTAURANTS)
-        .where(globals.searchPriority, isEqualTo: getSearchAreaKey())
-        .limit(2)
-        .get()
-        .then(
-      (querySnapshot) {
-        List<Map<String, dynamic>> result = [];
-        for (var snapshot in querySnapshot.docs) {
-          result.add(snapshot.data());
-        }
-        onSuccess(result);
-      },
-      onError: (e) => debugPrint("Error completing: $e"),
-    );
+    if (all) {
+      _firestore
+          .collection(globals.restaurantType)
+          .where(globals.searchPriority, isEqualTo: getSearchAreaKey())
+          .get()
+          .then(
+        (querySnapshot) {
+          List<Map<String, dynamic>> result = [];
+          for (var snapshot in querySnapshot.docs) {
+            result.add(snapshot.data());
+          }
+          onSuccess(result);
+        },
+        onError: (e) => debugPrint("Error completing: $e"),
+      );
+    } else {
+      _firestore
+          .collection(globals.restaurantType)
+          .where(globals.searchPriority, isEqualTo: getSearchAreaKey())
+          .limit(2)
+          .get()
+          .then(
+        (querySnapshot) {
+          List<Map<String, dynamic>> result = [];
+          for (var snapshot in querySnapshot.docs) {
+            result.add(snapshot.data());
+          }
+          onSuccess(result);
+        },
+        onError: (e) => debugPrint("Error completing: $e"),
+      );
+    }
     // }
     // });
+  }
+
+  void getBrands({
+    required bool all,
+    // callback functions
+    required Function(List<Map<String, dynamic>>) onSuccess,
+  }) {
+    if (all) {
+      _firestore
+          .collection(globals.restaurantType)
+          .where(globals.searchPriority, isEqualTo: getSearchAreaKey())
+          .where(RESTAURANT_BRAND, isEqualTo: true)
+          .get()
+          .then(
+        (querySnapshot) {
+          List<Map<String, dynamic>> result = [];
+          for (var snapshot in querySnapshot.docs) {
+            result.add(snapshot.data());
+          }
+          onSuccess(result);
+        },
+        onError: (e) => debugPrint("Error completing: $e"),
+      );
+    } else {
+      _firestore
+          .collection(globals.restaurantType)
+          .where(globals.searchPriority, isEqualTo: getSearchAreaKey())
+          .where(RESTAURANT_BRAND, isEqualTo: true)
+          .limit(2)
+          .get()
+          .then(
+        (querySnapshot) {
+          List<Map<String, dynamic>> result = [];
+          for (var snapshot in querySnapshot.docs) {
+            result.add(snapshot.data());
+          }
+          onSuccess(result);
+        },
+        onError: (e) => debugPrint("Error completing: $e"),
+      );
+    }
   }
 
   void getAmenities({

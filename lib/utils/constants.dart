@@ -35,6 +35,7 @@ const String USER_LAST_LOGIN = "user_last_login";
 
 const String RESTAURANT_ID = "id";
 const String RESTAURANT_ADDRESS = "address";
+const String RESTAURANT_BRAND = "brand";
 const String RESTAURANT_BUSINESSNAME = "businessName";
 const String RESTAURANT_CITY = "city";
 const String RESTAURANT_EMAIL = "email";
