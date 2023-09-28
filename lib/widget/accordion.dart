@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 
 class Accordion extends StatefulWidget {
   final List<String> contents;
+  final VoidCallback reloadFn;
 
-  const Accordion({Key? key, required this.contents}) : super(key: key);
+  const Accordion({Key? key, required this.contents, required this.reloadFn})
+      : super(key: key);
   @override
   State<Accordion> createState() => _AccordionState();
 }
@@ -39,7 +41,10 @@ class _AccordionState extends State<Accordion> {
             onPressed: () {},
           ),
           contentPadding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
-          onTap: () => NavigationRouter.switchToMain(context),
+          onTap: () async {
+            await NavigationRouter.switchToMain(context);
+            widget.reloadFn();
+          },
         ),
         Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),

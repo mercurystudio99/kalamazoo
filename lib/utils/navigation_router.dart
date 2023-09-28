@@ -97,7 +97,7 @@ class NavigationRouter {
     Navigator.pushNamed(context, "/ListScreen");
   }
 
-  static void switchToMain(BuildContext context) {
-    Navigator.pushNamed(context, "/MainScreen");
+  static Future<void> switchToMain(BuildContext context) async {
+    await Navigator.pushNamed(context, "/MainScreen");
   }
 }

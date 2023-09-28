@@ -315,7 +315,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.symmetric(
                       horizontal: Util.mainPadding, vertical: 5),
                   child: InkWell(
-                      onTap: () => NavigationRouter.switchToMain(context),
+                      onTap: () async {
+                        await NavigationRouter.switchToMain(context);
+                        setState(() {
+                          location = globals.searchFullAddress;
+                        });
+                      },
                       child: Container(
                           decoration: const BoxDecoration(
                             color: CustomColor.activeColor,
@@ -338,16 +343,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                       color: Colors.white,
                                     )
                                   ]))))),
-              const Padding(
-                padding: EdgeInsets.symmetric(
+              Padding(
+                padding: const EdgeInsets.symmetric(
                     horizontal: Util.mainPadding, vertical: 10),
                 child: Accordion(
-                  contents: <String>[
+                  contents: const <String>[
                     'Breweries',
                     'Food Trucks',
                     'Restaurants',
                     'Wineries'
                   ],
+                  reloadFn: () {
+                    setState(() {
+                      location = globals.searchFullAddress;
+                    });
+                  },
                 ),
               ),
             ],
