@@ -53,6 +53,9 @@ class Util {
   static const String subscriptionTitle = "Subscription Plan";
   static const String subscriptionDescription =
       "Subscribe your plan and push special offers to the people";
+  // Splash Screen
+  static const String listEmpty =
+      "No stores available in your area. Please come back soon to try again.";
   // Terms Screen
   static const String termsTitle = "Terms And Condition";
   static const List<Map<String, dynamic>> termsList = [

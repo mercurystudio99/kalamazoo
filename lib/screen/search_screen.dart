@@ -217,17 +217,33 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: ListBuilder(
-                      isSelectionMode: isSelectionMode,
-                      list: restaurants,
-                      onSelectionChange: (bool x) {
-                        setState(() {
-                          isSelectionMode = x;
-                        });
-                      },
+                  if (restaurants.isNotEmpty)
+                    Expanded(
+                      child: ListBuilder(
+                        isSelectionMode: isSelectionMode,
+                        list: restaurants,
+                        onSelectionChange: (bool x) {
+                          setState(() {
+                            isSelectionMode = x;
+                          });
+                        },
+                      ),
                     ),
-                  ),
+                  if (restaurants.isEmpty) const SizedBox(height: 50),
+                  if (restaurants.isEmpty)
+                    Center(
+                      child: Image.asset('assets/group.png'),
+                    ),
+                  if (restaurants.isEmpty) const SizedBox(height: 30),
+                  if (restaurants.isEmpty)
+                    const Center(
+                        child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Util.mainPadding * 2),
+                            child: Text(Util.listEmpty,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: CustomColor.textDetailColor))))
                 ],
               )
             ],
