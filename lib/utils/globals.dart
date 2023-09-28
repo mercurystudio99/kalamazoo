@@ -14,6 +14,7 @@ String restaurantType = C_RESTAURANTS;
 String restaurantID = "";
 double restaurantRating = 0;
 String menuID = "";
+String listTarget = '';
 
 String searchFullAddress = "Kalamazoo, MI, USA";
 String searchCity = "Kalamazoo";

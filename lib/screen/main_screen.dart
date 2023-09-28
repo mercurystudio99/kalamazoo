@@ -565,8 +565,8 @@ class _MainScreenState extends State<MainScreen> {
                           Util.categories,
                           style: TextStyle(color: Colors.white),
                         ),
-                        GestureDetector(
-                          onTap: () {},
+                        TextButton(
+                          onPressed: () {},
                           child: const Text(
                             Util.seeAll,
                             style: TextStyle(color: Colors.white),
@@ -636,8 +636,11 @@ class _MainScreenState extends State<MainScreen> {
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 18),
                             ),
-                            GestureDetector(
-                              onTap: () {},
+                            TextButton(
+                              onPressed: () {
+                                globals.listTarget = 'brands';
+                                NavigationRouter.switchToList(context);
+                              },
                               child: const Text(
                                 Util.seeAll,
                                 style:
@@ -666,8 +669,11 @@ class _MainScreenState extends State<MainScreen> {
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 18),
                             ),
-                            GestureDetector(
-                              onTap: () {},
+                            TextButton(
+                              onPressed: () {
+                                globals.listTarget = 'offers';
+                                NavigationRouter.switchToList(context);
+                              },
                               child: const Text(
                                 Util.seeAll,
                                 style:

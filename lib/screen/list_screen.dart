@@ -17,6 +17,8 @@ class ListScreen extends StatefulWidget {
 }
 
 class _ListScreenState extends State<ListScreen> {
+  final _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -34,8 +36,16 @@ class _ListScreenState extends State<ListScreen> {
       future: AppModel().getListRestaurant(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          final List<QueryDocumentSnapshot<Map<String, dynamic>>>
-              restaurantList = snapshot.data!.docs;
+          List<Map<String, dynamic>> restaurants = [];
+          for (var doc in snapshot.data!.docs) {
+            if (doc
+                .data()[RESTAURANT_BUSINESSNAME]
+                .toString()
+                .toLowerCase()
+                .contains(_searchController.text.trim().toLowerCase())) {
+              restaurants.add(doc.data());
+            }
+          }
           return Stack(
             fit: StackFit.expand,
             children: <Widget>[
@@ -94,36 +104,36 @@ class _ListScreenState extends State<ListScreen> {
                       ],
                     ),
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(
-                  //       left: Util.mainPadding,
-                  //       right: Util.mainPadding,
-                  //       bottom: 20),
-                  //   child: Material(
-                  //     borderRadius: const BorderRadius.all(Radius.circular(14)),
-                  //     elevation: 8,
-                  //     shadowColor: CustomColor.primaryColor.withOpacity(0.2),
-                  //     child: TextFormField(
-                  //         decoration: const InputDecoration(
-                  //           border: OutlineInputBorder(),
-                  //           hintText: 'Search Restaurant or Food...',
-                  //           prefixIconConstraints: BoxConstraints(
-                  //             minWidth: 50,
-                  //             minHeight: 2,
-                  //           ),
-                  //           prefixIcon: Icon(Icons.search_outlined, size: 24),
-                  //         ),
-                  //         autovalidateMode: AutovalidateMode.always,
-                  //         validator: (value) {
-                  //           if (value!.contains('\n')) {}
-                  //           return null;
-                  //         }),
-                  //   ),
-                  // ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: Util.mainPadding,
+                        right: Util.mainPadding,
+                        bottom: 20.0),
+                    child: Material(
+                      borderRadius: const BorderRadius.all(Radius.circular(14)),
+                      elevation: 8,
+                      shadowColor: CustomColor.primaryColor.withOpacity(0.2),
+                      child: TextFormField(
+                        controller: _searchController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Search Restaurant or Food...',
+                          prefixIconConstraints: BoxConstraints(
+                            minWidth: 50,
+                            minHeight: 2,
+                          ),
+                          prefixIcon: Icon(Icons.search_outlined, size: 24),
+                        ),
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                      ),
+                    ),
+                  ),
                   Expanded(
                     child: ListBuilder(
                       isSelectionMode: false,
-                      list: restaurantList,
+                      list: restaurants,
                       onSelectionChange: (bool x) {},
                     ),
                   ),
@@ -148,7 +158,7 @@ class ListBuilder extends StatefulWidget {
   });
 
   final bool isSelectionMode;
-  final List<QueryDocumentSnapshot<Map<String, dynamic>>> list;
+  final List<Map<String, dynamic>> list;
   final Function(bool)? onSelectionChange;
 
   @override
@@ -161,7 +171,7 @@ class _ListBuilderState extends State<ListBuilder> {
     return ListView.builder(
         itemCount: widget.list.length,
         itemBuilder: (_, int index) {
-          final Map<String, dynamic> restaurant = widget.list[index].data();
+          final Map<String, dynamic> restaurant = widget.list[index];
           return Padding(
               padding: const EdgeInsets.symmetric(horizontal: Util.mainPadding),
               child: SizedBox(

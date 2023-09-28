@@ -114,6 +114,7 @@ class _AccordionState extends State<Accordion> {
                           child: InkWell(
                               onTap: () {
                                 globals.restaurantType = C_BREWERIES;
+                                globals.listTarget = '';
                                 NavigationRouter.switchToList(context);
                               },
                               child: Row(
@@ -145,6 +146,7 @@ class _AccordionState extends State<Accordion> {
                           child: InkWell(
                               onTap: () {
                                 globals.restaurantType = C_RESTAURANTS;
+                                globals.listTarget = '';
                                 NavigationRouter.switchToList(context);
                               },
                               child: Row(
@@ -162,6 +164,7 @@ class _AccordionState extends State<Accordion> {
                           child: InkWell(
                               onTap: () {
                                 globals.restaurantType = C_WINERIES;
+                                globals.listTarget = '';
                                 NavigationRouter.switchToList(context);
                               },
                               child: Row(

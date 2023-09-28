@@ -468,10 +468,23 @@ class AppModel extends Model {
 
   // restaurant get method
   Future<QuerySnapshot<Map<String, dynamic>>> getListRestaurant() async {
-    return await _firestore
-        .collection(globals.restaurantType)
-        .where(globals.searchPriority, isEqualTo: getSearchAreaKey())
-        .get();
+    if (globals.listTarget == 'brands') {
+      return await _firestore
+          .collection(globals.restaurantType)
+          .where(globals.searchPriority, isEqualTo: getSearchAreaKey())
+          .where(RESTAURANT_BRAND, isEqualTo: true)
+          .get();
+    } else if (globals.listTarget == 'offers') {
+      return await _firestore
+          .collection(globals.restaurantType)
+          .where(globals.searchPriority, isEqualTo: getSearchAreaKey())
+          .get();
+    } else {
+      return await _firestore
+          .collection(globals.restaurantType)
+          .where(globals.searchPriority, isEqualTo: getSearchAreaKey())
+          .get();
+    }
   }
 
   // restaurant get method
