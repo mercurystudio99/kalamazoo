@@ -49,8 +49,8 @@ class NavigationRouter {
     Navigator.pushNamed(context, "/SubscriptionScreen");
   }
 
-  static void switchToSearch(BuildContext context) {
-    Navigator.pushNamed(context, "/SearchScreen");
+  static Future<void> switchToSearch(BuildContext context) async {
+    await Navigator.pushNamed(context, "/SearchScreen");
   }
 
   static void switchToProfileEdit(BuildContext context) {

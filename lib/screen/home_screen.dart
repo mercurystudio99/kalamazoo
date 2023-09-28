@@ -301,9 +301,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           suffixIcon: IconButton(
                               onPressed: () {},
                               icon: Image.asset('assets/filter.png'))),
-                      onFieldSubmitted: (value) {
+                      onFieldSubmitted: (value) async {
                         globals.searchKeyword = value;
-                        NavigationRouter.switchToSearch(context);
+                        await NavigationRouter.switchToSearch(context);
+                        setState(() {
+                          location = globals.searchFullAddress;
+                        });
                       },
                     ),
                   ])),
