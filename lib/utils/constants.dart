@@ -60,6 +60,7 @@ const String MENU_PHOTO = "photoLink";
 const String AMENITY_ID = "id";
 const String AMENITY_NAME = "name";
 const String AMENITY_LOGO = "logo";
+const String AMENITY_TYPE = "type";
 
 const String TOPMENU_ID = "id";
 const String TOPMENU_NAME = "name";

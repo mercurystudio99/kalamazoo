@@ -145,63 +145,103 @@ class _AmenitiesScreenState extends State<AmenitiesScreen> {
 
   Widget _listing() {
     Size size = MediaQuery.of(context).size;
-    List<Widget> lists = amenities.map((item) {
-      return SizedBox(
-          width: size.width / 2,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            child: Row(children: [
-              Container(
-                width: 24,
-                height: 24,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(5)),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey.shade400,
-                        blurRadius: 5,
-                        spreadRadius: 1),
-                  ],
-                ),
-                child: ColoredBox(
-                    color: Colors.white,
-                    child: Transform.scale(
-                      scale: 1.3,
-                      child: Checkbox(
-                        side: const BorderSide(color: Colors.white),
-                        checkColor: Colors.white,
-                        fillColor: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.disabled)) {
+
+    List<String> amenityCategories = [];
+    for (var amenity in amenities) {
+      if (!amenityCategories.contains(amenity[AMENITY_TYPE]) &&
+          amenity[AMENITY_TYPE] != null &&
+          amenity[AMENITY_TYPE].toString().isNotEmpty) {
+        amenityCategories.add(amenity[AMENITY_TYPE]);
+      }
+    }
+
+    List<Widget> amenitiesView = [];
+    for (var type in amenityCategories) {
+      amenitiesView.add(
+        SizedBox(
+            width: size.width,
+            child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(type,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w600, fontSize: 20)))),
+      );
+
+      amenitiesView.add(_subListing(type));
+    }
+
+    return SizedBox(
+      width: size.width,
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: amenitiesView),
+    );
+  }
+
+  Widget _subListing(String type) {
+    Size size = MediaQuery.of(context).size;
+    List<Widget> lists = [];
+    for (var item in amenities) {
+      if (item[AMENITY_TYPE] != null && item[AMENITY_TYPE].toString() == type) {
+        lists.add(SizedBox(
+            width: size.width / 2,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              child: Row(children: [
+                Container(
+                  width: 24,
+                  height: 24,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey.shade400,
+                          blurRadius: 5,
+                          spreadRadius: 1),
+                    ],
+                  ),
+                  child: ColoredBox(
+                      color: Colors.white,
+                      child: Transform.scale(
+                        scale: 1.3,
+                        child: Checkbox(
+                          side: const BorderSide(color: Colors.white),
+                          checkColor: Colors.white,
+                          fillColor: MaterialStateProperty.resolveWith<Color>(
+                              (Set<MaterialState> states) {
+                            if (states.contains(MaterialState.disabled)) {
+                              return CustomColor.primaryColor;
+                            }
                             return CustomColor.primaryColor;
-                          }
-                          return CustomColor.primaryColor;
-                        }),
-                        value: _isChecked[item[AMENITY_ID]],
-                        onChanged: (bool? value) {
-                          if (value == true) {
-                            global.ownerAmenities.add(item[AMENITY_ID]);
-                          } else {
-                            global.ownerAmenities.remove(item[AMENITY_ID]);
-                          }
-                          setState(() {
-                            _isChecked[item[AMENITY_ID]] = value!;
-                          });
-                        },
-                      ),
-                    )),
-              ),
-              const SizedBox(width: 5),
-              Image.asset(
-                'assets/amenities/icon (${item[AMENITY_LOGO]}).png',
-              ),
-              const SizedBox(width: 5),
-              Text(item[AMENITY_NAME].toString().length < 18
-                  ? item[AMENITY_NAME]
-                  : '${item[AMENITY_NAME].toString().substring(0, 16)}..')
-            ]),
-          ));
-    }).toList();
+                          }),
+                          value: _isChecked[item[AMENITY_ID]],
+                          onChanged: (bool? value) {
+                            if (value == true) {
+                              global.ownerAmenities.add(item[AMENITY_ID]);
+                            } else {
+                              global.ownerAmenities.remove(item[AMENITY_ID]);
+                            }
+                            setState(() {
+                              _isChecked[item[AMENITY_ID]] = value!;
+                            });
+                          },
+                        ),
+                      )),
+                ),
+                const SizedBox(width: 5),
+                Image.asset(
+                  'assets/amenities/icon (${item[AMENITY_LOGO]}).png',
+                ),
+                const SizedBox(width: 5),
+                Text(item[AMENITY_NAME].toString().length < 18
+                    ? item[AMENITY_NAME]
+                    : '${item[AMENITY_NAME].toString().substring(0, 16)}..')
+              ]),
+            )));
+      }
+    }
+
     int rowCount = lists.length ~/ 2;
     List<Widget> rowList = [];
     for (int i = 0; i < rowCount + 1; i++) {

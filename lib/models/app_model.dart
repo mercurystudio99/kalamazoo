@@ -348,7 +348,7 @@ class AppModel extends Model {
   }) async {
     final snapshots = await _firestore
         .collection(C_AMENITIES)
-        // .orderBy(AMENITY_NAME, descending: false)
+        .orderBy(AMENITY_NAME, descending: false)
         .get();
     if (snapshots.docs.isEmpty) {
       onEmpty();
