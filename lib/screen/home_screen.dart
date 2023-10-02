@@ -176,6 +176,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
+    globals.latitude = position.latitude;
+    globals.longitude = position.longitude;
     // List<Placemark> placemarks =
     //     await placemarkFromCoordinates(position.latitude, position.longitude);
     // String output = 'No results found.';
@@ -1326,7 +1328,8 @@ class _HomeScreenState extends State<HomeScreen> {
           textColor: CustomColor.textDetailColor,
           iconColor: CustomColor.textDetailColor,
           child: Padding(
-            padding: const EdgeInsets.all(Util.mainPadding),
+            padding: const EdgeInsets.fromLTRB(
+                Util.mainPadding, Util.mainPadding, 0, 10),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
@@ -1381,7 +1384,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 //   title: const Text('Offer & Promos'),
                 // ),
                 const SizedBox(
-                  height: 40,
+                  height: 20,
                 ),
                 const Padding(
                     padding: EdgeInsets.only(left: 20.0, bottom: 10.0),

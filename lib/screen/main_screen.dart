@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -94,6 +95,13 @@ class _MainScreenState extends State<MainScreen> {
       }
     }
     setState(() {});
+  }
+
+  String _getDistance(List<dynamic> geolocation) {
+    double distance = Geolocator.distanceBetween(
+        globals.latitude, globals.longitude, geolocation[0], geolocation[1]);
+    distance = distance / 1000;
+    return distance.toStringAsFixed(1);
   }
 
   Future<void> _onLocation(BuildContext context) async {
@@ -396,27 +404,27 @@ class _MainScreenState extends State<MainScreen> {
                           Padding(
                             padding: const EdgeInsets.only(top: 8),
                             child: Row(
-                              children: const [
-                                Icon(
+                              children: [
+                                const Icon(
                                   Icons.location_on,
                                   color: CustomColor.activeColor,
                                   size: 10,
                                 ),
                                 Text(
-                                  '1.2km',
-                                  style: TextStyle(
+                                  '${_getDistance(element[RESTAURANT_GEOLOCATION])}km',
+                                  style: const TextStyle(
                                       fontSize: 10.0,
                                       color: CustomColor.textDetailColor),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 4,
                                 ),
-                                Icon(
+                                const Icon(
                                   Icons.access_time,
                                   size: 10,
                                   color: CustomColor.textDetailColor,
                                 ),
-                                Text(
+                                const Text(
                                   '10min',
                                   style: TextStyle(
                                       fontSize: 10.0,
@@ -806,9 +814,9 @@ class _MainScreenState extends State<MainScreen> {
                         color: CustomColor.activeColor,
                         size: 12,
                       ),
-                      const Text(
-                        '1.2km',
-                        style: TextStyle(
+                      Text(
+                        '${_getDistance(brand[RESTAURANT_GEOLOCATION])}km',
+                        style: const TextStyle(
                           fontSize: 12.0,
                           color: CustomColor.textDetailColor,
                         ),

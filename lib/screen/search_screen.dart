@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:google_maps_webservice/places.dart';
@@ -273,6 +274,13 @@ class ListBuilder extends StatefulWidget {
 }
 
 class _ListBuilderState extends State<ListBuilder> {
+  String _getDistance(List<dynamic> geolocation) {
+    double distance = Geolocator.distanceBetween(
+        globals.latitude, globals.longitude, geolocation[0], geolocation[1]);
+    distance = distance / 1000;
+    return distance.toStringAsFixed(1);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -321,12 +329,14 @@ class _ListBuilderState extends State<ListBuilder> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 14),
-                      child: _ArticleDescription(
+                      child: _Description(
                         title: widget.list[index][RESTAURANT_BUSINESSNAME],
                         subtitle: 'Coffee',
                         author: '50% OFF',
                         publishDate: 'UPTO',
                         readDuration: '100',
+                        distance: _getDistance(
+                            widget.list[index][RESTAURANT_GEOLOCATION]),
                       ),
                     ),
                     const Spacer(),
@@ -353,13 +363,14 @@ class _ListBuilderState extends State<ListBuilder> {
   }
 }
 
-class _ArticleDescription extends StatelessWidget {
-  const _ArticleDescription({
+class _Description extends StatelessWidget {
+  const _Description({
     required this.title,
     required this.subtitle,
     required this.author,
     required this.publishDate,
     required this.readDuration,
+    required this.distance,
   });
 
   final String title;
@@ -367,6 +378,7 @@ class _ArticleDescription extends StatelessWidget {
   final String author;
   final String publishDate;
   final String readDuration;
+  final String distance;
 
   @override
   Widget build(BuildContext context) {
@@ -432,9 +444,9 @@ class _ArticleDescription extends StatelessWidget {
               color: CustomColor.activeColor,
               size: 12,
             ),
-            const Text(
-              '1.2km',
-              style: TextStyle(
+            Text(
+              '${distance}km',
+              style: const TextStyle(
                 fontSize: 12.0,
                 color: CustomColor.textDetailColor,
               ),
