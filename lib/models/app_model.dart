@@ -488,6 +488,14 @@ class AppModel extends Model {
   }
 
   // restaurant get method
+  Future<QuerySnapshot<Map<String, dynamic>>> getSearchRestaurant() async {
+    return await _firestore
+        .collection(globals.restaurantType)
+        .where(globals.searchPriority, isEqualTo: getSearchAreaKey())
+        .get();
+  }
+
+  // restaurant get method
   Future<QuerySnapshot<Map<String, dynamic>>> getRestaurant() async {
     return await _firestore
         .collection(globals.restaurantType)

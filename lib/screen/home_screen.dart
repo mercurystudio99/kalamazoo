@@ -301,7 +301,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           prefixIcon:
                               const Icon(Icons.search_outlined, size: 24),
                           suffixIcon: IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                NavigationRouter.switchToFilter(context);
+                              },
                               icon: Image.asset('assets/filter.png'))),
                       onFieldSubmitted: (value) async {
                         globals.searchKeyword = value;

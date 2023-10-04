@@ -53,6 +53,10 @@ class NavigationRouter {
     await Navigator.pushNamed(context, "/SearchScreen");
   }
 
+  static void switchToFilter(BuildContext context) {
+    Navigator.pushNamed(context, "/FilterScreen");
+  }
+
   static void switchToProfileEdit(BuildContext context) {
     Navigator.pushNamed(context, "/ProfileEditScreen");
   }

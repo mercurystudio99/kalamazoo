@@ -95,7 +95,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
-      future: AppModel().getListRestaurant(),
+      future: AppModel().getSearchRestaurant(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           restaurants.clear();
@@ -106,7 +106,18 @@ class _SearchScreenState extends State<SearchScreen> {
                   .toString()
                   .toLowerCase()
                   .contains(globals.searchKeyword.trim().toLowerCase())) {
-                restaurants.add(doc.data());
+                // filter condition
+                if (globals.searchAmenities.isEmpty) {
+                  restaurants.add(doc.data());
+                } else {
+                  if (doc.data()[RESTAURANT_AMENITIES] != null) {
+                    bool included = globals.searchAmenities.every((dynamic id) {
+                      return doc.data()[RESTAURANT_AMENITIES].contains(id);
+                    });
+                    if (included) restaurants.add(doc.data());
+                  }
+                }
+                ////////////////////
               }
             }
             globals.searchKeyword = '';
