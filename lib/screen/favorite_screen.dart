@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:kalamazoo/utils/globals.dart' as globals;
 import 'package:kalamazoo/utils/navigation_router.dart';
@@ -27,6 +25,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   _onSearchFavorite(String text) async {
     _searchFavorites.clear();
     if (text.isEmpty) {
+      setState(() {});
       return;
     }
 
@@ -35,6 +34,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
         _searchFavorites.add(favorite);
       }
     }
+    setState(() {});
   }
 
   @override
@@ -43,12 +43,24 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     if (globals.userFavourites.isNotEmpty) {
       AppModel().getFavourites(onSuccess: (List<Map<String, dynamic>> param) {
         favourites = param;
+        setState(() {});
       });
     }
   }
 
   @override
+  void dispose() {
+    favourites.clear();
+    _searchFavorites.clear();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    List<Map<String, dynamic>> list = (_searchFavorites.isNotEmpty ||
+            _searchFavoriteController.text.isNotEmpty)
+        ? _searchFavorites
+        : favourites;
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -115,20 +127,142 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                   ),
                 ),
               ),
-              Expanded(
-                child: ListBuilder(
-                  isSelectionMode: isSelectionMode,
-                  list: (_searchFavorites.isNotEmpty ||
-                          _searchFavoriteController.text.isNotEmpty)
-                      ? _searchFavorites
-                      : favourites,
-                  onSelectionChange: (bool x) {
-                    setState(() {
-                      isSelectionMode = x;
-                    });
-                  },
+              if (!(_searchFavoriteController.text.isNotEmpty &&
+                      _searchFavorites.isEmpty ||
+                  favourites.isEmpty))
+                Expanded(
+                    child: ListView.builder(
+                        itemCount: list.length,
+                        itemBuilder: (_, int index) {
+                          final Map<String, dynamic> restaurant = list[index];
+                          return GestureDetector(
+                            onTap: () {
+                              AppModel().setRestaurant(
+                                  restaurant: restaurant,
+                                  onSuccess: () =>
+                                      NavigationRouter.switchToAbout(context));
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: Util.mainPadding, vertical: 8),
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                    color: CustomColor.primaryColor
+                                        .withOpacity(0.2),
+                                    blurRadius: 8.0,
+                                  ),
+                                ],
+                                border: Border.all(color: Colors.white),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              alignment: Alignment.center,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.25,
+                                    child: ClipRRect(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(15)),
+                                        child: (restaurant[RESTAURANT_IMAGE] !=
+                                                null)
+                                            ? Image.network(
+                                                restaurant[RESTAURANT_IMAGE],
+                                                height: 100,
+                                                fit: BoxFit.cover)
+                                            : Image.asset(
+                                                'assets/group.png',
+                                                fit: BoxFit.cover,
+                                              )),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: _Description(
+                                      title:
+                                          restaurant[RESTAURANT_BUSINESSNAME],
+                                      subtitle: 'Coffee',
+                                      author: '50% OFF',
+                                      publishDate: 'UPTO',
+                                      readDuration: '100',
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  InkWell(
+                                      onTap: () {
+                                        AppModel().setFavourite(
+                                            restaurantID:
+                                                restaurant[RESTAURANT_ID],
+                                            onSuccess: () {
+                                              if (globals
+                                                  .userFavourites.isNotEmpty) {
+                                                AppModel().getFavourites(
+                                                    onSuccess: (List<
+                                                            Map<String,
+                                                                dynamic>>
+                                                        param) {
+                                                  favourites = param;
+                                                  _searchFavorites.clear();
+                                                  for (var favorite
+                                                      in favourites) {
+                                                    if (favorite[
+                                                            RESTAURANT_BUSINESSNAME]
+                                                        .contains(
+                                                            _searchFavoriteController
+                                                                .text)) {
+                                                      _searchFavorites
+                                                          .add(favorite);
+                                                    }
+                                                  }
+
+                                                  setState(() {});
+                                                });
+                                              } else {
+                                                favourites.clear();
+                                                _searchFavorites.clear();
+                                                setState(() {});
+                                              }
+                                            });
+                                      },
+                                      child: const Icon(
+                                        Icons.bookmark,
+                                        color: CustomColor.activeColor,
+                                      ))
+                                ],
+                              ),
+                            ),
+                          );
+                        })),
+              if (_searchFavoriteController.text.isNotEmpty &&
+                      _searchFavorites.isEmpty ||
+                  favourites.isEmpty)
+                const SizedBox(height: 50),
+              if (_searchFavoriteController.text.isNotEmpty &&
+                      _searchFavorites.isEmpty ||
+                  favourites.isEmpty)
+                Center(
+                  child: Image.asset('assets/group.png'),
                 ),
-              ),
+              if (_searchFavoriteController.text.isNotEmpty &&
+                      _searchFavorites.isEmpty ||
+                  favourites.isEmpty)
+                const SizedBox(height: 30),
+              if (_searchFavoriteController.text.isNotEmpty &&
+                      _searchFavorites.isEmpty ||
+                  favourites.isEmpty)
+                const Center(
+                    child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: Util.mainPadding * 2),
+                        child: Text(Util.listEmpty,
+                            textAlign: TextAlign.center,
+                            style:
+                                TextStyle(color: CustomColor.textDetailColor))))
             ],
           ),
         ],
@@ -137,93 +271,8 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
   }
 }
 
-class ListBuilder extends StatefulWidget {
-  const ListBuilder({
-    super.key,
-    required this.list,
-    required this.isSelectionMode,
-    required this.onSelectionChange,
-  });
-
-  final bool isSelectionMode;
-  final List<Map<String, dynamic>> list;
-  final Function(bool)? onSelectionChange;
-
-  @override
-  State<ListBuilder> createState() => _ListBuilderState();
-}
-
-class _ListBuilderState extends State<ListBuilder> {
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: widget.list.length,
-        itemBuilder: (_, int index) {
-          final Map<String, dynamic> restaurant = widget.list[index];
-          return GestureDetector(
-            onTap: () {
-              AppModel().setRestaurant(
-                  restaurant: restaurant,
-                  onSuccess: () => NavigationRouter.switchToAbout(context));
-            },
-            child: Container(
-              margin: const EdgeInsets.symmetric(
-                  horizontal: Util.mainPadding, vertical: 8),
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: CustomColor.primaryColor.withOpacity(0.2),
-                    blurRadius: 8.0,
-                  ),
-                ],
-                border: Border.all(color: Colors.white),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              alignment: Alignment.center,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.25,
-                    child: ClipRRect(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(15)),
-                        child: (restaurant[RESTAURANT_IMAGE] != null)
-                            ? Image.network(restaurant[RESTAURANT_IMAGE],
-                                height: 100, fit: BoxFit.cover)
-                            : Image.asset(
-                                'assets/group.png',
-                                fit: BoxFit.cover,
-                              )),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: _ArticleDescription(
-                      title: restaurant[RESTAURANT_BUSINESSNAME],
-                      subtitle: 'Coffee',
-                      author: '50% OFF',
-                      publishDate: 'UPTO',
-                      readDuration: '100',
-                    ),
-                  ),
-                  const Spacer(),
-                  const Icon(
-                    Icons.bookmark,
-                    color: CustomColor.activeColor,
-                  ),
-                ],
-              ),
-            ),
-          );
-        });
-  }
-}
-
-class _ArticleDescription extends StatelessWidget {
-  const _ArticleDescription({
+class _Description extends StatelessWidget {
+  const _Description({
     required this.title,
     required this.subtitle,
     required this.author,
