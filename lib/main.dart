@@ -30,6 +30,7 @@ import 'package:kalamazoo/screen/terms_screen.dart';
 import 'package:kalamazoo/screen/policy_screen.dart';
 import 'package:kalamazoo/screen/list_screen.dart';
 import 'package:kalamazoo/screen/filter_screen.dart';
+import 'package:kalamazoo/screen/favorite_screen.dart';
 import 'package:kalamazoo/screen/main_screen.dart';
 import 'package:kalamazoo/screen/splash_screen.dart';
 
@@ -58,6 +59,7 @@ var routes = <String, WidgetBuilder>{
   "/PolicyScreen": (BuildContext context) => const PolicyScreen(),
   "/ListScreen": (BuildContext context) => const ListScreen(),
   "/FilterScreen": (BuildContext context) => const FilterScreen(),
+  "/FavoriteScreen": (BuildContext context) => const FavoriteScreen(),
   "/MainScreen": (BuildContext context) => const MainScreen(),
 };
 void main() async {

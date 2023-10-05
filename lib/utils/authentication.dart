@@ -39,7 +39,7 @@ class Authentication {
       if (userCredential.user != null) {
         AppModel().userExist(
             email: userCredential.user!.email!,
-            onSuccess: () {
+            onSuccess: (String id) {
               AppModel().userSignIn(
                   email: userCredential.user!.email!,
                   password: globals.userPass,
@@ -108,7 +108,7 @@ class Authentication {
         if (userCredential.user != null) {
           AppModel().userExist(
               email: userCredential.user!.email!,
-              onSuccess: () {
+              onSuccess: (String id) {
                 AppModel().userSignIn(
                     email: userCredential.user!.email!,
                     password: globals.userPass,

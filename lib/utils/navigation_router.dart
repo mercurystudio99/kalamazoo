@@ -57,6 +57,10 @@ class NavigationRouter {
     Navigator.pushNamed(context, "/FilterScreen");
   }
 
+  static void switchToFavorite(BuildContext context) {
+    Navigator.pushNamed(context, "/FavoriteScreen");
+  }
+
   static void switchToProfileEdit(BuildContext context) {
     Navigator.pushNamed(context, "/ProfileEditScreen");
   }

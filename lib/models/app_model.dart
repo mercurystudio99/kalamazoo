@@ -124,7 +124,7 @@ class AppModel extends Model {
   void userExist({
     required String email,
     // callback functions
-    required VoidCallback onSuccess,
+    required Function(String) onSuccess,
     required Function(String) onError,
   }) {
     _firestore
@@ -144,7 +144,7 @@ class AppModel extends Model {
             globals.userRole = docSnapshot.data()[USER_ROLE];
             break;
           }
-          onSuccess();
+          onSuccess(retrieveID!);
         } else {
           onError('No user found for that email.');
         }

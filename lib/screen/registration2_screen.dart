@@ -1045,7 +1045,7 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                           // sign up
                           AppModel().userExist(
                               email: _emailController.text.trim(),
-                              onSuccess: () {
+                              onSuccess: (String id) {
                                 // Show error message
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(

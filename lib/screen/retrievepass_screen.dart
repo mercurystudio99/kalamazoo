@@ -191,7 +191,7 @@ class _RetrievePassScreenState extends State<RetrievePassScreen> {
                                 );
                                 AppModel().userExist(
                                     email: _emailController.text.trim(),
-                                    onSuccess: () {
+                                    onSuccess: (String id) {
                                       AppModel().sendOTP(
                                           email: _emailController.text.trim(),
                                           onSuccess: () {
