@@ -19,9 +19,19 @@ class ListScreen extends StatefulWidget {
 class _ListScreenState extends State<ListScreen> {
   final _searchController = TextEditingController();
 
+  static List<Map<String, dynamic>> topMenuList = [];
+  String _selectedTopMenu = '';
+
   @override
   void initState() {
     super.initState();
+    AppModel().getTopMenu(
+      onSuccess: (List<Map<String, dynamic>> param) {
+        topMenuList = param;
+        setState(() {});
+      },
+      onEmpty: () {},
+    );
   }
 
   @override
@@ -43,7 +53,13 @@ class _ListScreenState extends State<ListScreen> {
                 .toString()
                 .toLowerCase()
                 .contains(_searchController.text.trim().toLowerCase())) {
-              restaurants.add(doc.data());
+              if (doc.data()[RESTAURANT_CATEGORY] != null &&
+                  doc.data()[RESTAURANT_CATEGORY] == _selectedTopMenu) {
+                restaurants.add(doc.data());
+              }
+              if (_selectedTopMenu.isEmpty) {
+                restaurants.add(doc.data());
+              }
             }
           }
           return Stack(
@@ -130,6 +146,16 @@ class _ListScreenState extends State<ListScreen> {
                       ),
                     ),
                   ),
+                  SizedBox(
+                      height: 70,
+                      child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: topMenuList.map((topmenu) {
+                              return categoryBox(
+                                  topmenu, CustomColor.primaryColor);
+                            }).toList(),
+                          ))),
                   if (restaurants.isNotEmpty)
                     Expanded(
                       child: ListBuilder(
@@ -162,6 +188,42 @@ class _ListScreenState extends State<ListScreen> {
         }
       },
     ));
+  }
+
+  Widget categoryBox(Map<String, dynamic> item, Color backgroundcolor) {
+    return InkWell(
+        onTap: () {
+          setState(() {
+            _selectedTopMenu = item[TOPMENU_ID];
+          });
+        },
+        child: Container(
+            margin:
+                const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 12),
+            width: 65,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.white),
+              borderRadius: BorderRadius.circular(10),
+              color: _selectedTopMenu == item[TOPMENU_ID]
+                  ? CustomColor.activeColor
+                  : backgroundcolor,
+            ),
+            alignment: Alignment.center,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset("assets/topmenu/${item[TOPMENU_IMAGE]}.png",
+                    width: 25, height: 25),
+                Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                        item[TOPMENU_NAME].toString().length <= 10
+                            ? item[TOPMENU_NAME].toString()
+                            : '${item[TOPMENU_NAME].toString().substring(0, 8)}..',
+                        style: const TextStyle(
+                            color: Colors.white, fontSize: 10))),
+              ],
+            )));
   }
 }
 
