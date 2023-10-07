@@ -16,6 +16,9 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   bool isSelectionMode = false;
+  final _searchController = TextEditingController();
+
+  static List<Map<String, dynamic>> menu = [];
 
   @override
   void initState() {
@@ -24,6 +27,7 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   void dispose() {
+    menu.clear();
     super.dispose();
   }
 
@@ -34,8 +38,16 @@ class _MenuScreenState extends State<MenuScreen> {
       future: AppModel().getFullMenu(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          final List<QueryDocumentSnapshot<Map<String, dynamic>>> menu =
-              snapshot.data!.docs;
+          menu.clear();
+          for (var doc in snapshot.data!.docs) {
+            if (doc
+                .data()[MENU_NAME]
+                .toString()
+                .toLowerCase()
+                .contains(_searchController.text.trim().toLowerCase())) {
+              menu.add(doc.data());
+            }
+          }
           return Stack(
             fit: StackFit.expand,
             children: <Widget>[
@@ -104,33 +116,54 @@ class _MenuScreenState extends State<MenuScreen> {
                       elevation: 8,
                       shadowColor: CustomColor.primaryColor.withOpacity(0.2),
                       child: TextFormField(
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: 'Search Restaurant or Food...',
-                            prefixIconConstraints: BoxConstraints(
-                              minWidth: 50,
-                              minHeight: 2,
-                            ),
-                            prefixIcon: Icon(Icons.search_outlined, size: 24),
+                        controller: _searchController,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: 'Search Restaurant or Food...',
+                          prefixIconConstraints: BoxConstraints(
+                            minWidth: 50,
+                            minHeight: 2,
                           ),
-                          autovalidateMode: AutovalidateMode.always,
-                          validator: (value) {
-                            if (value!.contains('\n')) {}
-                            return null;
-                          }),
+                          prefixIcon: Icon(Icons.search_outlined, size: 24),
+                        ),
+                        autovalidateMode: AutovalidateMode.always,
+                        validator: (value) {
+                          if (value!.contains('\n')) {}
+                          return null;
+                        },
+                        onChanged: (value) {
+                          setState(() {});
+                        },
+                      ),
                     ),
                   ),
-                  Expanded(
-                    child: ListBuilder(
-                      isSelectionMode: isSelectionMode,
-                      list: menu,
-                      onSelectionChange: (bool x) {
-                        setState(() {
-                          isSelectionMode = x;
-                        });
-                      },
+                  if (menu.isNotEmpty)
+                    Expanded(
+                      child: ListBuilder(
+                        isSelectionMode: isSelectionMode,
+                        list: menu,
+                        onSelectionChange: (bool x) {
+                          setState(() {
+                            isSelectionMode = x;
+                          });
+                        },
+                      ),
                     ),
-                  ),
+                  if (menu.isEmpty) const SizedBox(height: 50),
+                  if (menu.isEmpty)
+                    Center(
+                      child: Image.asset('assets/group.png'),
+                    ),
+                  if (menu.isEmpty) const SizedBox(height: 30),
+                  if (menu.isEmpty)
+                    const Center(
+                        child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: Util.mainPadding * 2),
+                            child: Text(Util.listEmpty,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: CustomColor.textDetailColor))))
                 ],
               )
             ],
@@ -152,7 +185,7 @@ class ListBuilder extends StatefulWidget {
   });
 
   final bool isSelectionMode;
-  final List<QueryDocumentSnapshot<Map<String, dynamic>>> list;
+  final List<Map<String, dynamic>> list;
   final Function(bool)? onSelectionChange;
 
   @override
@@ -165,7 +198,7 @@ class _ListBuilderState extends State<ListBuilder> {
     return ListView.builder(
         itemCount: widget.list.length,
         itemBuilder: (_, int index) {
-          final Map<String, dynamic> menu = widget.list[index].data();
+          final Map<String, dynamic> menu = widget.list[index];
           return Padding(
               padding: const EdgeInsets.symmetric(horizontal: Util.mainPadding),
               child: SizedBox(

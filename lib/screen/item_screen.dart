@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
@@ -16,6 +17,13 @@ class ItemScreen extends StatefulWidget {
 }
 
 class _ItemScreenState extends State<ItemScreen> {
+  String _getDistance(List<dynamic> geolocation) {
+    double distance = Geolocator.distanceBetween(
+        globals.latitude, globals.longitude, geolocation[0], geolocation[1]);
+    distance = distance / 1000;
+    return distance.toStringAsFixed(1);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,10 +84,21 @@ class _ItemScreenState extends State<ItemScreen> {
                             NavigationRouter.back(context);
                           },
                         ),
-                        const Icon(
-                          Icons.bookmark,
-                          color: CustomColor.activeColor,
-                          size: 30,
+                        IconButton(
+                          onPressed: () {
+                            AppModel().setFavourite(
+                                restaurantID: globals.restaurantID,
+                                onSuccess: () {
+                                  setState(() {});
+                                });
+                          },
+                          icon: Icon(
+                            globals.userFavourites
+                                    .contains(globals.restaurantID)
+                                ? Icons.bookmark
+                                : Icons.bookmark_outline,
+                            color: CustomColor.activeColor,
+                          ),
                         )
                       ],
                     ),
