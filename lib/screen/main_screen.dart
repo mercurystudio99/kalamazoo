@@ -866,10 +866,20 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 ],
               ),
-              const Icon(
-                Icons.bookmark_border_outlined,
-                color: CustomColor.activeColor,
-              ),
+              InkWell(
+                  onTap: () {
+                    AppModel().setFavourite(
+                        restaurantID: brand[RESTAURANT_ID],
+                        onSuccess: () {
+                          setState(() {});
+                        });
+                  },
+                  child: Icon(
+                    globals.userFavourites.contains(brand[RESTAURANT_ID])
+                        ? Icons.bookmark
+                        : Icons.bookmark_outline,
+                    color: CustomColor.activeColor,
+                  ))
             ],
           ),
         ));

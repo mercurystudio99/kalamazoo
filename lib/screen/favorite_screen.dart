@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:kalamazoo/utils/globals.dart' as globals;
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/util.dart';
@@ -190,6 +191,8 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                       author: '50% OFF',
                                       publishDate: 'UPTO',
                                       readDuration: '100',
+                                      geolocation:
+                                          restaurant[RESTAURANT_GEOLOCATION],
                                     ),
                                   ),
                                   const Spacer(),
@@ -278,6 +281,7 @@ class _Description extends StatelessWidget {
     required this.author,
     required this.publishDate,
     required this.readDuration,
+    required this.geolocation,
   });
 
   final String title;
@@ -285,6 +289,14 @@ class _Description extends StatelessWidget {
   final String author;
   final String publishDate;
   final String readDuration;
+  final List<dynamic> geolocation;
+
+  String _getDistance(List<dynamic> geolocation) {
+    double distance = Geolocator.distanceBetween(
+        globals.latitude, globals.longitude, geolocation[0], geolocation[1]);
+    distance = distance / 1000;
+    return distance.toStringAsFixed(1);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -350,9 +362,9 @@ class _Description extends StatelessWidget {
               color: CustomColor.activeColor,
               size: 12,
             ),
-            const Text(
-              '1.2km',
-              style: TextStyle(
+            Text(
+              '${_getDistance(geolocation)}km',
+              style: const TextStyle(
                 fontSize: 12.0,
                 color: CustomColor.textDetailColor,
               ),
