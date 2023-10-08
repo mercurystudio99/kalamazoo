@@ -106,6 +106,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<void> _onLocation(BuildContext context) async {
     Prediction? p = await PlacesAutocomplete.show(
+        logo: const Text(''),
         context: context,
         radius: 100000000,
         types: [],
