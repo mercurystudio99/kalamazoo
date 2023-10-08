@@ -16,8 +16,8 @@ class Accordion extends StatefulWidget {
 
 class _AccordionState extends State<Accordion> {
   // Show or hide the content
-  bool _showContent = false;
-  bool _showHours = false;
+  bool _showDining = false;
+  bool _showDailySpecial = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,49 +32,60 @@ class _AccordionState extends State<Accordion> {
         ListTile(
           leading: Image.asset('assets/daily_specials.png'),
           title: const Text(
-            ' Daily Specials',
+            'Daily Specials',
             style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
-          ),
-          trailing: IconButton(
-            icon: const Icon(Icons.keyboard_arrow_right, color: Colors.white),
-            onPressed: () {},
-          ),
-          contentPadding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
-          onTap: () async {
-            await NavigationRouter.switchToMain(context);
-            widget.reloadFn();
-          },
-        ),
-        Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Container(height: 1, color: Colors.white54)),
-        ListTile(
-          title: const Text(
-            'Happy Hour',
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
           ),
           trailing: IconButton(
             icon: Icon(
-                _showHours
+                _showDailySpecial
                     ? Icons.keyboard_arrow_down
                     : Icons.keyboard_arrow_right,
                 color: Colors.white),
             onPressed: () {
               setState(() {
-                _showHours = !_showHours;
+                _showDailySpecial = !_showDailySpecial;
               });
             },
           ),
-          contentPadding: const EdgeInsets.fromLTRB(15, 5, 0, 10),
+          contentPadding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
+          onTap: () {},
         ),
-        _showHours
+        _showDailySpecial
             ? Container(
                 padding: const EdgeInsets.fromLTRB(15, 15, 12, 15),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const []),
+                    children: [
+                      Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: InkWell(
+                              onTap: () {},
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: const [
+                                    Text('Happy Hour',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 20)),
+                                    Icon(Icons.keyboard_arrow_right,
+                                        color: Colors.white)
+                                  ]))),
+                      Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: InkWell(
+                              onTap: () {},
+                              child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: const [
+                                    Text('Kids Menu',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 20)),
+                                    Icon(Icons.keyboard_arrow_right,
+                                        color: Colors.white)
+                                  ]))),
+                    ]),
               )
             : Container(),
 
@@ -84,26 +95,26 @@ class _AccordionState extends State<Accordion> {
         ListTile(
           leading: Image.asset('assets/dining.png'),
           title: const Text(
-            ' Dining',
+            'Dining',
             style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
           ),
           trailing: IconButton(
             icon: Icon(
-                _showContent
+                _showDining
                     ? Icons.keyboard_arrow_down
                     : Icons.keyboard_arrow_right,
                 color: Colors.white),
             onPressed: () {
               setState(() {
-                _showContent = !_showContent;
+                _showDining = !_showDining;
               });
             },
           ),
           contentPadding: const EdgeInsets.fromLTRB(15, 5, 0, 10),
         ),
         // Show or hide the content based on the state
-        _showContent
+        _showDining
             ? Container(
                 padding: const EdgeInsets.fromLTRB(15, 15, 12, 15),
                 child: Column(
@@ -186,9 +197,9 @@ class _AccordionState extends State<Accordion> {
         ListTile(
           leading: Image.asset('assets/events.png'),
           title: const Text(
-            '  Events',
+            ' Events',
             style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
           ),
           trailing: IconButton(
             icon: const Icon(Icons.keyboard_arrow_right, color: Colors.white),
@@ -201,26 +212,10 @@ class _AccordionState extends State<Accordion> {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Container(height: 1, color: Colors.white54)),
         ListTile(
-          leading: Image.asset('assets/kids_menu.png'),
-          title: const Text(
-            'Kids Menu',
-            style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
-          ),
-          trailing: IconButton(
-            icon: const Icon(Icons.keyboard_arrow_right, color: Colors.white),
-            onPressed: () {},
-          ),
-          contentPadding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
-        ),
-        Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Container(height: 1, color: Colors.white54)),
-        ListTile(
           title: const Text(
             'Catering',
             style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
           ),
           trailing: IconButton(
             icon: const Icon(Icons.keyboard_arrow_right, color: Colors.white),
@@ -234,9 +229,9 @@ class _AccordionState extends State<Accordion> {
         ListTile(
           leading: Image.asset('assets/new_places.png'),
           title: const Text(
-            '  New Places',
+            ' New Places',
             style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
           ),
           trailing: IconButton(
             icon: const Icon(Icons.keyboard_arrow_right, color: Colors.white),
