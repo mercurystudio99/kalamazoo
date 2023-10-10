@@ -57,6 +57,8 @@ dependencies:
   webview_flutter: ^4.2.4
   table_calendar: ^3.0.9
   flutter_google_places: ^0.3.0
+  flutter_stripe: ^9.4.0
+  http:
 
 dev_dependencies:
   flutter_test:

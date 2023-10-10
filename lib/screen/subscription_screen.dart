@@ -372,6 +372,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                           globals.userSubscription = i.toString();
                         }
                       }
+                      NavigationRouter.switchToPayment(context);
                     },
                     child: const Text(
                       Util.buttonSubscription,

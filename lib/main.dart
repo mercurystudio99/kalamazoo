@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'firebase_options.dart';
 
+import 'package:kalamazoo/key.dart';
 import 'package:kalamazoo/utils/color.dart';
 import 'package:kalamazoo/utils/globals.dart' as global;
 import 'package:kalamazoo/screen/home_screen.dart';
@@ -33,6 +35,7 @@ import 'package:kalamazoo/screen/filter_screen.dart';
 import 'package:kalamazoo/screen/favorite_screen.dart';
 import 'package:kalamazoo/screen/main_screen.dart';
 import 'package:kalamazoo/screen/splash_screen.dart';
+import 'package:kalamazoo/screen/payment_screen.dart';
 
 var routes = <String, WidgetBuilder>{
   "/OTPScreen": (BuildContext context) => const OTPScreen(),
@@ -61,6 +64,7 @@ var routes = <String, WidgetBuilder>{
   "/FilterScreen": (BuildContext context) => const FilterScreen(),
   "/FavoriteScreen": (BuildContext context) => const FavoriteScreen(),
   "/MainScreen": (BuildContext context) => const MainScreen(),
+  "/PaymentScreen": (BuildContext context) => const PaymentScreen(),
 };
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,6 +75,7 @@ void main() async {
   String? isLogged = prefs.getString('credential');
   isLogged ??= '';
   global.userEmail = isLogged;
+  Stripe.publishableKey = stripePublishableKey;
   runApp(MyApp());
 }
 

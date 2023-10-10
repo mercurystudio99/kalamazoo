@@ -105,6 +105,10 @@ class NavigationRouter {
     Navigator.pushNamed(context, "/ListScreen");
   }
 
+  static void switchToPayment(BuildContext context) {
+    Navigator.pushNamed(context, "/PaymentScreen");
+  }
+
   static Future<void> switchToMain(BuildContext context) async {
     await Navigator.pushNamed(context, "/MainScreen");
   }
