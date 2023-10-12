@@ -325,7 +325,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                     password: _passController.text.trim(),
                                     onSuccess: () {
                                       if (_isChecked) _setCredential();
-                                      NavigationRouter.switchToHome(context);
+                                      if (global.userRole == Util.customer) {
+                                        NavigationRouter.switchToHome(context);
+                                      } else {
+                                        NavigationRouter.switchToAbout(context);
+                                      }
                                     },
                                     onError: (String text) {
                                       // Show error message

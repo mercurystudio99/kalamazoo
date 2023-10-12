@@ -5,6 +5,7 @@ import 'package:kalamazoo/utils/globals.dart' as global;
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/color.dart';
+import 'package:kalamazoo/models/app_model.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,8 +19,19 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     if (global.userEmail.isNotEmpty) {
-      Timer(const Duration(seconds: 3),
-          () => NavigationRouter.switchToHome(context));
+      AppModel().userExist(
+          email: global.userEmail,
+          onSuccess: (String id) {
+            global.userID = id;
+            if (global.userRole == Util.customer) {
+              Timer(const Duration(seconds: 3),
+                  () => NavigationRouter.switchToHome(context));
+            } else {
+              Timer(const Duration(seconds: 3),
+                  () => NavigationRouter.switchToAbout(context));
+            }
+          },
+          onError: (String text) {});
     } else {
       Timer(const Duration(seconds: 3),
           () => NavigationRouter.switchToStart(context));

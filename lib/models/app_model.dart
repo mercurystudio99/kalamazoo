@@ -554,6 +554,44 @@ class AppModel extends Model {
         .get();
   }
 
+  void getRestaurantFoodByID({
+    // callback functions
+    required Function(List<Map<String, dynamic>>) onSuccess,
+    required Function(String) onError,
+  }) {
+    _firestore
+        .collection(C_RESTAURANTS)
+        .doc(globals.restaurantID)
+        .collection(C_C_MENU)
+        .get()
+        .then(
+      (querySnapshot) {
+        List<Map<String, dynamic>> result = [];
+        for (var snapshot in querySnapshot.docs) {
+          result.add(snapshot.data());
+        }
+        onSuccess(result);
+      },
+      onError: (e) => debugPrint("Error completing: $e"),
+    );
+  }
+
+  void getCategories({
+    required Function(List<Map<String, dynamic>>) onSuccess,
+    required VoidCallback onEmpty,
+  }) async {
+    final snapshots = await _firestore.collection(C_CATEGORIES).get();
+    if (snapshots.docs.isEmpty) {
+      onEmpty();
+    } else {
+      List<Map<String, dynamic>> list = [];
+      for (var element in snapshots.docs) {
+        list.add(element.data());
+      }
+      onSuccess(list);
+    }
+  }
+
   void setSubscription({
     required int count,
     required String type,

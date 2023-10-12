@@ -1063,8 +1063,8 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                     address: _addressController.text.trim(),
                                     phone: _phoneController.text.trim(),
                                     onSuccess: () {
-                                      // Go to Home
-                                      NavigationRouter.switchToHome(context);
+                                      // Go to Restaurant
+                                      NavigationRouter.switchToAbout(context);
                                     },
                                     onError: (String text) {
                                       // Show error message

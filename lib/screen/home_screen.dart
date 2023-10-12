@@ -164,12 +164,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void initializeSelection() {
     location = globals.searchFullAddress;
-    AppModel().userExist(
-        email: globals.userEmail,
-        onSuccess: (String id) {
-          globals.userID = id;
-        },
-        onError: (String text) {});
     AppModel().getProfile(onSuccess: (Map<String, dynamic> param) {
       profile = param;
     });

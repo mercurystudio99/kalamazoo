@@ -12,6 +12,7 @@ List<dynamic> ownerAmenities = [];
 String restaurantType = C_RESTAURANTS;
 String restaurantID = "";
 double restaurantRating = 0;
+String menuCategory = "";
 String menuID = "";
 String listTarget = '';
 

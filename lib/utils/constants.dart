@@ -9,6 +9,7 @@ const String C_WINERIES = "Wineries";
 const String C_BREWERIES = "Breweries";
 const String C_AMENITIES = "Amenities";
 const String C_TOPMENU = "TopMenus";
+const String C_CATEGORIES = "Categories";
 const String C_C_MENU = "Menu";
 
 /// DATABASE FIELDS FOR USER COLLECTION  ///
@@ -60,6 +61,7 @@ const String MENU_NAME = "name";
 const String MENU_PRICE = "price";
 const String MENU_DESCRIPTION = "description";
 const String MENU_PHOTO = "photoLink";
+const String MENU_CATEGORY = "category";
 
 const String AMENITY_ID = "id";
 const String AMENITY_NAME = "name";
@@ -69,3 +71,6 @@ const String AMENITY_TYPE = "type";
 const String TOPMENU_ID = "id";
 const String TOPMENU_NAME = "name";
 const String TOPMENU_IMAGE = "imgName";
+
+const String CATEGORY_ID = "id";
+const String CATEGORY_NAME = "name";

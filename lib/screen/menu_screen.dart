@@ -4,6 +4,7 @@ import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
 import 'package:kalamazoo/utils/constants.dart';
+import 'package:kalamazoo/utils/globals.dart' as global;
 import 'package:kalamazoo/models/app_model.dart';
 import 'package:kalamazoo/widget/processing.dart';
 
@@ -40,12 +41,14 @@ class _MenuScreenState extends State<MenuScreen> {
         if (snapshot.hasData) {
           menu.clear();
           for (var doc in snapshot.data!.docs) {
-            if (doc
-                .data()[MENU_NAME]
-                .toString()
-                .toLowerCase()
-                .contains(_searchController.text.trim().toLowerCase())) {
-              menu.add(doc.data());
+            if (doc.data()[MENU_CATEGORY].toString() == global.menuCategory) {
+              if (doc
+                  .data()[MENU_NAME]
+                  .toString()
+                  .toLowerCase()
+                  .contains(_searchController.text.trim().toLowerCase())) {
+                menu.add(doc.data());
+              }
             }
           }
           return Stack(
