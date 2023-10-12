@@ -1169,9 +1169,39 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding: const EdgeInsets.all(
                                         5) //content padding inside button
                                     ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  NavigationRouter.switchToSubscription(
+                                      context);
+                                },
                                 child: Text(
                                   'PROMOTE YOUR BUSINESS',
+                                  style: TextStyle(
+                                      color: CustomColor.buttonTextColor,
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.035),
+                                ),
+                              )))),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: Util.mainPadding),
+                      child: Center(
+                          child: SizedBox(
+                              height: 35, //height of button
+                              width: MediaQuery.of(context).size.width *
+                                  0.55, //width of button
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 0, //elevation of button
+                                    shape: RoundedRectangleBorder(
+                                        //to set border radius to button
+                                        borderRadius: BorderRadius.circular(5)),
+                                    padding: const EdgeInsets.all(
+                                        5) //content padding inside button
+                                    ),
+                                onPressed: () {},
+                                child: Text(
+                                  'UPLOAD DAILY SPECIALS',
                                   style: TextStyle(
                                       color: CustomColor.buttonTextColor,
                                       fontSize:
@@ -1302,15 +1332,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   title: const Text(Util.notification),
                   trailing: const Icon(Icons.arrow_forward_ios),
                 ),
-                if (profile[USER_ROLE] == Util.owner)
-                  ListTile(
-                    onTap: () {
-                      NavigationRouter.switchToSubscription(context);
-                    },
-                    leading: const Icon(Icons.subscriptions_outlined),
-                    title: const Text(Util.subscriptionTitle),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                  ),
                 ListTile(
                   onTap: () {
                     NavigationRouter.switchToEvent(context);
