@@ -1,10 +1,16 @@
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
 import 'package:badges/badges.dart' as badges;
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
 import 'package:kalamazoo/utils/globals.dart' as globals;
+import 'package:kalamazoo/models/app_model.dart';
+import 'package:kalamazoo/key.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({super.key});
@@ -15,6 +21,10 @@ class SubscriptionScreen extends StatefulWidget {
 
 class _SubscriptionScreenState extends State<SubscriptionScreen> {
   List<bool> selectIndex = [false, false, false, false];
+  List<int> money = [100, 250, 500, 1000];
+  List<int> count = [1, 4, 10, 1];
+  List<String> type = ['each', 'month', 'month', 'day'];
+  Map<String, dynamic>? paymentIntentData;
 
   @override
   void initState() {
@@ -367,12 +377,23 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                             5) //content padding inside button
                         ),
                     onPressed: () {
-                      for (var i = 0; i < selectIndex.length; i++) {
+                      int index = -1;
+                      for (int i = 0; i < selectIndex.length; i++) {
                         if (selectIndex[i]) {
-                          globals.userSubscription = i.toString();
+                          index = i;
                         }
                       }
-                      NavigationRouter.switchToPayment(context);
+                      if (index < 0) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                'Please choose one of the subscription plans.'),
+                            duration: Duration(seconds: 3),
+                          ),
+                        );
+                      } else {
+                        makePayment(index);
+                      }
                     },
                     child: const Text(
                       Util.buttonSubscription,
@@ -388,5 +409,101 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         ],
       ),
     );
+  }
+
+  void _setSubscription(int index) {
+    AppModel().setSubscription(
+      count: count[index],
+      type: type[index],
+      onSuccess: () {
+        debugPrint('success!!!');
+      },
+      onError: (err) {},
+    );
+  }
+
+  payFee() {
+    try {
+      //if you want to upload data to any database do it here
+    } catch (e) {
+      // exception while uploading data
+    }
+  }
+
+  Future<void> makePayment(int index) async {
+    int cost = money[index];
+    try {
+      paymentIntentData = await createPaymentIntent(
+          cost.toString(), 'USD'); //json.decode(response.body);
+      await Stripe.instance
+          .initPaymentSheet(
+              paymentSheetParameters: SetupPaymentSheetParameters(
+                  paymentIntentClientSecret:
+                      paymentIntentData!['client_secret'],
+                  style: ThemeMode.dark,
+                  merchantDisplayName: 'ANNIE'))
+          .then((value) {
+        debugPrint('===>>> $value');
+      });
+      displayPaymentSheet(index);
+    } catch (e, s) {
+      if (kDebugMode) {
+        debugPrint('$s');
+      }
+    }
+  }
+
+  displayPaymentSheet(int index) async {
+    try {
+      await Stripe.instance.presentPaymentSheet().then((newValue) {
+        payFee();
+        _setSubscription(index);
+        paymentIntentData = null;
+      }).onError((error, stackTrace) {
+        if (kDebugMode) {
+          debugPrint('Exception/DISPLAYPAYMENTSHEET==> $error $stackTrace');
+        }
+      });
+    } on StripeException catch (e) {
+      if (kDebugMode) {
+        debugPrint('$e');
+      }
+      showDialog(
+          context: context,
+          builder: (_) => const AlertDialog(
+                content: Text("Cancelled "),
+              ));
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('$e');
+      }
+    }
+  }
+
+  createPaymentIntent(String amount, String currency) async {
+    try {
+      Map<String, dynamic> body = {
+        'amount': calculateAmount(amount),
+        'currency': currency,
+        'payment_method_types[]': 'card'
+      };
+      var response = await http.post(
+          Uri.parse('https://api.stripe.com/v1/payment_intents'),
+          body: body,
+          headers: {
+            'Authorization': 'Bearer $stripeSecretKey',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          });
+      return jsonDecode(response.body);
+    } catch (err) {
+      if (kDebugMode) {
+        debugPrint('err charging user: ${err.toString()}');
+      }
+    }
+  }
+
+  calculateAmount(String amount) {
+    final a = (int.parse(amount)) * 100;
+    return a.toString();
   }
 }

@@ -553,4 +553,19 @@ class AppModel extends Model {
         .doc(globals.menuID)
         .get();
   }
+
+  void setSubscription({
+    required int count,
+    required String type,
+    // callback functions
+    required VoidCallback onSuccess,
+    required Function(String) onError,
+  }) {
+    _firestore.collection(C_USERS).doc(globals.userID).update({
+      USER_SUBSCRIPTION_DATE: DateTime.now(),
+      USER_SUBSCRIPTION_COUNT: count,
+      USER_SUBSCRIPTION_TYPE: type,
+    }).then((value) => onSuccess(),
+        onError: (e) => debugPrint("Error updating document $e"));
+  }
 }
