@@ -29,7 +29,8 @@ class _StartScreenState extends State<StartScreen> {
       provisional: false,
       sound: true,
     );
-
+    String? token = await _messaging.getToken();
+    debugPrint(token);
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       debugPrint('User granted permission');
       // For handling the received notifications
