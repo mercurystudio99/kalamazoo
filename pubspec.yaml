@@ -59,6 +59,8 @@ dependencies:
   flutter_google_places: ^0.3.0
   flutter_stripe: ^9.4.0
   http:
+  firebase_messaging: ^14.6.9
+  overlay_support: ^2.1.0
 
 dev_dependencies:
   flutter_test:
