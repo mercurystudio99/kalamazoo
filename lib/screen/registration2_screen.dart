@@ -1054,24 +1054,37 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                 );
                               },
                               onError: (String text) {
-                                AppModel().ownerSignUp(
-                                    name: _usernameController.text.trim(),
+                                AppModel().registerRestaurant(
                                     email: _emailController.text.trim(),
                                     password: _passController.text.trim(),
                                     businessname:
                                         _businessnameController.text.trim(),
                                     address: _addressController.text.trim(),
                                     phone: _phoneController.text.trim(),
-                                    onSuccess: () {
-                                      // Go to Restaurant
-                                      NavigationRouter.switchToAbout(context);
-                                    },
-                                    onError: (String text) {
-                                      // Show error message
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        SnackBar(content: Text(text)),
-                                      );
+                                    onSuccess: (String id) {
+                                      AppModel().ownerSignUp(
+                                          restaurantId: id,
+                                          name: _usernameController.text.trim(),
+                                          email: _emailController.text.trim(),
+                                          password: _passController.text.trim(),
+                                          businessname: _businessnameController
+                                              .text
+                                              .trim(),
+                                          address:
+                                              _addressController.text.trim(),
+                                          phone: _phoneController.text.trim(),
+                                          onSuccess: () {
+                                            // Go to Restaurant
+                                            NavigationRouter.switchToAbout(
+                                                context);
+                                          },
+                                          onError: (String text) {
+                                            // Show error message
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(content: Text(text)),
+                                            );
+                                          });
                                     });
                               });
                         }

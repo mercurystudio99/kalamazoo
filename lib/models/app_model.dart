@@ -55,6 +55,7 @@ class AppModel extends Model {
   }
 
   void ownerSignUp({
+    required String restaurantId,
     required String name,
     required String email,
     required String password,
@@ -68,6 +69,7 @@ class AppModel extends Model {
     final docRef = _firestore.collection(C_USERS).doc();
     await docRef.set({
       USER_ID: docRef.id,
+      USER_RESTAURANT_ID: restaurantId,
       USER_FULLNAME: name,
       USER_EMAIL: email,
       USER_PASS: password,
@@ -106,6 +108,9 @@ class AppModel extends Model {
               if (docSnapshot.data()[USER_FAVOURITIES].isNotEmpty) {
                 globals.userFavourites = docSnapshot.data()[USER_FAVOURITIES];
               }
+              if (docSnapshot.data()[USER_RESTAURANT_ID].isNotEmpty) {
+                globals.restaurantID = docSnapshot.data()[USER_RESTAURANT_ID];
+              }
               onSuccess();
             } else {
               onError('Wrong password provided for that user.');
@@ -139,6 +144,9 @@ class AppModel extends Model {
             retrieveID = docSnapshot.id;
             if (docSnapshot.data()[USER_FAVOURITIES].isNotEmpty) {
               globals.userFavourites = docSnapshot.data()[USER_FAVOURITIES];
+            }
+            if (docSnapshot.data()[USER_RESTAURANT_ID].isNotEmpty) {
+              globals.restaurantID = docSnapshot.data()[USER_RESTAURANT_ID];
             }
             globals.userPass = docSnapshot.data()[USER_PASS];
             globals.userRole = docSnapshot.data()[USER_ROLE];
@@ -605,5 +613,31 @@ class AppModel extends Model {
       USER_SUBSCRIPTION_TYPE: type,
     }).then((value) => onSuccess(),
         onError: (e) => debugPrint("Error updating document $e"));
+  }
+
+  void registerRestaurant({
+    required String email,
+    required String password,
+    required String businessname,
+    required String address,
+    required String phone,
+    // callback functions
+    required Function(String) onSuccess,
+  }) async {
+    final docRef = _firestore.collection(C_RESTAURANTS).doc();
+    await docRef.set({
+      RESTAURANT_ID: docRef.id,
+      RESTAURANT_ADDRESS: address,
+      RESTAURANT_BUSINESSNAME: businessname,
+      RESTAURANT_CATEGORY: '',
+      RESTAURANT_CITY: '',
+      RESTAURANT_EMAIL: email,
+      RESTAURANT_GEOLOCATION: [0, 0],
+      RESTAURANT_PHONE: phone,
+      RESTAURANT_STATE: '',
+      RESTAURANT_URL: '',
+      RESTAURANT_ZIP: '',
+    });
+    onSuccess(docRef.id);
   }
 }

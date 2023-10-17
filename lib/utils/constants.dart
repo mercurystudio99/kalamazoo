@@ -33,6 +33,7 @@ const String USER_STATUS = "user_status";
 const String USER_IS_VERIFIED = "user_is_verified";
 const String USER_REG_DATE = "user_reg_date";
 const String USER_LAST_LOGIN = "user_last_login";
+const String USER_RESTAURANT_ID = "user_restaurant_id";
 const String USER_SUBSCRIPTION_DATE = "user_subscription_date";
 const String USER_SUBSCRIPTION_COUNT = "user_subscription_count";
 const String USER_SUBSCRIPTION_TYPE = "user_subscription_type";
