@@ -61,6 +61,7 @@ dependencies:
   http:
   firebase_messaging: ^14.6.9
   overlay_support: ^2.1.0
+  rxdart: ^0.26.0
 
 dev_dependencies:
   flutter_test:

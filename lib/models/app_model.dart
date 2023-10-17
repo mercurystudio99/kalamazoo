@@ -207,6 +207,19 @@ class AppModel extends Model {
         : onError('Passwords must match.');
   }
 
+  // FCM token set method
+  void setFCMToken({
+    required String token,
+    // callback functions
+    required VoidCallback onSuccess,
+  }) {
+    _firestore
+        .collection(C_USERS)
+        .doc(globals.userID)
+        .update({USER_FCM_TOKEN: token}).then((value) => onSuccess(),
+            onError: (e) => debugPrint("Error updating document $e"));
+  }
+
   // search get method
   void getSearch({
     required String keyword,
