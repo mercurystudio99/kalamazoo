@@ -1199,7 +1199,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding: const EdgeInsets.all(
                                         5) //content padding inside button
                                     ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  NavigationRouter.switchToDailySpecialEdit(
+                                      context);
+                                },
                                 child: Text(
                                   'UPLOAD DAILY SPECIALS',
                                   style: TextStyle(

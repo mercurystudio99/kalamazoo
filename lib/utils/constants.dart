@@ -10,6 +10,7 @@ const String C_BREWERIES = "Breweries";
 const String C_AMENITIES = "Amenities";
 const String C_TOPMENU = "TopMenus";
 const String C_CATEGORIES = "Categories";
+const String C_DAILYSPECIAL = "DailySpecial";
 const String C_C_MENU = "Menu";
 
 /// DATABASE FIELDS FOR USER COLLECTION  ///
@@ -75,3 +76,8 @@ const String TOPMENU_IMAGE = "imgName";
 
 const String CATEGORY_ID = "id";
 const String CATEGORY_NAME = "name";
+
+const String DAILYSPECIAL_ID = "id";
+const String DAILYSPECIAL_IMAGE_LINK = "image_link";
+const String DAILYSPECIAL_DESC = "description";
+const String DAILYSPECIAL_ACTIVE = "active";

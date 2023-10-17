@@ -640,4 +640,20 @@ class AppModel extends Model {
     });
     onSuccess(docRef.id);
   }
+
+  void setDailySpecial({
+    required String imageLink,
+    required String desc,
+    // callback functions
+    required VoidCallback onSuccess,
+  }) async {
+    final docRef = _firestore.collection(C_DAILYSPECIAL).doc();
+    await docRef.set({
+      DAILYSPECIAL_ID: docRef.id,
+      DAILYSPECIAL_IMAGE_LINK: imageLink,
+      DAILYSPECIAL_DESC: desc,
+      DAILYSPECIAL_ACTIVE: false,
+    });
+    onSuccess();
+  }
 }
