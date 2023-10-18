@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/gestures.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
@@ -18,6 +19,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  late final FirebaseMessaging _messaging;
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -47,6 +49,12 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _obscureText = !_obscureText;
     });
+  }
+
+  void setFCMToken() async {
+    _messaging = FirebaseMessaging.instance;
+    String? token = await _messaging.getToken();
+    AppModel().setFCMToken(token: token ?? '', onSuccess: () {});
   }
 
   Future<void> _setCredential() async {
@@ -325,6 +333,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     password: _passController.text.trim(),
                                     onSuccess: () {
                                       if (_isChecked) _setCredential();
+                                      setFCMToken();
                                       if (global.userRole == Util.customer) {
                                         NavigationRouter.switchToHome(context);
                                       } else {

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:kalamazoo/utils/globals.dart' as global;
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/util.dart';
@@ -15,6 +16,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  late final FirebaseMessaging _messaging;
+
+  void setFCMToken() async {
+    _messaging = FirebaseMessaging.instance;
+    String? token = await _messaging.getToken();
+    AppModel().setFCMToken(token: token ?? '', onSuccess: () {});
+  }
+
   @override
   void initState() {
     super.initState();
@@ -23,6 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
           email: global.userEmail,
           onSuccess: (String id) {
             global.userID = id;
+            setFCMToken();
             if (global.userRole == Util.customer) {
               Timer(const Duration(seconds: 3),
                   () => NavigationRouter.switchToHome(context));

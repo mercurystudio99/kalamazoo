@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:rxdart/rxdart.dart';
 import 'firebase_options.dart';
 
 import 'package:kalamazoo/key.dart';
@@ -37,6 +40,17 @@ import 'package:kalamazoo/screen/favorite_screen.dart';
 import 'package:kalamazoo/screen/main_screen.dart';
 import 'package:kalamazoo/screen/splash_screen.dart';
 import 'package:kalamazoo/screen/payment_screen.dart';
+
+// used to pass messages from event handler to the UI
+final _messageStreamController = BehaviorSubject<RemoteMessage>();
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  debugPrint("Handling a background message: ${message.messageId}");
+  debugPrint('Message data: ${message.data}');
+  debugPrint('Message notification: ${message.notification?.title}');
+  debugPrint('Message notification: ${message.notification?.body}');
+}
 
 var routes = <String, WidgetBuilder>{
   "/OTPScreen": (BuildContext context) => const OTPScreen(),
@@ -79,6 +93,34 @@ void main() async {
   isLogged ??= '';
   global.userEmail = isLogged;
   Stripe.publishableKey = stripePublishableKey;
+  final FirebaseMessaging messaging = FirebaseMessaging.instance;
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    badge: true,
+    provisional: false,
+    sound: true,
+  );
+  String? token = await messaging.getToken();
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    debugPrint('Handling a foreground message: ${message.messageId}');
+    debugPrint('Message data: ${message.data}');
+    debugPrint('Message notification: ${message.notification?.title}');
+    debugPrint('Message notification: ${message.notification?.body}');
+    _messageStreamController.sink.add(message);
+    showSimpleNotification(
+      Text('${message.notification?.title}',
+          style: const TextStyle(color: Colors.black)),
+      leading: const Icon(
+        Icons.notifications,
+        color: CustomColor.activeColor,
+      ),
+      subtitle: Text('${message.notification?.body}',
+          style: const TextStyle(color: Colors.black)),
+      background: Colors.white,
+      duration: const Duration(seconds: 5),
+    );
+  });
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(MyApp());
 }
 
@@ -103,38 +145,40 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-            // This is the theme of your application.
-            //
-            // Try running your application with "flutter run". You'll see the
-            // application has a blue toolbar. Then, without quitting the app, try
-            // changing the primarySwatch below to Colors.green and then invoke
-            // "hot reload" (press "r" in the console where you ran "flutter run",
-            // or simply save your changes to "hot reload" in a Flutter IDE).
-            // Notice that the counter didn't reset back to zero; the application
-            // is not restarted.
-            primarySwatch: defaultcolor,
-            inputDecorationTheme: const InputDecorationTheme(
-                enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(14)),
-                    borderSide: BorderSide(color: Colors.white)),
-                focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(14)),
-                    borderSide: BorderSide(color: CustomColor.primaryColor)),
-                errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(14)),
-                    borderSide: BorderSide(color: CustomColor.activeColor)),
-                focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(14)),
-                    borderSide: BorderSide(color: CustomColor.activeColor)),
-                filled: true,
-                fillColor: Colors.white),
-            textTheme: GoogleFonts.poppinsTextTheme(
-              Theme.of(context).textTheme,
-            )),
-        home: const SplashScreen(),
-        routes: routes);
+    return OverlaySupport(
+        child: MaterialApp(
+            title: 'Flutter Demo',
+            theme: ThemeData(
+                // This is the theme of your application.
+                //
+                // Try running your application with "flutter run". You'll see the
+                // application has a blue toolbar. Then, without quitting the app, try
+                // changing the primarySwatch below to Colors.green and then invoke
+                // "hot reload" (press "r" in the console where you ran "flutter run",
+                // or simply save your changes to "hot reload" in a Flutter IDE).
+                // Notice that the counter didn't reset back to zero; the application
+                // is not restarted.
+                primarySwatch: defaultcolor,
+                inputDecorationTheme: const InputDecorationTheme(
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(14)),
+                        borderSide: BorderSide(color: Colors.white)),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(14)),
+                        borderSide:
+                            BorderSide(color: CustomColor.primaryColor)),
+                    errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(14)),
+                        borderSide: BorderSide(color: CustomColor.activeColor)),
+                    focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(14)),
+                        borderSide: BorderSide(color: CustomColor.activeColor)),
+                    filled: true,
+                    fillColor: Colors.white),
+                textTheme: GoogleFonts.poppinsTextTheme(
+                  Theme.of(context).textTheme,
+                )),
+            home: const SplashScreen(),
+            routes: routes));
   }
 }

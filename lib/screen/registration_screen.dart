@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
@@ -15,6 +16,7 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  late final FirebaseMessaging _messaging;
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -39,6 +41,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     _focusEmail.dispose();
     _focusPass.dispose();
     super.dispose();
+  }
+
+  void setFCMToken() async {
+    _messaging = FirebaseMessaging.instance;
+    String? token = await _messaging.getToken();
+    AppModel().setFCMToken(token: token ?? '', onSuccess: () {});
   }
 
   // Toggles the password show status
@@ -409,6 +417,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                     email: _emailController.text.trim(),
                                     password: _passController.text.trim(),
                                     onSuccess: () {
+                                      setFCMToken();
                                       // Go to Home
                                       NavigationRouter.switchToHome(context);
                                     },

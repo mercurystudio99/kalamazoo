@@ -38,6 +38,7 @@ const String USER_RESTAURANT_ID = "user_restaurant_id";
 const String USER_SUBSCRIPTION_DATE = "user_subscription_date";
 const String USER_SUBSCRIPTION_COUNT = "user_subscription_count";
 const String USER_SUBSCRIPTION_TYPE = "user_subscription_type";
+const String USER_FCM_TOKEN = "user_fcm_token";
 
 const String RESTAURANT_ID = "id";
 const String RESTAURANT_ADDRESS = "address";
