@@ -18,21 +18,6 @@ import 'package:kalamazoo/utils/constants.dart';
 import 'package:kalamazoo/models/app_model.dart';
 import 'package:kalamazoo/key.dart';
 
-final List<Map<String, dynamic>> imgList = [
-  {
-    "title": Util.featured,
-    "image": "assets/burger.png",
-    "bio": "Lorem ipsum dolor sit\n amet, consectetur adip\niscing elit.",
-    "eventCaption": Util.buttonMore
-  },
-  {
-    "title": Util.dailySpecial,
-    "image": "assets/plate.png",
-    "bio": "Lorem ipsum dolor sit\n amet, consectetur adip\niscing elit.",
-    "eventCaption": Util.showAll
-  }
-];
-
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
@@ -48,6 +33,8 @@ class _MainScreenState extends State<MainScreen> {
   static List<Map<String, dynamic>> bestOffers = [];
   static List<Map<String, dynamic>> topBrands = [];
   static List<Map<String, dynamic>> list = [];
+  static List<Map<String, dynamic>> carouselList = [];
+  static List<Map<String, dynamic>> dailyspecials = [];
   static List<Map<String, dynamic>> searchResults = [];
   static List<String> categories = [];
 
@@ -78,6 +65,20 @@ class _MainScreenState extends State<MainScreen> {
           list = param;
           setState(() {});
         });
+  }
+
+  void _getDailySpecial() {
+    AppModel().getDailySpecial(
+      limit: 5,
+      onSuccess: (List<Map<String, dynamic>> param) {
+        dailyspecials.clear();
+        dailyspecials = param;
+        setState(() {});
+      },
+      onEmpty: () {
+        dailyspecials.clear();
+      },
+    );
   }
 
   _onSearch(String text) async {
@@ -166,6 +167,7 @@ class _MainScreenState extends State<MainScreen> {
         if (value) categories.add(key);
       });
     });
+    _getDailySpecial();
     _getBrand();
     _getOffer();
     AppModel().getTopMenu(
@@ -187,7 +189,25 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> imageSliders = imgList
+    carouselList = [
+      {
+        "title": Util.featured,
+        "image":
+            'https://images.unsplash.com/photo-1519125323398-675f0ddb6308?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=94a1e718d89ca60a6337a6008341ca50&auto=format&fit=crop&w=1950&q=80',
+        "bio": "Lorem ipsum dolor sit\n amet, consectetur adip\niscing elit.",
+        "eventCaption": Util.buttonMore
+      }
+    ];
+    for (var dailyspecial in dailyspecials) {
+      carouselList.add({
+        "title": Util.dailySpecial,
+        "image": dailyspecial[DAILYSPECIAL_IMAGE_LINK],
+        "bio": dailyspecial[DAILYSPECIAL_DESC],
+        "eventCaption": Util.showAll
+      });
+    }
+
+    final List<Widget> imageSliders = carouselList
         .map((item) => Container(
               margin: const EdgeInsets.all(5.0),
               decoration: const BoxDecoration(
@@ -218,7 +238,11 @@ class _MainScreenState extends State<MainScreen> {
                           padding: const EdgeInsets.all(5),
                           child: Row(children: [
                             const SizedBox(width: 30),
-                            Image.asset(item["image"]),
+                            Image.network(
+                              item["image"],
+                              fit: BoxFit.cover,
+                              height: 100,
+                            ),
                             const SizedBox(width: 10),
                             Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -617,7 +641,7 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: imgList.asMap().entries.map((entry) {
+                      children: carouselList.asMap().entries.map((entry) {
                         return Container(
                           width:
                               (carouselIndicatorCurrent == entry.key ? 34 : 16),

@@ -654,6 +654,43 @@ class AppModel extends Model {
     onSuccess(docRef.id);
   }
 
+  void getDailySpecial({
+    int? limit,
+    required Function(List<Map<String, dynamic>>) onSuccess,
+    required VoidCallback onEmpty,
+  }) async {
+    if (limit != null) {
+      final snapshots = await _firestore
+          .collection(C_DAILYSPECIAL)
+          .where(DAILYSPECIAL_ACTIVE, isEqualTo: true)
+          .limit(limit)
+          .get();
+      if (snapshots.docs.isEmpty) {
+        onEmpty();
+      } else {
+        List<Map<String, dynamic>> list = [];
+        for (var element in snapshots.docs) {
+          list.add(element.data());
+        }
+        onSuccess(list);
+      }
+    } else {
+      final snapshots = await _firestore
+          .collection(C_DAILYSPECIAL)
+          .where(DAILYSPECIAL_ACTIVE, isEqualTo: true)
+          .get();
+      if (snapshots.docs.isEmpty) {
+        onEmpty();
+      } else {
+        List<Map<String, dynamic>> list = [];
+        for (var element in snapshots.docs) {
+          list.add(element.data());
+        }
+        onSuccess(list);
+      }
+    }
+  }
+
   void setDailySpecial({
     required String imageLink,
     required String desc,
