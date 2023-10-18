@@ -25,3 +25,5 @@ List<dynamic> searchAmenities = [];
 
 double latitude = 0;
 double longitude = 0;
+
+List<Map<String, dynamic>> notifications = [];

@@ -50,6 +50,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   debugPrint('Message data: ${message.data}');
   debugPrint('Message notification: ${message.notification?.title}');
   debugPrint('Message notification: ${message.notification?.body}');
+  global.notifications.add({
+    'body': message.notification?.body,
+    'time': DateTime.now(),
+    'seen': false,
+  });
 }
 
 var routes = <String, WidgetBuilder>{
@@ -107,6 +112,11 @@ void main() async {
     debugPrint('Message notification: ${message.notification?.title}');
     debugPrint('Message notification: ${message.notification?.body}');
     _messageStreamController.sink.add(message);
+    global.notifications.add({
+      'body': message.notification?.body,
+      'time': DateTime.now(),
+      'seen': false,
+    });
     showSimpleNotification(
       Text('${message.notification?.title}',
           style: const TextStyle(color: Colors.black)),

@@ -206,7 +206,12 @@ class _MainScreenState extends State<MainScreen> {
         "eventCaption": Util.showAll
       });
     }
-
+    int newNotificationCount = 0;
+    for (var notification in globals.notifications) {
+      if (!notification['seen']) {
+        newNotificationCount++;
+      }
+    }
     final List<Widget> imageSliders = carouselList
         .map((item) => Container(
               margin: const EdgeInsets.all(5.0),
@@ -555,17 +560,23 @@ class _MainScreenState extends State<MainScreen> {
                         onTap: () {
                           NavigationRouter.switchToNotification(context);
                         },
-                        child: const badges.Badge(
-                          badgeContent: Text(
-                            '1',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          child: Icon(
-                            Icons.notifications_outlined,
-                            size: 32,
-                            color: Colors.white,
-                          ),
-                        ),
+                        child: newNotificationCount > 0
+                            ? badges.Badge(
+                                badgeContent: Text(
+                                  '$newNotificationCount',
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                child: const Icon(
+                                  Icons.notifications_outlined,
+                                  size: 32,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Icon(
+                                Icons.notifications_outlined,
+                                size: 32,
+                                color: Colors.white,
+                              ),
                       ),
                     ],
                   ),
