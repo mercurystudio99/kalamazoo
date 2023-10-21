@@ -82,6 +82,8 @@ class AppModel extends Model {
     });
     globals.userEmail = email;
     globals.userID = docRef.id;
+    globals.restaurantID = restaurantId;
+    globals.ownerBusinessID = restaurantId;
     onSuccess();
   }
 
@@ -110,6 +112,8 @@ class AppModel extends Model {
               }
               if (docSnapshot.data()[USER_RESTAURANT_ID].isNotEmpty) {
                 globals.restaurantID = docSnapshot.data()[USER_RESTAURANT_ID];
+                globals.ownerBusinessID =
+                    docSnapshot.data()[USER_RESTAURANT_ID];
               }
               onSuccess();
             } else {
@@ -147,6 +151,7 @@ class AppModel extends Model {
             }
             if (docSnapshot.data()[USER_RESTAURANT_ID].isNotEmpty) {
               globals.restaurantID = docSnapshot.data()[USER_RESTAURANT_ID];
+              globals.ownerBusinessID = docSnapshot.data()[USER_RESTAURANT_ID];
             }
             globals.userPass = docSnapshot.data()[USER_PASS];
             globals.userRole = docSnapshot.data()[USER_ROLE];
@@ -703,7 +708,29 @@ class AppModel extends Model {
       DAILYSPECIAL_IMAGE_LINK: imageLink,
       DAILYSPECIAL_DESC: desc,
       DAILYSPECIAL_ACTIVE: false,
+      DAILYSPECIAL_BUSINESS_ID: globals.ownerBusinessID,
+      DAILYSPECIAL_BUSINESS_TYPE: globals.ownerBusinessType,
     });
     onSuccess();
+  }
+
+  void updateUserDailySpecial({
+    int? count,
+    DateTime? date,
+    // callback functions
+    required VoidCallback onSuccess,
+  }) {
+    if (count != null) {
+      _firestore.collection(C_USERS).doc(globals.userID).update({
+        USER_SUBSCRIPTION_COUNT: count,
+      }).then((value) => onSuccess(),
+          onError: (e) => debugPrint("Error updating document $e"));
+    }
+    if (date != null) {
+      _firestore.collection(C_USERS).doc(globals.userID).update({
+        USER_SUBSCRIPTION_DATE: date,
+      }).then((value) => onSuccess(),
+          onError: (e) => debugPrint("Error updating document $e"));
+    }
   }
 }

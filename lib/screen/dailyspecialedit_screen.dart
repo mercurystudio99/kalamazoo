@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:kalamazoo/utils/constants.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/color.dart';
@@ -21,6 +22,8 @@ class _DailySpecialEditScreenState extends State<DailySpecialEditScreen> {
   PlatformFile? _imageFile;
   final _formKey = GlobalKey<FormState>();
   final _descriptionController = TextEditingController();
+
+  static Map<String, dynamic> userInfo = {};
 
   Future getImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -56,6 +59,68 @@ class _DailySpecialEditScreenState extends State<DailySpecialEditScreen> {
     } else {
       onError('Please upload an image.');
     }
+  }
+
+  void save({
+    // callback functions
+    required VoidCallback onSuccess,
+    required Function(String) onError,
+  }) {
+    if (userInfo[USER_SUBSCRIPTION_TYPE] == null) {
+      onError('Please choose Subscription Plan.');
+    } else {
+      if (userInfo[USER_SUBSCRIPTION_TYPE] == 'each' ||
+          userInfo[USER_SUBSCRIPTION_TYPE] == 'month') {
+        if (userInfo[USER_SUBSCRIPTION_COUNT] > 0) {
+          AppModel().updateUserDailySpecial(
+              count: userInfo[USER_SUBSCRIPTION_COUNT]--,
+              onSuccess: () {
+                saveImage(onCallback: () {
+                  AppModel().getProfile(
+                      onSuccess: (Map<String, dynamic> param) {
+                    userInfo = param;
+                  });
+                  _descriptionController.text = '';
+                  onSuccess();
+                }, onError: (String text) {
+                  onError(text);
+                });
+              });
+        } else {
+          onError('Please choose Subscription Plan.');
+        }
+      }
+      if (userInfo[USER_SUBSCRIPTION_TYPE] == 'day') {
+        int diff =
+            DateTime.now().difference(userInfo[USER_SUBSCRIPTION_DATE]).inDays;
+        if (diff > 0) {
+          AppModel().updateUserDailySpecial(
+              date: DateTime.now(),
+              onSuccess: () {
+                saveImage(onCallback: () {
+                  AppModel().getProfile(
+                      onSuccess: (Map<String, dynamic> param) {
+                    userInfo = param;
+                  });
+                  _descriptionController.text = '';
+                  onSuccess();
+                }, onError: (String text) {
+                  onError(text);
+                });
+              });
+        } else {
+          onError('You can upload only one Daily Special in a day.');
+        }
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    AppModel().getProfile(onSuccess: (Map<String, dynamic> param) {
+      userInfo = param;
+    });
   }
 
   @override
@@ -190,7 +255,7 @@ class _DailySpecialEditScreenState extends State<DailySpecialEditScreen> {
                                     ),
                                 onPressed: () {
                                   if (_formKey.currentState!.validate()) {
-                                    saveImage(onCallback: () {
+                                    save(onSuccess: () {
                                       _descriptionController.text = '';
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(

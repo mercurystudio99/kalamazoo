@@ -8,6 +8,8 @@ String userPass = "";
 String userRole = "";
 List<dynamic> userFavourites = [];
 List<dynamic> ownerAmenities = [];
+String ownerBusinessID = "";
+String ownerBusinessType = "";
 
 String restaurantType = C_RESTAURANTS;
 String restaurantID = "";

@@ -82,3 +82,5 @@ const String DAILYSPECIAL_ID = "id";
 const String DAILYSPECIAL_IMAGE_LINK = "image_link";
 const String DAILYSPECIAL_DESC = "description";
 const String DAILYSPECIAL_ACTIVE = "active";
+const String DAILYSPECIAL_BUSINESS_ID = "business_id";
+const String DAILYSPECIAL_BUSINESS_TYPE = "business_type";
