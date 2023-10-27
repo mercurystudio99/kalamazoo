@@ -110,7 +110,8 @@ class AppModel extends Model {
               if (docSnapshot.data()[USER_FAVOURITIES].isNotEmpty) {
                 globals.userFavourites = docSnapshot.data()[USER_FAVOURITIES];
               }
-              if (docSnapshot.data()[USER_RESTAURANT_ID].isNotEmpty) {
+              if (docSnapshot.data()[USER_RESTAURANT_ID] != null &&
+                  docSnapshot.data()[USER_RESTAURANT_ID].isNotEmpty) {
                 globals.restaurantID = docSnapshot.data()[USER_RESTAURANT_ID];
                 globals.ownerBusinessID =
                     docSnapshot.data()[USER_RESTAURANT_ID];
@@ -149,7 +150,8 @@ class AppModel extends Model {
             if (docSnapshot.data()[USER_FAVOURITIES].isNotEmpty) {
               globals.userFavourites = docSnapshot.data()[USER_FAVOURITIES];
             }
-            if (docSnapshot.data()[USER_RESTAURANT_ID].isNotEmpty) {
+            if (docSnapshot.data()[USER_RESTAURANT_ID] != null &&
+                docSnapshot.data()[USER_RESTAURANT_ID].isNotEmpty) {
               globals.restaurantID = docSnapshot.data()[USER_RESTAURANT_ID];
               globals.ownerBusinessID = docSnapshot.data()[USER_RESTAURANT_ID];
             }
