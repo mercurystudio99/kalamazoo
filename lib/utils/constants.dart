@@ -11,6 +11,7 @@ const String C_AMENITIES = "Amenities";
 const String C_TOPMENU = "TopMenus";
 const String C_CATEGORIES = "Categories";
 const String C_DAILYSPECIAL = "DailySpecial";
+const String C_EVENTS = "Events";
 const String C_C_MENU = "Menu";
 
 /// DATABASE FIELDS FOR USER COLLECTION  ///
@@ -84,3 +85,11 @@ const String DAILYSPECIAL_DESC = "description";
 const String DAILYSPECIAL_ACTIVE = "active";
 const String DAILYSPECIAL_BUSINESS_ID = "business_id";
 const String DAILYSPECIAL_BUSINESS_TYPE = "business_type";
+
+const String EVENT_ID = "id";
+const String EVENT_TITLE = "title";
+const String EVENT_DESC = "description";
+const String EVENT_YEAR = "year";
+const String EVENT_MONTH = "month";
+const String EVENT_DATE = "date";
+const String EVENT_MILLISECONDS = "milliseconds";

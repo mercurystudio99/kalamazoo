@@ -2,26 +2,14 @@ import 'dart:collection';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/color.dart';
-
-final List<Map<String, dynamic>> imgList = [
-  {
-    "title": Util.event,
-    "image": "assets/burger.png",
-    "bio": "Lorem ipsum dolor sit\n amet, consectetur adip\niscing elit.",
-  },
-  {
-    "title": Util.event,
-    "image": "assets/plate.png",
-    "bio": "Lorem ipsum dolor sit\n amet, consectetur adip\niscing elit.",
-  }
-];
+import 'package:kalamazoo/utils/constants.dart';
+import 'package:kalamazoo/models/app_model.dart';
 
 final kToday = DateTime.now();
 final kFirstDay = DateTime(kToday.year);
@@ -42,13 +30,11 @@ class EventScreen extends StatefulWidget {
 }
 
 class _EventScreenState extends State<EventScreen> {
+  List<String> banners = [];
   late final ValueNotifier<List<Event>> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.month;
-  DateTime _focusedDay = DateTime.now();
+  DateTime _focusedDay = DateTime(kToday.year, kToday.month, kToday.day);
   DateTime? _selectedDay;
-
-  final _titleController = TextEditingController();
-  final _descController = TextEditingController();
 
   late final Map<DateTime, List<Event>> _kEventSource = {};
 
@@ -57,6 +43,8 @@ class _EventScreenState extends State<EventScreen> {
   @override
   void initState() {
     super.initState();
+    _getBanners();
+    _getEvents(_focusedDay);
     _selectedDay = _focusedDay;
     _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
   }
@@ -64,9 +52,59 @@ class _EventScreenState extends State<EventScreen> {
   @override
   void dispose() {
     _selectedEvents.dispose();
-    _titleController.dispose();
-    _descController.dispose();
+    kEvents.clear();
+    banners.clear();
     super.dispose();
+  }
+
+  void _getBanners() {
+    AppModel().getEventBanners(
+      onSuccess: (List<String> param) {
+        banners = param;
+        setState(() {});
+      },
+    );
+  }
+
+  void _getEvents(DateTime day) {
+    AppModel().getEventForMonth(
+      year: day.year.toString(),
+      month: day.month.toString(),
+      onSuccess: (List<Map<String, dynamic>> param) {
+        _kEventSource.clear();
+        for (var element in param) {
+          var date = DateTime.fromMillisecondsSinceEpoch(
+              element[EVENT_MILLISECONDS],
+              isUtc: true);
+          if (_kEventSource[date] != null) {
+            _kEventSource[date]?.add(Event(
+                eventTitle: element[EVENT_TITLE],
+                eventDesc: element[EVENT_DESC],
+                r: getRandomInt(0, 255),
+                g: getRandomInt(0, 255),
+                b: getRandomInt(0, 255)));
+          } else {
+            _kEventSource[date] = [
+              Event(
+                eventTitle: element[EVENT_TITLE],
+                eventDesc: element[EVENT_DESC],
+                r: getRandomInt(0, 255),
+                g: getRandomInt(0, 255),
+                b: getRandomInt(0, 255),
+              )
+            ];
+          }
+          kEvents.addAll(_kEventSource);
+        }
+        setState(() {});
+      },
+    );
+  }
+
+  int getRandomInt(int min, int max) {
+    final random = Random();
+    int number = min + random.nextInt(max - min + 1);
+    return number;
   }
 
   List<Event> _getEventsForDay(DateTime day) {
@@ -84,139 +122,25 @@ class _EventScreenState extends State<EventScreen> {
     }
   }
 
-  void _showAddEventDialog() async {
-    await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: const Text('New Event'),
-              content: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  buildTextField(
-                      controller: _titleController, hint: 'Enter Title'),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  buildTextField(
-                      controller: _descController, hint: 'Enter Description'),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Cancel'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    if (_titleController.text.isEmpty &&
-                        _descController.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Please enter title & description'),
-                          duration: Duration(seconds: 3),
-                        ),
-                      );
-                      return;
-                    } else {
-                      setState(() {
-                        if (_kEventSource[_selectedDay] != null) {
-                          _kEventSource[_selectedDay]?.add(Event(
-                              eventTitle: _titleController.text,
-                              eventDesc: _descController.text,
-                              eventColor: Colors.primaries[
-                                  Random().nextInt(Colors.primaries.length)]));
-                        } else {
-                          _kEventSource[_selectedDay!] = [
-                            Event(
-                                eventTitle: _titleController.text,
-                                eventDesc: _descController.text,
-                                eventColor: Colors.primaries[
-                                    Random().nextInt(Colors.primaries.length)])
-                          ];
-                        }
-                        kEvents.addAll(_kEventSource);
-                      });
-
-                      _titleController.clear();
-                      _descController.clear();
-
-                      Navigator.pop(context);
-                      return;
-                    }
-                  },
-                  child: const Text('Add'),
-                ),
-              ],
-            ));
-  }
-
   @override
   Widget build(BuildContext context) {
-    final List<Widget> imageSliders = imgList
+    final List<Widget> imageSliders = banners
         .map((item) => Container(
-              margin: const EdgeInsets.all(5.0),
-              decoration: const BoxDecoration(
-                color: Color(0xFFFFF9E5),
-                borderRadius: BorderRadius.all(Radius.circular(30)),
-              ),
-              child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(30)),
-                  child: Stack(
-                    children: <Widget>[
-                      Positioned(
-                        left: 0,
-                        top: 0,
-                        child: Container(
-                          width: 80,
-                          height: 80,
-                          decoration: const BoxDecoration(
-                            color: CustomColor.activeColor,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.zero,
-                                topRight: Radius.zero,
-                                bottomLeft: Radius.zero,
-                                bottomRight: Radius.circular(100)),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Row(children: [
-                            const SizedBox(width: 30),
-                            Image.asset(item["image"]),
-                            const SizedBox(width: 10),
-                            Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(item["title"].toString().toUpperCase(),
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20)),
-                                  RichText(
-                                    text: TextSpan(children: [
-                                      TextSpan(
-                                        text: item["bio"],
-                                        style: GoogleFonts.poppins(
-                                            color: CustomColor.textDetailColor,
-                                            fontSize: Util.descriptionSize),
-                                      )
-                                    ]),
-                                  ),
-                                ])
-                          ]))
-                    ],
-                  )),
-            ))
+            margin: const EdgeInsets.all(5.0),
+            decoration: const BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(5),
+              child: Image.network(item,
+                  width:
+                      MediaQuery.of(context).size.width - 4 * Util.mainPadding,
+                  fit: BoxFit.contain),
+            )))
         .toList();
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton.small(
-        onPressed: () => _showAddEventDialog(),
-        backgroundColor: CustomColor.primaryColor,
-        child: const Icon(Icons.add),
-      ),
       body: Stack(
         fit: StackFit.expand,
         children: <Widget>[
@@ -232,22 +156,28 @@ class _EventScreenState extends State<EventScreen> {
           ),
           ListView(
             children: <Widget>[
-              Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
+              Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: Util.mainPadding * 0.5),
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.arrow_back_ios,
-                      color: CustomColor.primaryColor,
-                    ),
-                    onPressed: () {
-                      NavigationRouter.back(context);
-                    },
-                  ),
-                ),
-              ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.arrow_back_ios,
+                          color: CustomColor.primaryColor,
+                        ),
+                        onPressed: () {
+                          NavigationRouter.back(context);
+                        },
+                      ),
+                      const Text('Event',
+                          style: TextStyle(
+                              color: CustomColor.primaryColor, fontSize: 22)),
+                      const SizedBox(width: Util.mainPadding)
+                    ],
+                  )),
               CarouselSlider(
                 items: imageSliders,
                 options: CarouselOptions(
@@ -266,7 +196,7 @@ class _EventScreenState extends State<EventScreen> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: imgList.asMap().entries.map((entry) {
+                children: banners.asMap().entries.map((entry) {
                   return Container(
                     width: (carouselIndicatorCurrent == entry.key ? 34 : 16),
                     height: 5.0,
@@ -333,10 +263,11 @@ class _EventScreenState extends State<EventScreen> {
                 },
                 onPageChanged: (focusedDay) {
                   _focusedDay = focusedDay;
+                  _getEvents(_focusedDay);
                 },
                 calendarBuilders: CalendarBuilders(
                   singleMarkerBuilder: (context, date, event) {
-                    Color color = event.eventColor;
+                    Color color = Color.fromRGBO(event.r, event.g, event.b, 1);
                     return Container(
                       decoration:
                           BoxDecoration(shape: BoxShape.circle, color: color),
@@ -356,17 +287,53 @@ class _EventScreenState extends State<EventScreen> {
                     return ListView.builder(
                       itemCount: value.length,
                       itemBuilder: (context, index) {
+                        var splitted = value[index].toString().split('&@&');
                         return Container(
                             margin: const EdgeInsets.symmetric(
                               horizontal: Util.mainPadding,
                               vertical: 4,
                             ),
-                            decoration: BoxDecoration(color: Colors.black38),
+                            decoration: BoxDecoration(
+                                color: Color.fromRGBO(
+                                    int.parse(splitted[2]),
+                                    int.parse(splitted[3]),
+                                    int.parse(splitted[4]),
+                                    0.1)),
                             child: Row(children: [
                               Container(
-                                  width: 5, height: 30, color: Colors.black),
-                              SizedBox(width: 20),
-                              Column(children: [Text('${value[index]}')])
+                                  width: 5,
+                                  height: 50,
+                                  color: Color.fromRGBO(
+                                      int.parse(splitted[2]),
+                                      int.parse(splitted[3]),
+                                      int.parse(splitted[4]),
+                                      1)),
+                              const SizedBox(width: 20),
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(splitted[0],
+                                            style: TextStyle(
+                                                color: Color.fromRGBO(
+                                                    int.parse(splitted[2]),
+                                                    int.parse(splitted[3]),
+                                                    int.parse(splitted[4]),
+                                                    1))),
+                                        Text(
+                                          splitted[1],
+                                          style: TextStyle(
+                                              color: Color.fromRGBO(
+                                                  int.parse(splitted[2]),
+                                                  int.parse(splitted[3]),
+                                                  int.parse(splitted[4]),
+                                                  1),
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      ]))
                             ]));
                       },
                     );
@@ -379,41 +346,23 @@ class _EventScreenState extends State<EventScreen> {
       ),
     );
   }
-
-  Widget buildTextField(
-      {String? hint, required TextEditingController controller}) {
-    return TextField(
-      controller: controller,
-      textCapitalization: TextCapitalization.words,
-      decoration: InputDecoration(
-        labelText: hint ?? '',
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.black, width: 1.5),
-          borderRadius: BorderRadius.circular(
-            10.0,
-          ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.black, width: 1.5),
-          borderRadius: BorderRadius.circular(
-            10.0,
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class Event {
   final String eventTitle;
   final String eventDesc;
-  final Color eventColor;
+  final int r;
+  final int g;
+  final int b;
 
-  Event(
-      {required this.eventTitle,
-      required this.eventDesc,
-      required this.eventColor});
+  Event({
+    required this.eventTitle,
+    required this.eventDesc,
+    required this.r,
+    required this.g,
+    required this.b,
+  });
 
   @override
-  String toString() => eventTitle;
+  String toString() => '$eventTitle&@&$eventDesc&@&$r&@&$g&@&$b';
 }
