@@ -49,10 +49,14 @@ class _ListScreenState extends State<ListScreen> {
           List<Map<String, dynamic>> restaurants = [];
           for (var doc in snapshot.data!.docs) {
             if (doc
-                .data()[RESTAURANT_BUSINESSNAME]
-                .toString()
-                .toLowerCase()
-                .contains(_searchController.text.trim().toLowerCase())) {
+                    .data()[RESTAURANT_BUSINESSNAME]
+                    .toString()
+                    .toLowerCase()
+                    .contains(_searchController.text.trim().toLowerCase()) ||
+                doc
+                    .data()[RESTAURANT_ZIP]
+                    .toString()
+                    .contains(_searchController.text.trim())) {
               if (doc.data()[RESTAURANT_CATEGORY] != null &&
                   doc.data()[RESTAURANT_CATEGORY] == _selectedTopMenu) {
                 restaurants.add(doc.data());
@@ -121,31 +125,47 @@ class _ListScreenState extends State<ListScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(
-                        left: Util.mainPadding,
-                        right: Util.mainPadding,
-                        bottom: 20.0),
-                    child: Material(
-                      borderRadius: const BorderRadius.all(Radius.circular(14)),
-                      elevation: 8,
-                      shadowColor: CustomColor.primaryColor.withOpacity(0.2),
-                      child: TextFormField(
-                        controller: _searchController,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: 'Search Restaurant or Food...',
-                          prefixIconConstraints: BoxConstraints(
-                            minWidth: 50,
-                            minHeight: 2,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: Util.mainPadding, vertical: 10),
+                      child: Stack(children: [
+                        Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(14)),
+                            boxShadow: [
+                              BoxShadow(
+                                  color:
+                                      CustomColor.primaryColor.withOpacity(0.2),
+                                  blurRadius: 5,
+                                  spreadRadius: 1),
+                            ],
                           ),
-                          prefixIcon: Icon(Icons.search_outlined, size: 24),
                         ),
-                        onChanged: (value) {
-                          setState(() {});
-                        },
-                      ),
-                    ),
-                  ),
+                        TextFormField(
+                          controller: _searchController,
+                          decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.all(4),
+                              border: const OutlineInputBorder(),
+                              hintText: 'Search Restaurant or Food...',
+                              hintStyle: const TextStyle(
+                                  color: CustomColor.textDetailColor),
+                              prefixIconConstraints: const BoxConstraints(
+                                minWidth: 50,
+                                minHeight: 2,
+                              ),
+                              prefixIcon:
+                                  const Icon(Icons.search_outlined, size: 24),
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    NavigationRouter.switchToFilter(context);
+                                  },
+                                  icon: Image.asset('assets/filter.png'))),
+                          onChanged: (value) {
+                            setState(() {});
+                          },
+                        ),
+                      ])),
                   SizedBox(
                       height: 70,
                       child: SingleChildScrollView(
