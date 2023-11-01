@@ -1,5 +1,10 @@
 // ignore_for_file: constant_identifier_names
 
+const int L_START_HOUR = 8;
+const int L_START_MINUTE = 0;
+const int L_END_HOUR = 21;
+const int L_END_MINUTE = 0;
+
 /// DATABASE COLLECTION NAMES USED IN APP
 ///
 const String C_APPINFO = "AppInfo";

@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:kalamazoo/utils/constants.dart';
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/navigation_router.dart';
 import 'package:kalamazoo/utils/color.dart';
@@ -45,11 +46,69 @@ class _Registration2ScreenState extends State<Registration2Screen> {
   ];
   bool _checkConfirmBusiness = false;
 
-  TimeOfDay? selectedTime;
   TimePickerEntryMode entryMode = TimePickerEntryMode.dial;
   TextDirection textDirection = TextDirection.ltr;
   MaterialTapTargetSize tapTargetSize = MaterialTapTargetSize.padded;
   bool use24HourTime = false;
+
+  List<Map<String, dynamic>> hours = [
+    {
+      "day": "Tuesday",
+      "startHour": 8,
+      "startMinute": 0,
+      "endHour": 21,
+      "endMinute": 0,
+      "opened": false
+    },
+    {
+      "day": "Wednesday",
+      "startHour": 8,
+      "startMinute": 0,
+      "endHour": 21,
+      "endMinute": 0,
+      "opened": true
+    },
+    {
+      "day": "Thursday",
+      "startHour": 8,
+      "startMinute": 0,
+      "endHour": 21,
+      "endMinute": 0,
+      "opened": true
+    },
+    {
+      "day": "Friday",
+      "startHour": 8,
+      "startMinute": 0,
+      "endHour": 21,
+      "endMinute": 0,
+      "opened": true
+    },
+    {
+      "day": "Saturday",
+      "startHour": 8,
+      "startMinute": 0,
+      "endHour": 21,
+      "endMinute": 0,
+      "opened": true
+    },
+    {
+      "day": "Sunday",
+      "startHour": 8,
+      "startMinute": 0,
+      "endHour": 21,
+      "endMinute": 0,
+      "opened": true
+    },
+    {
+      "day": "Monday",
+      "startHour": 8,
+      "startMinute": 0,
+      "endHour": 21,
+      "endMinute": 0,
+      "opened": false
+    },
+  ];
 
   @override
   void initState() {
@@ -130,6 +189,112 @@ class _Registration2ScreenState extends State<Registration2Screen> {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> hoursView = [];
+    for (var element in hours) {
+      TimeOfDay startTime =
+          TimeOfDay(hour: element['startHour'], minute: element['startMinute']);
+      TimeOfDay endTime =
+          TimeOfDay(hour: element['endHour'], minute: element['endMinute']);
+      hoursView.add(Padding(
+          padding: const EdgeInsets.all(0),
+          child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+            Text(element['day'],
+                style: const TextStyle(
+                    color: CustomColor.textDetailColor, fontSize: 16)),
+            const Spacer(),
+            if (element['opened'])
+              TextButton(
+                  onPressed: () async {
+                    final TimeOfDay? time = await showTimePicker(
+                      context: context,
+                      initialTime: startTime,
+                      initialEntryMode: entryMode,
+                      builder: (BuildContext context, Widget? child) {
+                        return Theme(
+                          data: Theme.of(context).copyWith(
+                            materialTapTargetSize: tapTargetSize,
+                          ),
+                          child: Directionality(
+                            textDirection: textDirection,
+                            child: MediaQuery(
+                              data: MediaQuery.of(context).copyWith(
+                                alwaysUse24HourFormat: use24HourTime,
+                              ),
+                              child: child!,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                    if (time != null) {
+                      element['startHour'] = time.hour;
+                      element['startMinute'] = time.minute;
+                      setState(() {});
+                    }
+                  },
+                  child: Text(startTime.format(context),
+                      style: const TextStyle(
+                          color: CustomColor.textDetailColor, fontSize: 16))),
+            if (element['opened'])
+              const Text('-',
+                  style: TextStyle(
+                      color: CustomColor.textDetailColor, fontSize: 16)),
+            if (element['opened'])
+              TextButton(
+                  onPressed: () async {
+                    final TimeOfDay? time = await showTimePicker(
+                      context: context,
+                      initialTime: endTime,
+                      initialEntryMode: entryMode,
+                      builder: (BuildContext context, Widget? child) {
+                        return Theme(
+                          data: Theme.of(context).copyWith(
+                            materialTapTargetSize: tapTargetSize,
+                          ),
+                          child: Directionality(
+                            textDirection: textDirection,
+                            child: MediaQuery(
+                              data: MediaQuery.of(context).copyWith(
+                                alwaysUse24HourFormat: use24HourTime,
+                              ),
+                              child: child!,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                    if (time != null) {
+                      element['endHour'] = time.hour;
+                      element['endMinute'] = time.minute;
+                      setState(() {});
+                    }
+                  },
+                  child: Text(endTime.format(context),
+                      style: const TextStyle(
+                          color: CustomColor.textDetailColor, fontSize: 16))),
+            if (!element['opened'])
+              const Padding(
+                padding: EdgeInsets.only(right: 55),
+                child: Text('Closed',
+                    style: TextStyle(
+                        color: CustomColor.activeColor, fontSize: 16)),
+              ),
+            IconButton(
+                onPressed: () {
+                  if (element['opened']) {
+                    element['startHour'] = L_START_HOUR;
+                    element['startMinute'] = L_START_MINUTE;
+                    element['endHour'] = L_END_HOUR;
+                    element['endMinute'] = L_END_MINUTE;
+                  }
+                  element['opened'] = !element['opened'];
+                  setState(() {});
+                },
+                icon: element['opened']
+                    ? const Icon(Icons.close, color: Colors.black)
+                    : const Icon(Icons.add, color: Colors.black))
+          ])));
+    }
     return Scaffold(
       body: Stack(
         fit: StackFit.expand,
@@ -487,228 +652,7 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                     child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                              padding: const EdgeInsets.all(0),
-                                              child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    const Text('Tuesday',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .textDetailColor,
-                                                            fontSize: 16)),
-                                                    const Spacer(),
-                                                    const Text(
-                                                        'Closed          ',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .activeColor,
-                                                            fontSize: 16)),
-                                                    IconButton(
-                                                        onPressed: () {},
-                                                        icon: const Icon(
-                                                            Icons.edit_outlined,
-                                                            color:
-                                                                Colors.black)),
-                                                  ])),
-                                          Padding(
-                                              padding: const EdgeInsets.all(0),
-                                              child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    const Text('Wednesday',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .textDetailColor,
-                                                            fontSize: 16)),
-                                                    const Spacer(),
-                                                    const Text(
-                                                        '8:00 AM - 9:00 PM',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .textDetailColor,
-                                                            fontSize: 16)),
-                                                    IconButton(
-                                                        onPressed: () {},
-                                                        icon: const Icon(
-                                                            Icons.edit_outlined,
-                                                            color:
-                                                                Colors.black)),
-                                                  ])),
-                                          Padding(
-                                              padding: const EdgeInsets.all(0),
-                                              child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    const Text('Thursday',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .textDetailColor,
-                                                            fontSize: 16)),
-                                                    const Spacer(),
-                                                    const Text(
-                                                        '8:00 AM - 9:00 PM',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .textDetailColor,
-                                                            fontSize: 16)),
-                                                    IconButton(
-                                                        onPressed: () async {
-                                                          final TimeOfDay?
-                                                              time =
-                                                              await showTimePicker(
-                                                            context: context,
-                                                            initialTime:
-                                                                selectedTime ??
-                                                                    TimeOfDay
-                                                                        .now(),
-                                                            initialEntryMode:
-                                                                entryMode,
-                                                            builder:
-                                                                (BuildContext
-                                                                        context,
-                                                                    Widget?
-                                                                        child) {
-                                                              return Theme(
-                                                                data: Theme.of(
-                                                                        context)
-                                                                    .copyWith(
-                                                                  materialTapTargetSize:
-                                                                      tapTargetSize,
-                                                                ),
-                                                                child:
-                                                                    Directionality(
-                                                                  textDirection:
-                                                                      textDirection,
-                                                                  child:
-                                                                      MediaQuery(
-                                                                    data: MediaQuery.of(
-                                                                            context)
-                                                                        .copyWith(
-                                                                      alwaysUse24HourFormat:
-                                                                          use24HourTime,
-                                                                    ),
-                                                                    child:
-                                                                        child!,
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            },
-                                                          );
-                                                          setState(() {
-                                                            selectedTime = time;
-                                                          });
-                                                        },
-                                                        icon: const Icon(
-                                                            Icons.edit_outlined,
-                                                            color:
-                                                                Colors.black)),
-                                                  ])),
-                                          Padding(
-                                              padding: const EdgeInsets.all(0),
-                                              child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    const Text('Friday',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .textDetailColor,
-                                                            fontSize: 16)),
-                                                    const Spacer(),
-                                                    const Text(
-                                                        '8:00 AM - 9:00 PM',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .textDetailColor,
-                                                            fontSize: 16)),
-                                                    IconButton(
-                                                        onPressed: () {},
-                                                        icon: const Icon(
-                                                            Icons.edit_outlined,
-                                                            color:
-                                                                Colors.black)),
-                                                  ])),
-                                          Padding(
-                                              padding: const EdgeInsets.all(0),
-                                              child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    const Text('Saturday',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .textDetailColor,
-                                                            fontSize: 16)),
-                                                    const Spacer(),
-                                                    const Text(
-                                                        '8:00 AM - 9:00 PM',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .textDetailColor,
-                                                            fontSize: 16)),
-                                                    IconButton(
-                                                        onPressed: () {},
-                                                        icon: const Icon(
-                                                            Icons.edit_outlined,
-                                                            color:
-                                                                Colors.black)),
-                                                  ])),
-                                          Padding(
-                                              padding: const EdgeInsets.all(0),
-                                              child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    const Text('Sunday',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .textDetailColor,
-                                                            fontSize: 16)),
-                                                    const Spacer(),
-                                                    const Text(
-                                                        '8:00 AM - 9:00 PM',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .textDetailColor,
-                                                            fontSize: 16)),
-                                                    IconButton(
-                                                        onPressed: () {},
-                                                        icon: const Icon(
-                                                            Icons.edit_outlined,
-                                                            color:
-                                                                Colors.black)),
-                                                  ])),
-                                          Padding(
-                                              padding: const EdgeInsets.all(0),
-                                              child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    const Text('Monday',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .textDetailColor,
-                                                            fontSize: 16)),
-                                                    const Spacer(),
-                                                    const Text(
-                                                        'Closed          ',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .activeColor,
-                                                            fontSize: 16)),
-                                                    IconButton(
-                                                        onPressed: () {},
-                                                        icon: const Icon(
-                                                            Icons.edit_outlined,
-                                                            color:
-                                                                Colors.black)),
-                                                  ])),
-                                        ]),
+                                        children: hoursView),
                                   )
                                 : Container(),
                           ]),
