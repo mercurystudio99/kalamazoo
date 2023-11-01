@@ -45,6 +45,12 @@ class _Registration2ScreenState extends State<Registration2Screen> {
   ];
   bool _checkConfirmBusiness = false;
 
+  TimeOfDay? selectedTime;
+  TimePickerEntryMode entryMode = TimePickerEntryMode.dial;
+  TextDirection textDirection = TextDirection.ltr;
+  MaterialTapTargetSize tapTargetSize = MaterialTapTargetSize.padded;
+  bool use24HourTime = false;
+
   @override
   void initState() {
     super.initState();
@@ -551,7 +557,52 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                                                 .textDetailColor,
                                                             fontSize: 16)),
                                                     IconButton(
-                                                        onPressed: () {},
+                                                        onPressed: () async {
+                                                          final TimeOfDay?
+                                                              time =
+                                                              await showTimePicker(
+                                                            context: context,
+                                                            initialTime:
+                                                                selectedTime ??
+                                                                    TimeOfDay
+                                                                        .now(),
+                                                            initialEntryMode:
+                                                                entryMode,
+                                                            builder:
+                                                                (BuildContext
+                                                                        context,
+                                                                    Widget?
+                                                                        child) {
+                                                              return Theme(
+                                                                data: Theme.of(
+                                                                        context)
+                                                                    .copyWith(
+                                                                  materialTapTargetSize:
+                                                                      tapTargetSize,
+                                                                ),
+                                                                child:
+                                                                    Directionality(
+                                                                  textDirection:
+                                                                      textDirection,
+                                                                  child:
+                                                                      MediaQuery(
+                                                                    data: MediaQuery.of(
+                                                                            context)
+                                                                        .copyWith(
+                                                                      alwaysUse24HourFormat:
+                                                                          use24HourTime,
+                                                                    ),
+                                                                    child:
+                                                                        child!,
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            },
+                                                          );
+                                                          setState(() {
+                                                            selectedTime = time;
+                                                          });
+                                                        },
                                                         icon: const Icon(
                                                             Icons.edit_outlined,
                                                             color:
