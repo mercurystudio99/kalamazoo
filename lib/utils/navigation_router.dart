@@ -113,6 +113,10 @@ class NavigationRouter {
     Navigator.pushNamed(context, "/PaymentScreen");
   }
 
+  static void switchToUploadMenu(BuildContext context) {
+    Navigator.pushNamed(context, "/UploadMenuScreen");
+  }
+
   static Future<void> switchToMain(BuildContext context) async {
     await Navigator.pushNamed(context, "/MainScreen");
   }

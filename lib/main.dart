@@ -40,6 +40,7 @@ import 'package:kalamazoo/screen/favorite_screen.dart';
 import 'package:kalamazoo/screen/main_screen.dart';
 import 'package:kalamazoo/screen/splash_screen.dart';
 import 'package:kalamazoo/screen/payment_screen.dart';
+import 'package:kalamazoo/screen/uploadmenu_screen.dart';
 
 // used to pass messages from event handler to the UI
 final _messageStreamController = BehaviorSubject<RemoteMessage>();
@@ -87,6 +88,7 @@ var routes = <String, WidgetBuilder>{
   "/FavoriteScreen": (BuildContext context) => const FavoriteScreen(),
   "/MainScreen": (BuildContext context) => const MainScreen(),
   "/PaymentScreen": (BuildContext context) => const PaymentScreen(),
+  "/UploadMenuScreen": (BuildContext context) => const UploadMenuScreen(),
 };
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

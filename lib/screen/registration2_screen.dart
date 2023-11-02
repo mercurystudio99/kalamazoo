@@ -814,7 +814,10 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                       padding: const EdgeInsets.all(
                                           5) //content padding inside button
                                       ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    NavigationRouter.switchToUploadMenu(
+                                        context);
+                                  },
                                   child: Text(
                                     'UPLOAD MENU',
                                     style: TextStyle(
