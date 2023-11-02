@@ -37,13 +37,7 @@ class _Registration2ScreenState extends State<Registration2Screen> {
   bool _isCheckedPolicy = false;
   bool _checkConfirmPolicy = false;
   bool _showDaysHours = false;
-  final List<bool> _isCheckedBusiness = <bool>[
-    false,
-    false,
-    false,
-    false,
-    false
-  ];
+  String _checkBusiness = '';
   bool _checkConfirmBusiness = false;
 
   TimePickerEntryMode entryMode = TimePickerEntryMode.dial;
@@ -676,10 +670,10 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                 ? CustomColor.activeColor
                                 : CustomColor.primaryColor);
                           }),
-                          value: _isCheckedBusiness[0],
+                          value: (_checkBusiness == 'Brewery') ? true : false,
                           onChanged: (bool? value) {
                             setState(() {
-                              _isCheckedBusiness[0] = value!;
+                              _checkBusiness = 'Brewery';
                             });
                           },
                         ),
@@ -701,10 +695,11 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                 ? CustomColor.activeColor
                                 : CustomColor.primaryColor);
                           }),
-                          value: _isCheckedBusiness[1],
+                          value:
+                              (_checkBusiness == 'Food Truck') ? true : false,
                           onChanged: (bool? value) {
                             setState(() {
-                              _isCheckedBusiness[1] = value!;
+                              _checkBusiness = 'Food Truck';
                             });
                           },
                         ),
@@ -732,10 +727,11 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                 ? CustomColor.activeColor
                                 : CustomColor.primaryColor);
                           }),
-                          value: _isCheckedBusiness[2],
+                          value:
+                              (_checkBusiness == 'Restaurant') ? true : false,
                           onChanged: (bool? value) {
                             setState(() {
-                              _isCheckedBusiness[2] = value!;
+                              _checkBusiness = 'Restaurant';
                             });
                           },
                         ),
@@ -757,10 +753,10 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                 ? CustomColor.activeColor
                                 : CustomColor.primaryColor);
                           }),
-                          value: _isCheckedBusiness[3],
+                          value: (_checkBusiness == 'Winery') ? true : false,
                           onChanged: (bool? value) {
                             setState(() {
-                              _isCheckedBusiness[3] = value!;
+                              _checkBusiness = 'Winery';
                             });
                           },
                         ),
@@ -788,10 +784,10 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                 ? CustomColor.activeColor
                                 : CustomColor.primaryColor);
                           }),
-                          value: _isCheckedBusiness[4],
+                          value: (_checkBusiness == 'Catering') ? true : false,
                           onChanged: (bool? value) {
                             setState(() {
-                              _isCheckedBusiness[4] = value!;
+                              _checkBusiness = 'Catering';
                             });
                           },
                         ),
@@ -1025,10 +1021,8 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                           ),
                       onPressed: () {
                         _checkConfirmBusiness = true;
-                        for (var element in _isCheckedBusiness) {
-                          if (element) {
-                            _checkConfirmBusiness = false;
-                          }
+                        if (_checkBusiness.isNotEmpty) {
+                          _checkConfirmBusiness = false;
                         }
 
                         if (_isCheckedPolicy) {
