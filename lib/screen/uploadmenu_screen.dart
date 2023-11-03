@@ -80,6 +80,7 @@ class _UploadMenuScreenState extends State<UploadMenuScreen> {
         for (var element in categories) {
           listCategory.add(element[CATEGORY_NAME]);
         }
+        if (!mounted) return;
         setState(() {});
       },
       onEmpty: () {},
