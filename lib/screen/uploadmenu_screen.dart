@@ -76,6 +76,7 @@ class _UploadMenuScreenState extends State<UploadMenuScreen> {
   void _getFoodCategory() {
     AppModel().getCategories(
       onSuccess: (List<Map<String, dynamic>> param) {
+        listCategory = <String>['None'];
         categories = param;
         for (var element in categories) {
           listCategory.add(element[CATEGORY_NAME]);
