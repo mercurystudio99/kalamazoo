@@ -166,6 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
     location = globals.searchFullAddress;
     AppModel().getProfile(onSuccess: (Map<String, dynamic> param) {
       profile = param;
+      setState(() {});
     });
   }
 
@@ -1142,7 +1143,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding: const EdgeInsets.all(
                                         5) //content padding inside button
                                     ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  NavigationRouter.switchToUploadMenu(context);
+                                },
                                 child: Text(
                                   'UPLOAD MENU',
                                   style: TextStyle(

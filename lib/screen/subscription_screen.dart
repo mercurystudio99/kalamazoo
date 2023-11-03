@@ -93,22 +93,22 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       NavigationRouter.back(context);
                     },
                   ),
-                  InkWell(
-                    onTap: () {
-                      NavigationRouter.switchToNotification(context);
-                    },
-                    child: const badges.Badge(
-                      badgeContent: Text(
-                        '1',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      child: Icon(
-                        Icons.notifications_outlined,
-                        size: 30,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
+                  // InkWell(
+                  //   onTap: () {
+                  //     NavigationRouter.switchToNotification(context);
+                  //   },
+                  //   child: const badges.Badge(
+                  //     badgeContent: Text(
+                  //       '',
+                  //       style: TextStyle(color: Colors.white),
+                  //     ),
+                  //     child: Icon(
+                  //       Icons.notifications_outlined,
+                  //       size: 30,
+                  //       color: Colors.black,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
