@@ -680,24 +680,29 @@ class AppModel extends Model {
     required String businessname,
     required String address,
     required String phone,
+    required String businessservice,
     // callback functions
     required Function(String) onSuccess,
   }) async {
-    final docRef = _firestore.collection(C_RESTAURANTS).doc();
-    await docRef.set({
-      RESTAURANT_ID: docRef.id,
-      RESTAURANT_ADDRESS: address,
-      RESTAURANT_BUSINESSNAME: businessname,
-      RESTAURANT_CATEGORY: '',
-      RESTAURANT_CITY: '',
-      RESTAURANT_EMAIL: email,
-      RESTAURANT_GEOLOCATION: [0, 0],
-      RESTAURANT_PHONE: phone,
-      RESTAURANT_STATE: '',
-      RESTAURANT_URL: '',
-      RESTAURANT_ZIP: '',
-    });
-    onSuccess(docRef.id);
+    if (businessservice == C_RESTAURANTS ||
+        businessservice == C_WINERIES ||
+        businessservice == C_BREWERIES) {
+      final docRef = _firestore.collection(businessservice).doc();
+      await docRef.set({
+        RESTAURANT_ID: docRef.id,
+        RESTAURANT_ADDRESS: address,
+        RESTAURANT_BUSINESSNAME: businessname,
+        RESTAURANT_CATEGORY: '',
+        RESTAURANT_CITY: '',
+        RESTAURANT_EMAIL: email,
+        RESTAURANT_GEOLOCATION: [0, 0],
+        RESTAURANT_PHONE: phone,
+        RESTAURANT_STATE: '',
+        RESTAURANT_URL: '',
+        RESTAURANT_ZIP: '',
+      });
+      onSuccess(docRef.id);
+    }
   }
 
   void getDailySpecial({

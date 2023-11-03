@@ -798,36 +798,6 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                       ]),
                     ),
                     Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: Center(
-                            child: SizedBox(
-                                height: 35, //height of button
-                                width: MediaQuery.of(context).size.width *
-                                    0.55, //width of button
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      elevation: 0, //elevation of button
-                                      shape: RoundedRectangleBorder(
-                                          //to set border radius to button
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
-                                      padding: const EdgeInsets.all(
-                                          5) //content padding inside button
-                                      ),
-                                  onPressed: () {
-                                    NavigationRouter.switchToUploadMenu(
-                                        context);
-                                  },
-                                  child: Text(
-                                    'UPLOAD MENU',
-                                    style: TextStyle(
-                                        color: CustomColor.buttonTextColor,
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.035),
-                                  ),
-                                )))),
-                    Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: Util.mainPadding),
                       child: Stack(children: [
@@ -894,34 +864,6 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                         )
                       ]),
                     ),
-                    Padding(
-                        padding: const EdgeInsets.only(bottom: 10),
-                        child: Center(
-                            child: SizedBox(
-                                height: 35, //height of button
-                                width: MediaQuery.of(context).size.width *
-                                    0.55, //width of button
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      elevation: 0, //elevation of button
-                                      shape: RoundedRectangleBorder(
-                                          //to set border radius to button
-                                          borderRadius:
-                                              BorderRadius.circular(5)),
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical:
-                                              5) //content padding inside button
-                                      ),
-                                  onPressed: () {},
-                                  child: Text(
-                                    'PROMOTE YOUR BUSINESS',
-                                    style: TextStyle(
-                                        color: CustomColor.buttonTextColor,
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.035),
-                                  ),
-                                )))),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           vertical: 8, horizontal: Util.mainPadding * 0.5),
@@ -1061,6 +1003,7 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                         _businessnameController.text.trim(),
                                     address: _addressController.text.trim(),
                                     phone: _phoneController.text.trim(),
+                                    businessservice: _checkBusiness,
                                     onSuccess: (String id) {
                                       AppModel().ownerSignUp(
                                           restaurantId: id,
