@@ -582,6 +582,42 @@ class AppModel extends Model {
         .get();
   }
 
+  void saveMenu({
+    required String imageUrl,
+    required String name,
+    required String price,
+    required String desc,
+    required String category,
+    // VoidCallback functions
+    required VoidCallback onSuccess,
+    required VoidCallback onError,
+  }) async {
+    final docRef = _firestore
+        .collection(globals.restaurantType)
+        .doc(globals.restaurantID)
+        .collection(C_C_MENU)
+        .doc();
+    if (category.isEmpty) {
+      await docRef.set({
+        MENU_ID: docRef.id,
+        MENU_PHOTO: imageUrl,
+        MENU_NAME: name,
+        MENU_PRICE: price,
+        MENU_DESCRIPTION: desc,
+      });
+    } else {
+      await docRef.set({
+        MENU_ID: docRef.id,
+        MENU_PHOTO: imageUrl,
+        MENU_NAME: name,
+        MENU_PRICE: price,
+        MENU_DESCRIPTION: desc,
+        MENU_CATEGORY: category,
+      });
+    }
+    onSuccess();
+  }
+
   void getRestaurantFoodByID({
     // callback functions
     required Function(List<Map<String, dynamic>>) onSuccess,
@@ -608,7 +644,10 @@ class AppModel extends Model {
     required Function(List<Map<String, dynamic>>) onSuccess,
     required VoidCallback onEmpty,
   }) async {
-    final snapshots = await _firestore.collection(C_CATEGORIES).get();
+    final snapshots = await _firestore
+        .collection(C_CATEGORIES)
+        .orderBy(CATEGORY_NAME, descending: false)
+        .get();
     if (snapshots.docs.isEmpty) {
       onEmpty();
     } else {
