@@ -56,6 +56,7 @@ class AppModel extends Model {
 
   void ownerSignUp({
     required String restaurantId,
+    required String restaurantService,
     required String name,
     required String email,
     required String password,
@@ -70,6 +71,7 @@ class AppModel extends Model {
     await docRef.set({
       USER_ID: docRef.id,
       USER_RESTAURANT_ID: restaurantId,
+      USER_RESTAURANT_SERVICE: restaurantService,
       USER_FULLNAME: name,
       USER_EMAIL: email,
       USER_PASS: password,

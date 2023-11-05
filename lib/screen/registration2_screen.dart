@@ -1013,6 +1013,7 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                     onSuccess: (String id) {
                                       AppModel().ownerSignUp(
                                           restaurantId: id,
+                                          restaurantService: _checkBusiness,
                                           name: _usernameController.text.trim(),
                                           email: _emailController.text.trim(),
                                           password: _passController.text.trim(),
