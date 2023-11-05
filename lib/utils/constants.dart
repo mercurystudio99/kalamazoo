@@ -5,6 +5,14 @@ const int L_START_MINUTE = 0;
 const int L_END_HOUR = 21;
 const int L_END_MINUTE = 0;
 
+const String L_MONDAY = "Monday";
+const String L_TUESDAY = "Tuesday";
+const String L_WEDNESDAY = "Wednesday";
+const String L_THURSDAY = "Thursday";
+const String L_FRIDAY = "Friday";
+const String L_SATURDAY = "Saturday";
+const String L_SUNDAY = "Sunday";
+
 /// DATABASE COLLECTION NAMES USED IN APP
 ///
 const String C_APPINFO = "AppInfo";
@@ -59,7 +67,14 @@ const String RESTAURANT_STATE = "state";
 const String RESTAURANT_URL = "url";
 const String RESTAURANT_ZIP = "zip";
 const String RESTAURANT_RATING = "rating";
-const String RESTAURANT_HOURS = "hours";
+const String RESTAURANT_SCHEDULE = "schedule";
+const String RESTAURANT_SCHEDULE_DAY = "day";
+const String RESTAURANT_SCHEDULE_STARTHOUR = "startHour";
+const String RESTAURANT_SCHEDULE_STARTMINUTE = "startMinute";
+const String RESTAURANT_SCHEDULE_ENDHOUR = "endHour";
+const String RESTAURANT_SCHEDULE_ENDMINUTE = "endMinute";
+const String RESTAURANT_SCHEDULE_ISWORKINGDAY = "isWorkingDay";
+
 const String RESTAURANT_AMENITIES = "amenities";
 const String RESTAURANT_DISCOUNT = "discount";
 const String RESTAURANT_MINCOST = "mincost";

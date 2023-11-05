@@ -45,62 +45,62 @@ class _Registration2ScreenState extends State<Registration2Screen> {
   MaterialTapTargetSize tapTargetSize = MaterialTapTargetSize.padded;
   bool use24HourTime = false;
 
-  List<Map<String, dynamic>> hours = [
+  List<Map<String, dynamic>> schedule = [
     {
-      "day": "Tuesday",
-      "startHour": 8,
-      "startMinute": 0,
-      "endHour": 21,
-      "endMinute": 0,
-      "opened": false
+      RESTAURANT_SCHEDULE_DAY: L_TUESDAY,
+      RESTAURANT_SCHEDULE_STARTHOUR: L_START_HOUR,
+      RESTAURANT_SCHEDULE_STARTMINUTE: L_START_MINUTE,
+      RESTAURANT_SCHEDULE_ENDHOUR: L_END_HOUR,
+      RESTAURANT_SCHEDULE_ENDMINUTE: L_END_MINUTE,
+      RESTAURANT_SCHEDULE_ISWORKINGDAY: false
     },
     {
-      "day": "Wednesday",
-      "startHour": 8,
-      "startMinute": 0,
-      "endHour": 21,
-      "endMinute": 0,
-      "opened": true
+      RESTAURANT_SCHEDULE_DAY: L_WEDNESDAY,
+      RESTAURANT_SCHEDULE_STARTHOUR: L_START_HOUR,
+      RESTAURANT_SCHEDULE_STARTMINUTE: L_START_MINUTE,
+      RESTAURANT_SCHEDULE_ENDHOUR: L_END_HOUR,
+      RESTAURANT_SCHEDULE_ENDMINUTE: L_END_MINUTE,
+      RESTAURANT_SCHEDULE_ISWORKINGDAY: true
     },
     {
-      "day": "Thursday",
-      "startHour": 8,
-      "startMinute": 0,
-      "endHour": 21,
-      "endMinute": 0,
-      "opened": true
+      RESTAURANT_SCHEDULE_DAY: L_THURSDAY,
+      RESTAURANT_SCHEDULE_STARTHOUR: L_START_HOUR,
+      RESTAURANT_SCHEDULE_STARTMINUTE: L_START_MINUTE,
+      RESTAURANT_SCHEDULE_ENDHOUR: L_END_HOUR,
+      RESTAURANT_SCHEDULE_ENDMINUTE: L_END_MINUTE,
+      RESTAURANT_SCHEDULE_ISWORKINGDAY: true
     },
     {
-      "day": "Friday",
-      "startHour": 8,
-      "startMinute": 0,
-      "endHour": 21,
-      "endMinute": 0,
-      "opened": true
+      RESTAURANT_SCHEDULE_DAY: L_FRIDAY,
+      RESTAURANT_SCHEDULE_STARTHOUR: L_START_HOUR,
+      RESTAURANT_SCHEDULE_STARTMINUTE: L_START_MINUTE,
+      RESTAURANT_SCHEDULE_ENDHOUR: L_END_HOUR,
+      RESTAURANT_SCHEDULE_ENDMINUTE: L_END_MINUTE,
+      RESTAURANT_SCHEDULE_ISWORKINGDAY: true
     },
     {
-      "day": "Saturday",
-      "startHour": 8,
-      "startMinute": 0,
-      "endHour": 21,
-      "endMinute": 0,
-      "opened": true
+      RESTAURANT_SCHEDULE_DAY: L_SATURDAY,
+      RESTAURANT_SCHEDULE_STARTHOUR: L_START_HOUR,
+      RESTAURANT_SCHEDULE_STARTMINUTE: L_START_MINUTE,
+      RESTAURANT_SCHEDULE_ENDHOUR: L_END_HOUR,
+      RESTAURANT_SCHEDULE_ENDMINUTE: L_END_MINUTE,
+      RESTAURANT_SCHEDULE_ISWORKINGDAY: true
     },
     {
-      "day": "Sunday",
-      "startHour": 8,
-      "startMinute": 0,
-      "endHour": 21,
-      "endMinute": 0,
-      "opened": true
+      RESTAURANT_SCHEDULE_DAY: L_SUNDAY,
+      RESTAURANT_SCHEDULE_STARTHOUR: L_START_HOUR,
+      RESTAURANT_SCHEDULE_STARTMINUTE: L_START_MINUTE,
+      RESTAURANT_SCHEDULE_ENDHOUR: L_END_HOUR,
+      RESTAURANT_SCHEDULE_ENDMINUTE: L_END_MINUTE,
+      RESTAURANT_SCHEDULE_ISWORKINGDAY: true
     },
     {
-      "day": "Monday",
-      "startHour": 8,
-      "startMinute": 0,
-      "endHour": 21,
-      "endMinute": 0,
-      "opened": false
+      RESTAURANT_SCHEDULE_DAY: L_MONDAY,
+      RESTAURANT_SCHEDULE_STARTHOUR: L_START_HOUR,
+      RESTAURANT_SCHEDULE_STARTMINUTE: L_START_MINUTE,
+      RESTAURANT_SCHEDULE_ENDHOUR: L_END_HOUR,
+      RESTAURANT_SCHEDULE_ENDMINUTE: L_END_MINUTE,
+      RESTAURANT_SCHEDULE_ISWORKINGDAY: false
     },
   ];
 
@@ -183,20 +183,22 @@ class _Registration2ScreenState extends State<Registration2Screen> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> hoursView = [];
-    for (var element in hours) {
-      TimeOfDay startTime =
-          TimeOfDay(hour: element['startHour'], minute: element['startMinute']);
-      TimeOfDay endTime =
-          TimeOfDay(hour: element['endHour'], minute: element['endMinute']);
-      hoursView.add(Padding(
+    List<Widget> scheduleView = [];
+    for (var element in schedule) {
+      TimeOfDay startTime = TimeOfDay(
+          hour: element[RESTAURANT_SCHEDULE_STARTHOUR],
+          minute: element[RESTAURANT_SCHEDULE_STARTMINUTE]);
+      TimeOfDay endTime = TimeOfDay(
+          hour: element[RESTAURANT_SCHEDULE_ENDHOUR],
+          minute: element[RESTAURANT_SCHEDULE_ENDMINUTE]);
+      scheduleView.add(Padding(
           padding: const EdgeInsets.all(0),
           child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            Text(element['day'],
+            Text(element[RESTAURANT_SCHEDULE_DAY],
                 style: const TextStyle(
                     color: CustomColor.textDetailColor, fontSize: 16)),
             const Spacer(),
-            if (element['opened'])
+            if (element[RESTAURANT_SCHEDULE_ISWORKINGDAY])
               TextButton(
                   onPressed: () async {
                     final TimeOfDay? time = await showTimePicker(
@@ -221,19 +223,19 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                       },
                     );
                     if (time != null) {
-                      element['startHour'] = time.hour;
-                      element['startMinute'] = time.minute;
+                      element[RESTAURANT_SCHEDULE_STARTHOUR] = time.hour;
+                      element[RESTAURANT_SCHEDULE_STARTMINUTE] = time.minute;
                       setState(() {});
                     }
                   },
                   child: Text(startTime.format(context),
                       style: const TextStyle(
                           color: CustomColor.textDetailColor, fontSize: 16))),
-            if (element['opened'])
+            if (element[RESTAURANT_SCHEDULE_ISWORKINGDAY])
               const Text('-',
                   style: TextStyle(
                       color: CustomColor.textDetailColor, fontSize: 16)),
-            if (element['opened'])
+            if (element[RESTAURANT_SCHEDULE_ISWORKINGDAY])
               TextButton(
                   onPressed: () async {
                     final TimeOfDay? time = await showTimePicker(
@@ -258,15 +260,15 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                       },
                     );
                     if (time != null) {
-                      element['endHour'] = time.hour;
-                      element['endMinute'] = time.minute;
+                      element[RESTAURANT_SCHEDULE_ENDHOUR] = time.hour;
+                      element[RESTAURANT_SCHEDULE_ENDMINUTE] = time.minute;
                       setState(() {});
                     }
                   },
                   child: Text(endTime.format(context),
                       style: const TextStyle(
                           color: CustomColor.textDetailColor, fontSize: 16))),
-            if (!element['opened'])
+            if (!element[RESTAURANT_SCHEDULE_ISWORKINGDAY])
               const Padding(
                 padding: EdgeInsets.only(right: 55),
                 child: Text('Closed',
@@ -275,16 +277,17 @@ class _Registration2ScreenState extends State<Registration2Screen> {
               ),
             IconButton(
                 onPressed: () {
-                  if (element['opened']) {
-                    element['startHour'] = L_START_HOUR;
-                    element['startMinute'] = L_START_MINUTE;
-                    element['endHour'] = L_END_HOUR;
-                    element['endMinute'] = L_END_MINUTE;
+                  if (element[RESTAURANT_SCHEDULE_ISWORKINGDAY]) {
+                    element[RESTAURANT_SCHEDULE_STARTHOUR] = L_START_HOUR;
+                    element[RESTAURANT_SCHEDULE_STARTMINUTE] = L_START_MINUTE;
+                    element[RESTAURANT_SCHEDULE_ENDHOUR] = L_END_HOUR;
+                    element[RESTAURANT_SCHEDULE_ENDMINUTE] = L_END_MINUTE;
                   }
-                  element['opened'] = !element['opened'];
+                  element[RESTAURANT_SCHEDULE_ISWORKINGDAY] =
+                      !element[RESTAURANT_SCHEDULE_ISWORKINGDAY];
                   setState(() {});
                 },
-                icon: element['opened']
+                icon: element[RESTAURANT_SCHEDULE_ISWORKINGDAY]
                     ? const Icon(Icons.close, color: Colors.black)
                     : const Icon(Icons.add, color: Colors.black))
           ])));
@@ -646,7 +649,7 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                     child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
-                                        children: hoursView),
+                                        children: scheduleView),
                                   )
                                 : Container(),
                           ]),
@@ -670,10 +673,10 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                 ? CustomColor.activeColor
                                 : CustomColor.primaryColor);
                           }),
-                          value: (_checkBusiness == 'Brewery') ? true : false,
+                          value: (_checkBusiness == C_BREWERIES) ? true : false,
                           onChanged: (bool? value) {
                             setState(() {
-                              _checkBusiness = 'Brewery';
+                              _checkBusiness = C_BREWERIES;
                             });
                           },
                         ),
@@ -728,10 +731,10 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                 : CustomColor.primaryColor);
                           }),
                           value:
-                              (_checkBusiness == 'Restaurant') ? true : false,
+                              (_checkBusiness == C_RESTAURANTS) ? true : false,
                           onChanged: (bool? value) {
                             setState(() {
-                              _checkBusiness = 'Restaurant';
+                              _checkBusiness = C_RESTAURANTS;
                             });
                           },
                         ),
@@ -753,10 +756,10 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                                 ? CustomColor.activeColor
                                 : CustomColor.primaryColor);
                           }),
-                          value: (_checkBusiness == 'Winery') ? true : false,
+                          value: (_checkBusiness == C_WINERIES) ? true : false,
                           onChanged: (bool? value) {
                             setState(() {
-                              _checkBusiness = 'Winery';
+                              _checkBusiness = C_WINERIES;
                             });
                           },
                         ),
@@ -998,12 +1001,15 @@ class _Registration2ScreenState extends State<Registration2Screen> {
                               onError: (String text) {
                                 AppModel().registerRestaurant(
                                     email: _emailController.text.trim(),
-                                    password: _passController.text.trim(),
                                     businessname:
                                         _businessnameController.text.trim(),
                                     address: _addressController.text.trim(),
                                     phone: _phoneController.text.trim(),
                                     businessservice: _checkBusiness,
+                                    city: 'Kalamazoo',
+                                    state: 'MI',
+                                    zip: '49001',
+                                    schedule: schedule,
                                     onSuccess: (String id) {
                                       AppModel().ownerSignUp(
                                           restaurantId: id,

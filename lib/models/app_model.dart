@@ -676,11 +676,14 @@ class AppModel extends Model {
 
   void registerRestaurant({
     required String email,
-    required String password,
     required String businessname,
     required String address,
     required String phone,
     required String businessservice,
+    required String city,
+    required String state,
+    required String zip,
+    required List<Map<String, dynamic>> schedule,
     // callback functions
     required Function(String) onSuccess,
   }) async {
@@ -691,15 +694,17 @@ class AppModel extends Model {
       await docRef.set({
         RESTAURANT_ID: docRef.id,
         RESTAURANT_ADDRESS: address,
+        RESTAURANT_AMENITIES: globals.ownerAmenities,
         RESTAURANT_BUSINESSNAME: businessname,
         RESTAURANT_CATEGORY: '',
-        RESTAURANT_CITY: '',
+        RESTAURANT_CITY: city,
         RESTAURANT_EMAIL: email,
         RESTAURANT_GEOLOCATION: [0, 0],
         RESTAURANT_PHONE: phone,
-        RESTAURANT_STATE: '',
+        RESTAURANT_STATE: state,
         RESTAURANT_URL: '',
-        RESTAURANT_ZIP: '',
+        RESTAURANT_ZIP: zip,
+        RESTAURANT_SCHEDULE: schedule,
       });
       onSuccess(docRef.id);
     }
