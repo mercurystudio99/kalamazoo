@@ -40,6 +40,7 @@ class _FilterScreenState extends State<FilterScreen> {
   void initState() {
     super.initState();
     _getAmenities();
+    distanceRange = global.searchDistanceRange;
   }
 
   @override

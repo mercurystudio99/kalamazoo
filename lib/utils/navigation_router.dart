@@ -53,8 +53,8 @@ class NavigationRouter {
     await Navigator.pushNamed(context, "/SearchScreen");
   }
 
-  static void switchToFilter(BuildContext context) {
-    Navigator.pushNamed(context, "/FilterScreen");
+  static Future<void> switchToFilter(BuildContext context) async {
+    await Navigator.pushNamed(context, "/FilterScreen");
   }
 
   static void switchToFavorite(BuildContext context) {

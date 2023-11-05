@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/globals.dart' as globals;
@@ -47,6 +48,7 @@ class _ListScreenState extends State<ListScreen> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<Map<String, dynamic>> restaurants = [];
+          List<Map<String, dynamic>> sourceList = [];
           for (var doc in snapshot.data!.docs) {
             if (doc
                     .data()[RESTAURANT_BUSINESSNAME]
@@ -59,13 +61,33 @@ class _ListScreenState extends State<ListScreen> {
                     .contains(_searchController.text.trim())) {
               if (doc.data()[RESTAURANT_CATEGORY] != null &&
                   doc.data()[RESTAURANT_CATEGORY] == _selectedTopMenu) {
-                restaurants.add(doc.data());
+                sourceList.add(doc.data());
               }
               if (_selectedTopMenu.isEmpty) {
-                restaurants.add(doc.data());
+                sourceList.add(doc.data());
               }
             }
           }
+
+          restaurants = sourceList.where((element) {
+            double distance = Geolocator.distanceBetween(
+                globals.latitude,
+                globals.longitude,
+                element[RESTAURANT_GEOLOCATION][0],
+                element[RESTAURANT_GEOLOCATION][1]);
+            distance = distance / 1609.344;
+            bool included = true;
+            if (element[RESTAURANT_AMENITIES] != null) {
+              included = globals.searchAmenities.every((dynamic id) {
+                return element[RESTAURANT_AMENITIES].contains(id);
+              });
+            }
+            if (globals.searchDistanceRange > 0 &&
+                globals.searchDistanceRange < distance) return false;
+            if (!included) return false;
+            return true;
+          }).toList();
+
           return Stack(
             fit: StackFit.expand,
             children: <Widget>[
@@ -157,8 +179,10 @@ class _ListScreenState extends State<ListScreen> {
                               prefixIcon:
                                   const Icon(Icons.search_outlined, size: 24),
                               suffixIcon: IconButton(
-                                  onPressed: () {
-                                    NavigationRouter.switchToFilter(context);
+                                  onPressed: () async {
+                                    await NavigationRouter.switchToFilter(
+                                        context);
+                                    setState(() {});
                                   },
                                   icon: Image.asset('assets/filter.png'))),
                           onChanged: (value) {
