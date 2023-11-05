@@ -15,6 +15,7 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
+  late int distanceRange = 0;
   late List<Map<String, dynamic>> amenities = [];
   late final Map<String, dynamic> _isChecked = {};
 
@@ -28,6 +29,7 @@ class _FilterScreenState extends State<FilterScreen> {
                   ? true
                   : false;
         }
+        if (!mounted) return;
         setState(() {});
       },
       onEmpty: () {},
@@ -131,6 +133,8 @@ class _FilterScreenState extends State<FilterScreen> {
                   TextButton(
                     onPressed: () {
                       global.searchAmenities.clear();
+                      global.searchDistanceRange = 0;
+                      distanceRange = 0;
                       _getAmenities();
                     },
                     child: const Text(
@@ -142,7 +146,28 @@ class _FilterScreenState extends State<FilterScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            _listing(),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: Util.mainPadding),
+              child: Text(
+                'Distance Range',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Util.mainPadding),
+              child: _distanceRangeSection(),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: Util.mainPadding),
+              child: Text(
+                'Amenities',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Util.mainPadding),
+              child: _amenitySection(),
+            ),
             const SizedBox(height: 10),
           ]),
         ],
@@ -150,7 +175,40 @@ class _FilterScreenState extends State<FilterScreen> {
     );
   }
 
-  Widget _listing() {
+  Widget _distanceRangeSection() {
+    List<int> distanceRangeList = [1, 3, 5, 10];
+    List<Widget> viewList = [];
+    for (var range in distanceRangeList) {
+      viewList.add(InkWell(
+          onTap: () {
+            setState(() {
+              distanceRange = range;
+            });
+            global.searchDistanceRange = distanceRange;
+          },
+          child: Container(
+            width: 80,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            decoration: BoxDecoration(
+              color: distanceRange == range
+                  ? CustomColor.primaryColor
+                  : CustomColor.textDetailColor,
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
+            ),
+            child: Text('$range mile',
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white, fontSize: 15)),
+          )));
+    }
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: viewList));
+  }
+
+  Widget _amenitySection() {
     Size size = MediaQuery.of(context).size;
 
     List<String> amenityCategories = [];
@@ -166,19 +224,19 @@ class _FilterScreenState extends State<FilterScreen> {
     for (var type in amenityCategories) {
       amenitiesView.add(
         SizedBox(
-            width: size.width,
+            width: size.width / 2,
             child: Padding(
                 padding: const EdgeInsets.all(10),
                 child: Text(type,
                     style: const TextStyle(
-                        fontWeight: FontWeight.w600, fontSize: 20)))),
+                        fontWeight: FontWeight.w600, fontSize: 15)))),
       );
 
-      amenitiesView.add(_subListing(type));
+      amenitiesView.add(_subAmenitySection(type));
     }
 
     return SizedBox(
-      width: size.width,
+      width: size.width - Util.mainPadding * 2,
       child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,13 +244,13 @@ class _FilterScreenState extends State<FilterScreen> {
     );
   }
 
-  Widget _subListing(String type) {
+  Widget _subAmenitySection(String type) {
     Size size = MediaQuery.of(context).size;
     List<Widget> lists = [];
     for (var item in amenities) {
       if (item[AMENITY_TYPE] != null && item[AMENITY_TYPE].toString() == type) {
         lists.add(SizedBox(
-            width: size.width / 2,
+            width: size.width / 2 - Util.mainPadding,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
               child: Row(children: [
@@ -241,9 +299,9 @@ class _FilterScreenState extends State<FilterScreen> {
                   'assets/amenities/icon (${item[AMENITY_LOGO]}).png',
                 ),
                 const SizedBox(width: 5),
-                Text(item[AMENITY_NAME].toString().length < 18
+                Text(item[AMENITY_NAME].toString().length < 12
                     ? item[AMENITY_NAME]
-                    : '${item[AMENITY_NAME].toString().substring(0, 16)}..')
+                    : '${item[AMENITY_NAME].toString().substring(0, 10)}..')
               ]),
             )));
       }
@@ -264,7 +322,7 @@ class _FilterScreenState extends State<FilterScreen> {
     }
 
     return SizedBox(
-      width: size.width,
+      width: size.width - Util.mainPadding * 2,
       child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,

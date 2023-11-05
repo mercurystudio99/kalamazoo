@@ -24,6 +24,7 @@ String searchZip = "";
 String searchPriority = RESTAURANT_CITY;
 String searchKeyword = '';
 List<dynamic> searchAmenities = [];
+int searchDistanceRange = 0;
 
 double latitude = 0;
 double longitude = 0;

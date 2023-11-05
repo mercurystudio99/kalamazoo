@@ -101,26 +101,35 @@ class _SearchScreenState extends State<SearchScreen> {
         if (snapshot.hasData) {
           restaurants.clear();
           if (initSearch) {
+            List<Map<String, dynamic>> sourceList = [];
             for (var doc in snapshot.data!.docs) {
               if (doc
                   .data()[RESTAURANT_BUSINESSNAME]
                   .toString()
                   .toLowerCase()
                   .contains(globals.searchKeyword.trim().toLowerCase())) {
-                // filter condition
-                if (globals.searchAmenities.isEmpty) {
-                  restaurants.add(doc.data());
-                } else {
-                  if (doc.data()[RESTAURANT_AMENITIES] != null) {
-                    bool included = globals.searchAmenities.every((dynamic id) {
-                      return doc.data()[RESTAURANT_AMENITIES].contains(id);
-                    });
-                    if (included) restaurants.add(doc.data());
-                  }
-                }
-                ////////////////////
+                sourceList.add(doc.data());
               }
             }
+
+            restaurants = sourceList.where((element) {
+              double distance = Geolocator.distanceBetween(
+                  globals.latitude,
+                  globals.longitude,
+                  element[RESTAURANT_GEOLOCATION][0],
+                  element[RESTAURANT_GEOLOCATION][1]);
+              distance = distance / 1609.344;
+              bool included = true;
+              if (element[RESTAURANT_AMENITIES] != null) {
+                included = globals.searchAmenities.every((dynamic id) {
+                  return element[RESTAURANT_AMENITIES].contains(id);
+                });
+              }
+              if (globals.searchDistanceRange > 0 &&
+                  globals.searchDistanceRange < distance) return false;
+              if (!included) return false;
+              return true;
+            }).toList();
             globals.searchKeyword = '';
             initSearch = false;
           } else {
