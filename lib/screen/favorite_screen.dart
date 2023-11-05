@@ -294,7 +294,7 @@ class _Description extends StatelessWidget {
   String _getDistance(List<dynamic> geolocation) {
     double distance = Geolocator.distanceBetween(
         globals.latitude, globals.longitude, geolocation[0], geolocation[1]);
-    distance = distance / 1000;
+    distance = distance / 1609.344;
     return distance.toStringAsFixed(1);
   }
 
@@ -363,7 +363,7 @@ class _Description extends StatelessWidget {
               size: 12,
             ),
             Text(
-              '${_getDistance(geolocation)}km',
+              '${_getDistance(geolocation)}mi',
               style: const TextStyle(
                 fontSize: 12.0,
                 color: CustomColor.textDetailColor,

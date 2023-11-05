@@ -20,7 +20,7 @@ class _ItemScreenState extends State<ItemScreen> {
   String _getDistance(List<dynamic> geolocation) {
     double distance = Geolocator.distanceBetween(
         globals.latitude, globals.longitude, geolocation[0], geolocation[1]);
-    distance = distance / 1000;
+    distance = distance / 1609.344;
     return distance.toStringAsFixed(1);
   }
 
