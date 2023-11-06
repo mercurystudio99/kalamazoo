@@ -33,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _showDaysHours = false;
 
   static Map<String, dynamic> profile = {};
+  static Map<String, dynamic> profileRestaurant = {};
 
   static String location = '';
 
@@ -166,7 +167,19 @@ class _HomeScreenState extends State<HomeScreen> {
     location = globals.searchFullAddress;
     AppModel().getProfile(onSuccess: (Map<String, dynamic> param) {
       profile = param;
-      setState(() {});
+      if (param[USER_ROLE] == Util.owner) {
+        AppModel().getRestaurantProfile(
+            businessId: param[USER_RESTAURANT_ID],
+            businessService: param[USER_RESTAURANT_SERVICE],
+            onSuccess: (Map<String, dynamic> param2) {
+              profileRestaurant = param2;
+              if (!mounted) return;
+              setState(() {});
+            });
+      } else {
+        if (!mounted) return;
+        setState(() {});
+      }
     });
   }
 
@@ -177,6 +190,55 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String service = '';
+    List<Widget> scheduleView = [];
+    if (profile[USER_ROLE] == Util.owner) {
+      if (profile[USER_RESTAURANT_SERVICE] == C_RESTAURANTS) {
+        service = 'Restaurant';
+      }
+      if (profile[USER_RESTAURANT_SERVICE] == C_BREWERIES) service = 'Brewery';
+      if (profile[USER_RESTAURANT_SERVICE] == C_WINERIES) service = 'Winery';
+
+      if (profileRestaurant.isNotEmpty &&
+          profileRestaurant[RESTAURANT_SCHEDULE] != null) {
+        for (var element in profileRestaurant[RESTAURANT_SCHEDULE]) {
+          TimeOfDay startTime = TimeOfDay(
+              hour: element[RESTAURANT_SCHEDULE_STARTHOUR],
+              minute: element[RESTAURANT_SCHEDULE_STARTMINUTE]);
+          TimeOfDay endTime = TimeOfDay(
+              hour: element[RESTAURANT_SCHEDULE_ENDHOUR],
+              minute: element[RESTAURANT_SCHEDULE_ENDMINUTE]);
+          scheduleView.add(Padding(
+              padding: const EdgeInsets.all(0),
+              child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Text(element[RESTAURANT_SCHEDULE_DAY],
+                    style: const TextStyle(
+                        color: CustomColor.textDetailColor, fontSize: 16)),
+                const Spacer(),
+                if (element[RESTAURANT_SCHEDULE_ISWORKINGDAY])
+                  Text(startTime.format(context),
+                      style: const TextStyle(
+                          color: CustomColor.textDetailColor, fontSize: 16)),
+                if (element[RESTAURANT_SCHEDULE_ISWORKINGDAY])
+                  const Text('-',
+                      style: TextStyle(
+                          color: CustomColor.textDetailColor, fontSize: 16)),
+                if (element[RESTAURANT_SCHEDULE_ISWORKINGDAY])
+                  Text(endTime.format(context),
+                      style: const TextStyle(
+                          color: CustomColor.textDetailColor, fontSize: 16)),
+                if (!element[RESTAURANT_SCHEDULE_ISWORKINGDAY])
+                  const Padding(
+                    padding: EdgeInsets.only(right: 40),
+                    child: Text('Closed',
+                        style: TextStyle(
+                            color: CustomColor.activeColor, fontSize: 16)),
+                  ),
+              ])));
+        }
+      }
+    }
+
     // 4 screens
     final List<Widget> widgetOptions = <Widget>[
       Column(mainAxisAlignment: MainAxisAlignment.start, children: <Widget>[
@@ -502,7 +564,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              if (profile[USER_ROLE] == Util.customer)
+              if (profile.isNotEmpty && profile[USER_ROLE] == Util.customer)
                 Expanded(
                     child: Column(children: [
                   Padding(
@@ -659,7 +721,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ])),
-              if (profile[USER_ROLE] == Util.owner)
+              if (profile.isNotEmpty && profile[USER_ROLE] == Util.owner)
                 Expanded(
                     child: Column(children: [
                   Padding(
@@ -839,20 +901,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               'Service Category',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            Row(children: const [
+                            Row(children: [
                               SizedBox(
-                                  width: 100,
+                                  width: 150,
                                   child: Text(
-                                    'Brewery',
-                                    style: TextStyle(
-                                        color: CustomColor.textDetailColor,
-                                        fontSize: 12),
-                                  )),
-                              SizedBox(
-                                  width: 100,
-                                  child: Text(
-                                    'Food Truck',
-                                    style: TextStyle(
+                                    service,
+                                    style: const TextStyle(
                                         color: CustomColor.textDetailColor,
                                         fontSize: 12),
                                   )),
@@ -911,216 +965,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           MainAxisAlignment.start,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 40),
-                                            child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  const Text('Tuesday',
-                                                      style: TextStyle(
-                                                          color: CustomColor
-                                                              .textDetailColor,
-                                                          fontSize: 12)),
-                                                  const Spacer(),
-                                                  const Padding(
-                                                    padding: EdgeInsets.only(
-                                                        right: 20),
-                                                    child: Text('Closed',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .activeColor,
-                                                            fontSize: 12)),
-                                                  ),
-                                                  InkWell(
-                                                      onTap: () {},
-                                                      child: const Icon(
-                                                        Icons.edit_outlined,
-                                                        size: 22,
-                                                      )),
-                                                ])),
-                                        Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 40),
-                                            child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  const Text('Wednesday',
-                                                      style: TextStyle(
-                                                          color: CustomColor
-                                                              .textDetailColor,
-                                                          fontSize: 12)),
-                                                  const Spacer(),
-                                                  const Padding(
-                                                    padding: EdgeInsets.only(
-                                                        right: 20),
-                                                    child: Text(
-                                                        '8:00 AM - 9:00 PM',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .textDetailColor,
-                                                            fontSize: 12)),
-                                                  ),
-                                                  InkWell(
-                                                      onTap: () {},
-                                                      child: const Icon(
-                                                        Icons.edit_outlined,
-                                                        size: 22,
-                                                      )),
-                                                ])),
-                                        Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 40),
-                                            child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  const Text('Thursday',
-                                                      style: TextStyle(
-                                                          color: CustomColor
-                                                              .textDetailColor,
-                                                          fontSize: 12)),
-                                                  const Spacer(),
-                                                  const Padding(
-                                                    padding: EdgeInsets.only(
-                                                        right: 20),
-                                                    child: Text(
-                                                        '8:00 AM - 9:00 PM',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .textDetailColor,
-                                                            fontSize: 12)),
-                                                  ),
-                                                  InkWell(
-                                                      onTap: () {},
-                                                      child: const Icon(
-                                                        Icons.edit_outlined,
-                                                        size: 22,
-                                                      )),
-                                                ])),
-                                        Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 40),
-                                            child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  const Text('Friday',
-                                                      style: TextStyle(
-                                                          color: CustomColor
-                                                              .textDetailColor,
-                                                          fontSize: 12)),
-                                                  const Spacer(),
-                                                  const Padding(
-                                                    padding: EdgeInsets.only(
-                                                        right: 20),
-                                                    child: Text(
-                                                        '8:00 AM - 9:00 PM',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .textDetailColor,
-                                                            fontSize: 12)),
-                                                  ),
-                                                  InkWell(
-                                                      onTap: () {},
-                                                      child: const Icon(
-                                                        Icons.edit_outlined,
-                                                        size: 22,
-                                                      )),
-                                                ])),
-                                        Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 40),
-                                            child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  const Text('Saturday',
-                                                      style: TextStyle(
-                                                          color: CustomColor
-                                                              .textDetailColor,
-                                                          fontSize: 12)),
-                                                  const Spacer(),
-                                                  const Padding(
-                                                    padding: EdgeInsets.only(
-                                                        right: 20),
-                                                    child: Text(
-                                                        '8:00 AM - 9:00 PM',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .textDetailColor,
-                                                            fontSize: 12)),
-                                                  ),
-                                                  InkWell(
-                                                      onTap: () {},
-                                                      child: const Icon(
-                                                        Icons.edit_outlined,
-                                                        size: 22,
-                                                      )),
-                                                ])),
-                                        Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 40),
-                                            child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  const Text('Sunday',
-                                                      style: TextStyle(
-                                                          color: CustomColor
-                                                              .textDetailColor,
-                                                          fontSize: 12)),
-                                                  const Spacer(),
-                                                  const Padding(
-                                                    padding: EdgeInsets.only(
-                                                        right: 20),
-                                                    child: Text(
-                                                        '8:00 AM - 9:00 PM',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .textDetailColor,
-                                                            fontSize: 12)),
-                                                  ),
-                                                  InkWell(
-                                                      onTap: () {},
-                                                      child: const Icon(
-                                                        Icons.edit_outlined,
-                                                        size: 22,
-                                                      )),
-                                                ])),
-                                        Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 40),
-                                            child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  const Text('Monday',
-                                                      style: TextStyle(
-                                                          color: CustomColor
-                                                              .textDetailColor,
-                                                          fontSize: 12)),
-                                                  const Spacer(),
-                                                  const Padding(
-                                                    padding: EdgeInsets.only(
-                                                        right: 20),
-                                                    child: Text('Closed',
-                                                        style: TextStyle(
-                                                            color: CustomColor
-                                                                .activeColor,
-                                                            fontSize: 12)),
-                                                  ),
-                                                  InkWell(
-                                                      onTap: () {},
-                                                      child: const Icon(
-                                                        Icons.edit_outlined,
-                                                        size: 22,
-                                                      )),
-                                                ])),
-                                      ]),
+                                      children: scheduleView),
                                 )
                               : Container(),
                         ]),

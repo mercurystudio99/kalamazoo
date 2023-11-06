@@ -86,6 +86,7 @@ class AppModel extends Model {
     globals.userID = docRef.id;
     globals.restaurantID = restaurantId;
     globals.ownerBusinessID = restaurantId;
+    globals.restaurantType = restaurantService;
     onSuccess();
   }
 
@@ -534,6 +535,31 @@ class AppModel extends Model {
         .collection(globals.restaurantType)
         .where(RESTAURANT_ID, isEqualTo: globals.restaurantID)
         .get();
+  }
+
+  void getRestaurantProfile({
+    required String businessId,
+    required String businessService,
+    // callback functions
+    required Function(Map<String, dynamic>) onSuccess,
+  }) {
+    _firestore
+        .collection(businessService)
+        .where(RESTAURANT_ID, isEqualTo: businessId)
+        .get()
+        .then(
+      (querySnapshot) {
+        if (querySnapshot.docs.isNotEmpty) {
+          Map<String, dynamic> data = {};
+          for (var docSnapshot in querySnapshot.docs) {
+            data = docSnapshot.data();
+            break;
+          }
+          onSuccess(data);
+        }
+      },
+      onError: (e) => debugPrint("Error completing: $e"),
+    );
   }
 
   void getListByTopMenu({
