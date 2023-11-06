@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 
 import 'package:kalamazoo/utils/util.dart';
 import 'package:kalamazoo/utils/globals.dart' as globals;
@@ -9,6 +10,8 @@ import 'package:kalamazoo/utils/color.dart';
 import 'package:kalamazoo/utils/constants.dart';
 import 'package:kalamazoo/models/app_model.dart';
 import 'package:kalamazoo/widget/processing.dart';
+
+const String us = 'United States';
 
 class ListScreen extends StatefulWidget {
   const ListScreen({super.key});
@@ -82,9 +85,23 @@ class _ListScreenState extends State<ListScreen> {
                 return element[RESTAURANT_AMENITIES].contains(id);
               });
             }
+            bool open = true;
+            if (element[RESTAURANT_SCHEDULE] != null) {
+              for (var item in element[RESTAURANT_SCHEDULE]) {
+                if (item[RESTAURANT_SCHEDULE_DAY] ==
+                    DateFormat('EEEE').format(DateTime.now())) {
+                  if (globals.searchOpen == 'open' &&
+                      !item[RESTAURANT_SCHEDULE_ISWORKINGDAY]) open = false;
+                  if (globals.searchOpen == 'close' &&
+                      item[RESTAURANT_SCHEDULE_ISWORKINGDAY]) open = false;
+                }
+              }
+            }
+
             if (globals.searchDistanceRange > 0 &&
                 globals.searchDistanceRange < distance) return false;
             if (!included) return false;
+            if (!open) return false;
             return true;
           }).toList();
 
@@ -294,6 +311,38 @@ class _ListBuilderState extends State<ListBuilder> {
         itemCount: widget.list.length,
         itemBuilder: (_, int index) {
           final Map<String, dynamic> restaurant = widget.list[index];
+          double distance = Geolocator.distanceBetween(
+              globals.latitude,
+              globals.longitude,
+              restaurant[RESTAURANT_GEOLOCATION][0],
+              restaurant[RESTAURANT_GEOLOCATION][1]);
+          distance = distance / 1609.344;
+          String time = '';
+          String open = '';
+          if (restaurant[RESTAURANT_SCHEDULE] != null) {
+            for (var element in restaurant[RESTAURANT_SCHEDULE]) {
+              if (element[RESTAURANT_SCHEDULE_DAY] ==
+                  DateFormat('EEEE').format(DateTime.now())) {
+                TimeOfDay startTime = TimeOfDay(
+                    hour: element[RESTAURANT_SCHEDULE_STARTHOUR],
+                    minute: element[RESTAURANT_SCHEDULE_STARTMINUTE]);
+                TimeOfDay endTime = TimeOfDay(
+                    hour: element[RESTAURANT_SCHEDULE_ENDHOUR],
+                    minute: element[RESTAURANT_SCHEDULE_ENDMINUTE]);
+                time =
+                    '${startTime.format(context)} - ${endTime.format(context)}';
+                open = element[RESTAURANT_SCHEDULE_ISWORKINGDAY]
+                    ? 'Open'
+                    : 'Close';
+              }
+            }
+          }
+          String streetName = '';
+          if (restaurant[RESTAURANT_ADDRESS] != null) {
+            streetName =
+                restaurant[RESTAURANT_ADDRESS].toString().replaceFirst(us, '');
+            streetName = streetName.substring(0, streetName.length - 2);
+          }
           return Padding(
               padding: const EdgeInsets.symmetric(horizontal: Util.mainPadding),
               child: SizedBox(
@@ -349,8 +398,7 @@ class _ListBuilderState extends State<ListBuilder> {
                                             fontWeight: FontWeight.bold,
                                             fontSize: 18.0),
                                       ),
-                                      if (restaurant[RESTAURANT_ADDRESS] !=
-                                          null)
+                                      if (streetName.isNotEmpty)
                                         SizedBox(
                                             width: MediaQuery.of(context)
                                                     .size
@@ -358,14 +406,9 @@ class _ListBuilderState extends State<ListBuilder> {
                                                 Util.mainPadding * 2 -
                                                 170,
                                             child: Text(
-                                              (restaurant[RESTAURANT_ADDRESS]
-                                                          .toString()
-                                                          .trim()
-                                                          .length <
-                                                      100)
-                                                  ? restaurant[
-                                                      RESTAURANT_ADDRESS]
-                                                  : '${restaurant[RESTAURANT_ADDRESS].toString().substring(0, 100)}...',
+                                              (streetName.trim().length < 100)
+                                                  ? streetName.trim()
+                                                  : '${streetName.substring(0, 100)}...',
                                               style: TextStyle(
                                                   fontSize: 12.0,
                                                   color: (widget.isSelectionMode
@@ -381,49 +424,66 @@ class _ListBuilderState extends State<ListBuilder> {
                                               170,
                                           child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                                  MainAxisAlignment.start,
                                               children: [
+                                                const Icon(Icons.location_on,
+                                                    color: CustomColor
+                                                        .activeColor),
                                                 Text(
-                                                  restaurant[RESTAURANT_ZIP],
+                                                  '${distance.toStringAsFixed(1)}mi',
                                                   style: TextStyle(
                                                       overflow:
                                                           TextOverflow.ellipsis,
-                                                      fontSize: 15.0,
+                                                      fontSize: 12,
                                                       color: (widget
                                                               .isSelectionMode
                                                           ? Colors.white
-                                                          : Colors.black),
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                          : Colors.black)),
                                                 ),
-                                                Container(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(horizontal: 4),
-                                                  decoration: BoxDecoration(
-                                                    color:
-                                                        CustomColor.activeColor,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                  child: Row(
-                                                    children: const [
-                                                      Text(
-                                                        '4.8',
-                                                        style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontSize: 12),
-                                                      ),
-                                                      Icon(
-                                                        Icons.star,
-                                                        color: Colors.white,
-                                                        size: 12,
-                                                      )
-                                                    ],
-                                                  ),
-                                                )
                                               ])),
+                                      if (time.isNotEmpty)
+                                        SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width -
+                                                Util.mainPadding * 2 -
+                                                170,
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: [
+                                                  const Icon(Icons.access_time),
+                                                  Text(
+                                                    time,
+                                                    style: TextStyle(
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        fontSize: 12,
+                                                        color: (widget
+                                                                .isSelectionMode
+                                                            ? Colors.white
+                                                            : Colors.black)),
+                                                  ),
+                                                  const Spacer(),
+                                                  Container(
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 4),
+                                                      decoration: BoxDecoration(
+                                                        color: CustomColor
+                                                            .activeColor,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                      ),
+                                                      child: Text(
+                                                        open,
+                                                        style: const TextStyle(
+                                                            fontSize: 12,
+                                                            color:
+                                                                Colors.white),
+                                                      ))
+                                                ])),
                                     ])
                               ]))))));
         });
