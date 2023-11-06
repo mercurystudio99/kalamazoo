@@ -25,6 +25,7 @@ String searchPriority = RESTAURANT_CITY;
 String searchKeyword = '';
 List<dynamic> searchAmenities = [];
 int searchDistanceRange = 0;
+String searchOpen = 'all';
 
 double latitude = 0;
 double longitude = 0;

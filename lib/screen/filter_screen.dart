@@ -16,6 +16,7 @@ class FilterScreen extends StatefulWidget {
 
 class _FilterScreenState extends State<FilterScreen> {
   late int distanceRange = 0;
+  late String open = 'all';
   late List<Map<String, dynamic>> amenities = [];
   late final Map<String, dynamic> _isChecked = {};
 
@@ -41,6 +42,7 @@ class _FilterScreenState extends State<FilterScreen> {
     super.initState();
     _getAmenities();
     distanceRange = global.searchDistanceRange;
+    open = global.searchOpen;
   }
 
   @override
@@ -136,6 +138,8 @@ class _FilterScreenState extends State<FilterScreen> {
                       global.searchAmenities.clear();
                       global.searchDistanceRange = 0;
                       distanceRange = 0;
+                      global.searchOpen = 'all';
+                      open = 'all';
                       _getAmenities();
                     },
                     child: const Text(
@@ -157,6 +161,17 @@ class _FilterScreenState extends State<FilterScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: Util.mainPadding),
               child: _distanceRangeSection(),
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: Util.mainPadding),
+              child: Text(
+                'Open or Not',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: Util.mainPadding),
+              child: _openSection(),
             ),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: Util.mainPadding),
@@ -205,6 +220,56 @@ class _FilterScreenState extends State<FilterScreen> {
         padding: const EdgeInsets.symmetric(vertical: 20),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: viewList));
+  }
+
+  Widget _openSection() {
+    List<Widget> viewList = [];
+    viewList.add(InkWell(
+        onTap: () {
+          setState(() {
+            open = 'open';
+          });
+          global.searchOpen = open;
+        },
+        child: Container(
+          width: 80,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          decoration: BoxDecoration(
+            color: open == 'open'
+                ? CustomColor.primaryColor
+                : CustomColor.textDetailColor,
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+          ),
+          child: const Text('Open',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white, fontSize: 15)),
+        )));
+    viewList.add(InkWell(
+        onTap: () {
+          setState(() {
+            open = 'close';
+          });
+          global.searchOpen = open;
+        },
+        child: Container(
+          width: 80,
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          decoration: BoxDecoration(
+            color: open == 'close'
+                ? CustomColor.primaryColor
+                : CustomColor.textDetailColor,
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+          ),
+          child: const Text('Close',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white, fontSize: 15)),
+        )));
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: viewList));
   }
