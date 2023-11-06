@@ -16,6 +16,7 @@ import 'package:kalamazoo/screen/notification_screen.dart';
 import 'package:kalamazoo/screen/subscription_screen.dart';
 import 'package:kalamazoo/screen/search_screen.dart';
 import 'package:kalamazoo/screen/profileedit_screen.dart';
+import 'package:kalamazoo/screen/profileedit2_screen.dart';
 import 'package:kalamazoo/screen/about_screen.dart';
 import 'package:kalamazoo/screen/menu_screen.dart';
 import 'package:kalamazoo/screen/item_screen.dart';
@@ -72,6 +73,7 @@ var routes = <String, WidgetBuilder>{
   "/SubscriptionScreen": (BuildContext context) => const SubscriptionScreen(),
   "/SearchScreen": (BuildContext context) => const SearchScreen(),
   "/ProfileEditScreen": (BuildContext context) => const ProfileEditScreen(),
+  "/ProfileEdit2Screen": (BuildContext context) => const ProfileEdit2Screen(),
   "/AboutScreen": (BuildContext context) => const AboutScreen(),
   "/MenuScreen": (BuildContext context) => const MenuScreen(),
   "/ItemScreen": (BuildContext context) => const ItemScreen(),

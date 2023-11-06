@@ -562,6 +562,26 @@ class AppModel extends Model {
     );
   }
 
+  void saveRestaurantProfile({
+    required String imageUrl,
+    required String businessservice,
+    required String businessId,
+    required List<Map<String, dynamic>> schedule,
+    // callback functions
+    required VoidCallback onSuccess,
+    required Function(String) onError,
+  }) {
+    if (businessservice == C_RESTAURANTS ||
+        businessservice == C_WINERIES ||
+        businessservice == C_BREWERIES) {
+      _firestore.collection(businessservice).doc(businessId).update({
+        RESTAURANT_IMAGE: imageUrl,
+        RESTAURANT_SCHEDULE: schedule,
+      }).then((value) => onSuccess(),
+          onError: (e) => debugPrint("Error updating document $e"));
+    }
+  }
+
   void getListByTopMenu({
     required String topMenu,
     // callback functions

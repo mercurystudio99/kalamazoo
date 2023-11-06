@@ -555,7 +555,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     TextButton(
                         onPressed: () {
-                          NavigationRouter.switchToProfileEdit(context);
+                          if (profile.isNotEmpty &&
+                              profile[USER_ROLE] == Util.customer) {
+                            NavigationRouter.switchToProfileEdit(context);
+                          }
+                          if (profile.isNotEmpty &&
+                              profile[USER_ROLE] == Util.owner) {
+                            NavigationRouter.switchToProfileEdit2(context);
+                          }
                         },
                         child: const Text(
                           Util.edit,

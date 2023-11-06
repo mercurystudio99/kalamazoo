@@ -65,6 +65,10 @@ class NavigationRouter {
     Navigator.pushNamed(context, "/ProfileEditScreen");
   }
 
+  static void switchToProfileEdit2(BuildContext context) {
+    Navigator.pushNamed(context, "/ProfileEdit2Screen");
+  }
+
   static void switchToAbout(BuildContext context) {
     Navigator.pushNamed(context, "/AboutScreen");
   }
