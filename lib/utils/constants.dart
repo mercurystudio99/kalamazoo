@@ -75,7 +75,6 @@ const String RESTAURANT_SCHEDULE_STARTMINUTE = "startMinute";
 const String RESTAURANT_SCHEDULE_ENDHOUR = "endHour";
 const String RESTAURANT_SCHEDULE_ENDMINUTE = "endMinute";
 const String RESTAURANT_SCHEDULE_ISWORKINGDAY = "isWorkingDay";
-
 const String RESTAURANT_AMENITIES = "amenities";
 const String RESTAURANT_DISCOUNT = "discount";
 const String RESTAURANT_MINCOST = "mincost";
