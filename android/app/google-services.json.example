@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "285237934***",
+    "project_id": "thebestlocaleats-b6***",
+    "storage_bucket": "thebestlocaleats-b6***.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:285237934***:android:fcba0d2094b3b982dc6...",
+        "android_client_info": {
+          "package_name": "com.example.bestlocaleats"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "285237934***-vrg3fgvs2itkvt14mmbs5ubgg18pe***.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8bMKeCR864zyCQmm4kB8ERsKDTfDG..."
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "285237934***-32j6f6m8sgb6os3bvjous8hk5b8ed***.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "285237934***-60pnuoojuhvm2nl6f6odmg0qgknf6***.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.kalamazoo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:285237934***:android:2d0f1957adb0f626dc6...",
+        "android_client_info": {
+          "package_name": "com.example.kalamazoo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "285237934***-7e7tgfrvhtnoer0htbor2b4r9s0li***.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kalamazoo",
+            "certificate_hash": "ec16e4cf03087b579847d23e9b72d5398a08b..."
+          }
+        },
+        {
+          "client_id": "285237934***-vrg3fgvs2itkvt14mmbs5ubgg18pe***.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8bMKeCR864zyCQmm4kB8ERsKDTfDG..."
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "285237934***-32j6f6m8sgb6os3bvjous8hk5b8ed***.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "285237934***-60pnuoojuhvm2nl6f6odmg0qgknf6***.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.kalamazoo"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
